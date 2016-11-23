@@ -1,49 +1,23 @@
 <resources>
-    <string name="app_name">CookHelper</string>
+    <string name="app_name">SampleRecipeName</string>
 
-    <string name="category_prompt">Choose a category</string>
-    <string name="type_prompt">Choose a type</string>
-    <string name="ingredient_prompt">Choose an ingredient</string>
-
-
-    <string-array name="category_arrays">
-        <item>-select-</item>
-        <item>Appetizer</item>
-        <item>Breakfast</item>
-        <item>Desert</item>
-        <item>Dinner</item>
-        <item>Lunch</item>
-        <item>Snack</item>
-        <item>Vegetarian</item>
-
+    <string-array name="test_array">
+        <item>Test Item 1</item>
+        <item>Test Item 2</item>
     </string-array>
 
-    <string-array name="type_arrays">
-        <item>-select-</item>
-        <item>American</item>
-        <item>Asian</item>
-        <item>Chinese</item>
-        <item>Colombian</item>
-        <item>French</item>
-        <item>Indian</item>
-        <item>Italian</item>
-        <item>Mexican</item>
-        <item>Spanish</item>
-
-    </string-array>
-
-
-    <string-array name="ingredient_arrays">
-        <item>-select-</item>
+    <string-array name="sample_ingredients">
         <item>Apple</item>
-        <item>Banana</item>
-        <item>Dark chocolate</item>
+        <item>Orange</item>
         <item>Milk</item>
-        <item>Olive Oil</item>
+        <item>Sugar</item>
+        <item>Flour</item>
+        <item>Cream</item>
+        <item>Water</item>
     </string-array>
 
-    <string name="title_activity_add_recipe">Add New Recipe</string>
-    <string name="title_activity_search_recipe">Search Recipe</string>
+    <string-array name="sample_instructions">
+        <item>Struct1</item>
+    </string-array>
 
-    title_activity_search_recip
 </resources>
