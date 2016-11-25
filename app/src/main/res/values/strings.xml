@@ -44,6 +44,6 @@
 
     <string name="title_activity_add_recipe">Add New Recipe</string>
     <string name="title_activity_search_recipe">Search Recipe</string>
+    <string name="title_activity_add_ingredient">Add Ingredient</string>
 
-    title_activity_search_recip
 </resources>

@@ -23,10 +23,9 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/ic_logo_00"
+            android:src="@drawable/addrecipe"
             android:id="@+id/imageID"
-            android:layout_gravity="center_horizontal"
-            android:onClick="OnSetAvatarButton" />
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"

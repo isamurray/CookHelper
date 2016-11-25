@@ -25,4 +25,8 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
+    public void testAddIngredient(View v) {
+        Intent intent = new Intent(getApplication(), AddIngredient.class);
+        startActivityForResult(intent, 0);
+    }
 }
