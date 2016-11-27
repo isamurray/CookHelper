@@ -3,6 +3,8 @@ package com.example.utilisateur.cookhelper;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,4 +31,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplication(), AddIngredient.class);
         startActivityForResult(intent, 0);
     }
+
+    public void testViewRecipe(View v) {
+        Intent intent = new Intent(getApplication(), ViewRecipe.class);
+        startActivityForResult(intent, 0);
+    }
+
+
+
 }
+

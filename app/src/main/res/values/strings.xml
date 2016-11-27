@@ -45,5 +45,25 @@
     <string name="title_activity_add_recipe">Add New Recipe</string>
     <string name="title_activity_search_recipe">Search Recipe</string>
     <string name="title_activity_add_ingredient">Add Ingredient</string>
+    <string name="title_activity_view_recipe">View Recipe</string>
+
+    <string-array name="test_array">
+        <item>Test Item 1</item>
+        <item>Test Item 2</item>
+    </string-array>
+
+    <string-array name="sample_ingredients">
+        <item>Apple</item>
+        <item>Orange</item>
+        <item>Milk</item>
+        <item>Sugar</item>
+        <item>Flour</item>
+        <item>Cream</item>
+        <item>Water</item>
+    </string-array>
+
+    <string-array name="sample_instructions">
+        <item>Struct1</item>
+    </string-array>
 
 </resources>
