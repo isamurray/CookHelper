@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
 
@@ -30,10 +30,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
 
             <EditText
-                android:id="@+id/recipeNameField"
+                android:id="@+id/recipeName"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:hint="(Please enter a recipe name)"
@@ -42,14 +43,11 @@
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="20px"
-            android:layout_height="60px" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -103,225 +101,61 @@
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="20px"
-            android:layout_height="60px" />
-
-        <ScrollView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scrollView" >
+            android:orientation="horizontal"
+            android:layout_weight="1">
 
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentEnd="false">
+                android:layout_weight="1">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <TextView
+                    android:id="@+id/numIngredientField"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:text="Number of ingredients: "
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="5dp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                <Spinner
+                    android:id="@+id/numIngredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center" />
 
+            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/ingredientsTextField"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Ingredients : "
-                            android:textSize="20dp"
-                            android:layout_marginBottom="5dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/ingredientQty_00"
-                                android:hint="Qty"
-                                android:textAlignment="center"
-                                android:layout_weight="1" />
-
-                            <Spinner
-                                android:id="@+id/chosenIngredient_00"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:entries="@array/ingredient_arrays"
-                                android:prompt="@string/ingredient_prompt"
-                                android:textAlignment="center"
-                                android:layout_weight=".25" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/ingredientQty_01"
-                                android:hint="Qty"
-                                android:textAlignment="center"
-                                android:layout_weight="1" />
-
-                            <Spinner
-                                android:id="@+id/chosenIngredient_01"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:entries="@array/ingredient_arrays"
-                                android:prompt="@string/ingredient_prompt"
-                                android:textAlignment="center"
-                                android:layout_weight=".25" />
-
-                        </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
 
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/numInstructionField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Number of instructions:"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="5dp" />
 
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/ingredientQty_02"
-                                android:hint="Qty"
-                                android:textAlignment="center"
-                                android:layout_weight="1" />
+                <Spinner
+                    android:id="@+id/numInstruction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center" />
+            </LinearLayout>
 
-                            <Spinner
-                                android:id="@+id/chosenIngredient_02"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:entries="@array/ingredient_arrays"
-                                android:prompt="@string/ingredient_prompt"
-                                android:textAlignment="center"
-                                android:layout_weight=".25" />
-
-                        </LinearLayout>
+        </LinearLayout>
 
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/instructionTextField"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Please enter instructions : "
-                            android:textSize="20dp"
-                            android:layout_marginBottom="5dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/instructionTextField1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="1 - "
-                                android:textSize="20dp"
-                                android:layout_marginBottom="5dp"
-                                android:layout_weight="1" />
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/instruction_01"
-                                android:hint="Enter instruction"
-                                android:layout_weight=".1" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/instructionTextField2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="2 - "
-                                android:textSize="20dp"
-                                android:layout_marginBottom="5dp"
-                                android:layout_weight="1" />
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/instruction_02"
-                                android:hint="Enter instruction"
-                                android:layout_weight=".1" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/instructionTextField3"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="3 - "
-                                android:textSize="20dp"
-                                android:layout_marginBottom="5dp"
-                                android:layout_weight="1" />
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/instruction_03"
-                                android:hint="Enter instruction"
-                                android:layout_weight=".1" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/instructionTextField4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="4 - "
-                                android:textSize="20dp"
-                                android:layout_marginBottom="5dp"
-                                android:layout_weight="1" />
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/instruction_04"
-                                android:hint="Enter instruction"
-                                android:layout_weight=".1" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-        </ScrollView>
 
     </LinearLayout>
 
