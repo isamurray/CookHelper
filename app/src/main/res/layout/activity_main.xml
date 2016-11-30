@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/logo_stroumph_cleaned"
-                android:id="@+id/imageView7"
+                android:id="@+id/logoCookHelper"
                 android:layout_weight="1.06" />
         </LinearLayout>
 
@@ -42,15 +42,15 @@
                 android:layout_width="72dp"
                 android:layout_height="40dp"
                 app:srcCompat="@drawable/search"
-                android:id="@+id/imageView" />
+                android:id="@+id/imageSearch" />
 
             <Button
                 android:text="Search Recipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button12"
+                android:id="@+id/searchRecipeButton"
                 android:layout_weight="1.06"
-                android:onClick="testSearch" />
+                android:onClick="onClickSearchPage" />
 
         </LinearLayout>
 
@@ -63,15 +63,15 @@
                 android:layout_width="72dp"
                 android:layout_height="52dp"
                 app:srcCompat="@drawable/jumelles"
-                android:id="@+id/imageView8" />
+                android:id="@+id/imageViewRecipe" />
 
             <Button
                 android:text="View All Recipes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button"
+                android:id="@+id/viewAllRecipeButton"
                 android:layout_weight="1.06"
-                android:onClick="testViewRecipe" />
+                android:onClick="onClickViewAllRecipesPage" />
         </LinearLayout>
 
         <LinearLayout
@@ -84,15 +84,15 @@
                 android:layout_width="72dp"
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/addrecipe"
-                android:id="@+id/imageView2" />
+                android:id="@+id/imageAddRecipe" />
 
             <Button
                 android:text="Add recipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button7"
+                android:id="@+id/addRecipeButton"
                 android:layout_weight="1.06"
-                android:onClick="testAdd" />
+                android:onClick="onClickAddRecipePage" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,16 +105,16 @@
                 android:layout_width="68dp"
                 android:layout_height="48dp"
                 app:srcCompat="@drawable/addingredient"
-                android:id="@+id/imageView3"
+                android:id="@+id/imageIngredient"
                 android:layout_weight="0.04" />
 
             <Button
                 android:text="Add ingredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button9"
+                android:id="@+id/addIngredientButton"
                 android:layout_weight="1.06"
-                android:onClick="testAddIngredient" />
+                android:onClick="onClickAddIngredientPage" />
         </LinearLayout>
 
         <LinearLayout
@@ -126,15 +126,17 @@
                 android:layout_width="72dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/help"
-                android:id="@+id/imageView4"
+                android:id="@+id/imageHelp"
                 android:layout_weight="0.01" />
 
             <Button
                 android:text="Help"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button11"
-                android:layout_weight="1.06" />
+                android:id="@+id/helpButton"
+                android:layout_weight="1.06"
+                android:nestedScrollingEnabled="false"
+                android:onClick="GOTOADDINFO" />
 
         </LinearLayout>
 
