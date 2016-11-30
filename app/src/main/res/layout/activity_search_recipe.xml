@@ -186,7 +186,8 @@
                     android:layout_height="wrap_content"
                     android:text="search"
                     android:id="@+id/searchRecipes"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="testSpecificRecipe (Main Activity)" />
             </LinearLayout>
         </LinearLayout>
 
