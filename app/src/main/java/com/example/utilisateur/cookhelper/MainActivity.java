@@ -17,26 +17,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void testAdd(View v) {
+    public void onClickAddRecipePage(View v) {
         Intent intent = new Intent(getApplication(), AddRecipe.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testSearch(View v) {
+    public void onClickSearchPage(View v) {
         Intent intent = new Intent(getApplication(), SearchRecipe.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testAddIngredient(View v) {
+    public void onClickAddIngredientPage(View v) {
         Intent intent = new Intent(getApplication(), AddIngredient.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testViewRecipe(View v) {
+    public void onClickViewAllRecipesPage(View v) {
         Intent intent = new Intent(getApplication(), ViewRecipe.class);
         startActivityForResult(intent, 0);
     }
 
+    public void GOTOADDINFO(View v) {
+        Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
+        startActivityForResult(intent, 0);
+    }
 
 
 }
