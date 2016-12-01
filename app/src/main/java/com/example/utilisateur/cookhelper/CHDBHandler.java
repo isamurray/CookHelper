@@ -185,6 +185,47 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
     
     /**
+     * Get all recipe categories as array of strings from DB
+     */
+    public String[] getAllRecipeCategories(){
+        String query = "Select * FROM " + TABLE_RECIPECATEGORIES + "\"";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int queryCount = cursor.getCount();
+        
+        String[] categories = new String[queryCount];
+        if(cursor.moveToFirst()){
+            for(int i=0; i < queryCount; i++){
+                categories[i] = cursor.getString(1);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return categories;
+    }
+    
+    /**
+     * Get all recipe types as array of strings from DB
+     */
+    public String[] getAllRecipeTypes(){
+        String query = "Select * FROM " + TABLE_RECIPETYPES + "\"";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int queryCount = cursor.getCount();
+        String[] types = new String[queryCount];
+
+        if(cursor.moveToFirst()){
+            for(int i=0; i < queryCount; i++){
+                types[i] = cursor.getString(1);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return types;
+
+    }
+    
+    /**
      * Get array of recipes
      */
     public Recipe[] getAllRecipes(){
