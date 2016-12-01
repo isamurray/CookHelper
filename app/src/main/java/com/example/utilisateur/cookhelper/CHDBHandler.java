@@ -11,67 +11,86 @@ import android.database.Cursor;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "cookhelperDB.db";
-    public  static final String TABLE_RECIPES = "recipes";
-    public  static final String TABLE_INGREDIENTS = "ingredients";
+    private static final String TABLE_RECIPES = "recipes";
+    private static final String TABLE_INGREDIENTS = "ingredients";
+    private static final String TABLE_RECIPETYPES = "recipetypes";
     // Mix egg in bowl... x N recipes, or mix egg in bowl x 1
-    public  static final String TABLE_INSTRUCTIONS = "instructions";
+    private  static final String TABLE_INSTRUCTIONS = "instructions";
+    private static final String TABLE_RECIPECATEGORIES = "categories";
+    
 
-    public static final String COLUMN_ID = "_id"; // should be in recipe class
-    public static final String COLUMN_RECIPENAME = "title";
-    public static final String COLUMN_RECIPECOUNTRY = "type";
-    public static final String COLUMN_RECIPEDISHTYPE = "category";
-    public static final String COLUMN_RECIPECOOKTIME = "time";
+    private static final String COL_ID = "_id"; // should be in recipe class
+    private static final String COL_RECIPENAME = "title";
+    private static final String COL_RECIPECOUNTRY = "type";
+    private static final String COL_RECIPEDISHTYPE = "category";
+    private static final String COL_RECIPECOOKTIME = "time";
 
-    public static final String COLUMN_INGREDIENTNAME = "title";
+    private static final String COL_INGREDIENTNAME = "title";
+    private static final String COL_RECIPETYPES_TYPE = "type";
+    private static final String COL_CAT_CATEGORY = "category";
 
 
     // INSTRUCTION TABLE CONSTANTS
     // All instructions belong to a recipe... or more?...
-    public static final String COL_INSTRUCTION_PARENT_RECIPE = "parent";
+    private static final String COL_INSTRUCTION_PARENT_RECIPE = "parent";
 
     // Index of instruction in set of instructions
     // Starts at 0
-    public static final String COL_INSTRUCTION_INDEX = "index";
-    public static final String COL_INSTRUCTION_TEXT = "text";
+    private static final String COL_INSTRUCTION_INDEX = "index";
+    private static final String COL_INSTRUCTION_TEXT = "text";
 
     public CHDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
     }
 
-    // implemented to create initial recipe table when db init'
-    // create table
-    // create columns 1340
-    // pass to execSQL() of SQLiteDatabase from param
+    /**
+     * Creates the initial database and all associated tables.
+     */
     @Override
     public void onCreate(SQLiteDatabase db){
         String CREATE_RECIPE_TABLE = "CREATE TABLE " +
                 TABLE_RECIPES + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY," +
-                COLUMN_RECIPENAME + " TEXT," +
-                COLUMN_RECIPECOUNTRY + " TEXT," +
-                COLUMN_RECIPEDISHTYPE + " TEXT," +
-                COLUMN_RECIPECOOKTIME + " INTEGER" + ")"; // should have ; in ")" => ");" ???
+                COL_ID + " INTEGER PRIMARY KEY," +
+                COL_RECIPENAME + " TEXT," +
+                COL_RECIPECOUNTRY + " TEXT," +
+                COL_RECIPEDISHTYPE + " TEXT," +
+                COL_RECIPECOOKTIME + " INTEGER" + ")";
 
         String CREATE_INGREDIENTS_TABLE = "CREATE TABLE " +
                 TABLE_INGREDIENTS + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY," +
-                COLUMN_INGREDIENTNAME + " TEXT" + ")";
+                COL_ID + " INTEGER PRIMARY KEY," +
+                COL_INGREDIENTNAME + " TEXT" + ")";
 
         String CREATE_INSTRUCTION_TABLE = "CREATE TABLE " +
                 TABLE_INSTRUCTIONS + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY," +
+                COL_ID + " INTEGER PRIMARY KEY," +
                 COL_INSTRUCTION_PARENT_RECIPE + " INTEGER," +
                 COL_INSTRUCTION_INDEX + " INTEGER," +
                 COL_INSTRUCTION_TEXT + " TEXT" + ")";
+        
+        String CREATE_RECIPETYPE_TABLE = "CREATE TABLE " +
+                TABLE_RECIPETYPES + "(" +
+                COL_ID + " INTEGER PRIMARY KEY," +
+                COL_RECIPETYPES_TYPE + " TEXT" + ")";
+        
+        String CREATE_RECIPECATEGORY_TABLE = "CREATE TABLE " +
+                TABLE_RECIPECATEGORIES + "(" +
+                COL_ID + " INTEGER PRIMARY KEY," +
+                COL_CAT_CATEGORY + " TEXT" + ")";
+        
+        
 
         db.execSQL(CREATE_INSTRUCTION_TABLE);
         db.execSQL(CREATE_RECIPE_TABLE);
         db.execSQL(CREATE_INGREDIENTS_TABLE);
+        db.execSQL(CREATE_RECIPECATEGORY_TABLE);
     }
 
-    // called on handler invocation when dbversion is higher than previous
+    /**
+     * Called when DBVersion mismatch occurs.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
@@ -79,39 +98,71 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Add
+     * Add recipe to db
+     * TODO: check for duplicates
      */
     public void addRecipe(Recipe recipe){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_RECIPENAME,recipe.getTitle());
-        values.put(COLUMN_RECIPECOUNTRY,recipe.getType());
-        values.put(COLUMN_RECIPEDISHTYPE,recipe.getCategory());
-        values.put(COLUMN_RECIPECOOKTIME,recipe.getCookingTime());
+        values.put(COL_RECIPENAME,recipe.getTitle());
+        values.put(COL_RECIPECOUNTRY,recipe.getType());
+        values.put(COL_RECIPEDISHTYPE,recipe.getCategory());
+        values.put(COL_RECIPECOOKTIME,recipe.getCookingTime());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPES,null,values);
         db.close();
     }
 
+    /**
+     * Add ingredient to DB
+     * TODO: check for duplicates
+     */
     public void addIngredient(Ingredient ingredient){
         ContentValues values = new ContentValues();
-        values.put(COLUMN_INGREDIENTNAME,ingredient.getName());
+        values.put(COL_INGREDIENTNAME,ingredient.getName());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_INGREDIENTS,null,values);
         db.close();
         System.out.println("Ingredient "+ingredient.getName()+" was added to db");
     }
+    
+    /**
+     * Add recipe type to DB
+     * TODO: check for duplicates
+     * TODO: SECURITY VULN SQL INJECTION
+     */
+    public void addRecipeType(String recipeType){
+        ContentValues values = new ContentValues();
+        values.put(COL_RECIPETYPES_TYPE,recipeType);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(TABLE_RECIPETYPES,null,values);
+        db.close();
+        System.out.println("Recipetype "+recipeType+" was added to db");
+    }
+    
+    /**
+     * Add recipe category to DB
+     * TODO: check for duplicates
+     * TODO: SECURITY VULN SQL INJECTION
+     */
+    public void addRecipeCategory(String recipeCategory){
+        ContentValues values = new ContentValues();
+        values.put(COL_CAT_CATEGORY,recipeCategory);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(TABLE_RECIPECATEGORIES,null,values);
+        db.close();
+        System.out.println("Recipecategory "+recipeCategory+" was added to db");
+    }
 
     /**
-     * !!!!
-     * @param recipeName The recipe's name
+     * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      * !!! NOT CURRENTLY SAFE - VULN. TO SQL-INJECTIONS !!!
-     * !!!! TODO: Sanitize
+     * !!! TODO: Sanitize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     public Recipe findRecipe(String recipeName){
         String query = "Select * FROM " + TABLE_RECIPES +
-                " WHERE " + COLUMN_RECIPENAME + " = \"" +
+                " WHERE " + COL_RECIPENAME + " = \"" +
                 recipeName + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -132,7 +183,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
         db.close();
         return recipe;
     }
-
+    
+    /**
+     * Get array of recipes
+     */
     public Recipe[] getAllRecipes(){
         String query = "Select * FROM " + TABLE_RECIPES + "\"";
 
@@ -166,7 +220,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         boolean result = false;
 
         String query = "Select * FROM " + TABLE_RECIPES +
-                " WHERE " + COLUMN_RECIPENAME + " = \"" +
+                " WHERE " + COL_RECIPENAME + " = \"" +
                 recipeName + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -175,7 +229,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             recipe.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_RECIPES, COLUMN_ID + " =?", new String[]{String.valueOf(recipe.getID())});
+            db.delete(TABLE_RECIPES, COL_ID + " =?", new String[]{String.valueOf(recipe.getID())});
             cursor.close();
             result = true;
         }
