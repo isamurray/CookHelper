@@ -33,7 +33,24 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".AddRecipeInformation"></activity>
+        <activity
+            android:name=".AddIngredientToRecipe"
+            android:label="@string/title_activity_add_ingredient_to_recipe"
+            android:parentActivityName=".AddRecipe"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.utilisateur.cookhelper.AddRecipe" />
+        </activity>
+        <activity
+            android:name=".AddInstructionsToRecipe"
+            android:label="@string/title_activity_add_instructions_to_recipe"
+            android:parentActivityName=".AddIngredientToRecipe"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.utilisateur.cookhelper.AddIngredientToRecipe" />
+        </activity>
     </application>
 
 </manifest>

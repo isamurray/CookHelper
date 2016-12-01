@@ -16,7 +16,7 @@ import java.util.List;
 
 public class AddRecipe extends AppCompatActivity {
 
-    private Spinner typeChoice, categoryChosen, numIngredient, numInstruction;
+    private Spinner typeChoice, categoryChosen;
     private EditText recipeName;
 
     @Override
@@ -25,25 +25,19 @@ public class AddRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_add_recipe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        addItemsOnSpinners();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addRecipe);
         fab.setOnClickListener(new View.OnClickListener() {
                                    @Override
                                    public void onClick(View view) {
                                        readItemSelection();
-                                       System.out.println("Type : " + String.valueOf(typeChoice.getSelectedItem()));
-                                       System.out.println("Category : " + String.valueOf(categoryChosen.getSelectedItem()));
-                                       System.out.println("Name : " + recipeName.getText().toString());
-                                       System.out.println("Nombre ingredient : " + String.valueOf(numIngredient.getSelectedItem()));
-                                       System.out.println("Nombre instruction : " + String.valueOf(numInstruction.getSelectedItem()));
+
                                        if (String.valueOf(typeChoice.getSelectedItem()).equals("-select-") || String.valueOf(categoryChosen.getSelectedItem()).equals("-select-") ||
-                                               recipeName.getText().toString().equals("") ||String.valueOf(numIngredient.getSelectedItem()).equals("-select-")||
-                                               String.valueOf(numInstruction.getSelectedItem()).equals("-select-")){
+                                               recipeName.getText().toString().equals("")){
                                            Snackbar.make(view, "Please enter all information", Snackbar.LENGTH_LONG)
                                                    .setAction("Action", null).show();                                       }
                                        else {
-                                           Intent intent = new Intent(getApplication(), AddRecipeInformation.class);
+                                           Intent intent = new Intent(getApplication(), AddIngredientToRecipe.class);
                                            startActivityForResult(intent, 0);
 
                                        }
@@ -60,23 +54,7 @@ public class AddRecipe extends AppCompatActivity {
         categoryChosen = (Spinner) findViewById(R.id.categoryChosen);
     }
 
-    private void addItemsOnSpinners() {
 
-        numIngredient = (Spinner) findViewById(R.id.numIngredient);
-        numInstruction = (Spinner) findViewById(R.id.numInstruction);
-        List<String> list = new ArrayList<String>();
-        list.add("-select-");
-        for(int i=1 ; i<100 ; i++) {
-            list.add(Integer.toString(i));
-        }
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        numIngredient.setAdapter(dataAdapter);
-        numInstruction.setAdapter(dataAdapter);
-
-    }
 
 
 

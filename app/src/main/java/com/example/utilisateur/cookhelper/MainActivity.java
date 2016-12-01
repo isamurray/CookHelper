@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void GOTOADDINFO(View v) {
-        Intent intent = new Intent(getApplication(), AddRecipeInformation.class);
+        Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
         startActivityForResult(intent, 0);
     }
 
