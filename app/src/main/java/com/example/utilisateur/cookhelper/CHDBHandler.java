@@ -16,12 +16,11 @@ public class CHDBHandler extends SQLiteOpenHelper {
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
     private static final String TABLE_RECIPETYPES = "recipetypes";
-    // Mix egg in bowl... x N recipes, or mix egg in bowl x 1
     private  static final String TABLE_INSTRUCTIONS = "instructions";
     private static final String TABLE_RECIPECATEGORIES = "categories";
     
 
-    private static final String COL_ID = "_id"; // should be in recipe class
+    private static final String COL_ID = "_id";
     private static final String COL_RECIPENAME = "title";
     private static final String COL_RECIPECOUNTRY = "type";
     private static final String COL_RECIPEDISHTYPE = "category";
