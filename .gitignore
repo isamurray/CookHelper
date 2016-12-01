@@ -32,5 +32,9 @@ Thumbs.db
 .gradle
 build/
 
+# Gradle
+.idea/gradle.xml
+gradle.xml
+
 #NDK
 obj/
