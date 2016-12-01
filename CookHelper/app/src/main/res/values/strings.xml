@@ -1,0 +1,73 @@
+<resources>
+    <string name="app_name">CookHelper</string>
+
+    <string name="category_prompt">Choose a category</string>
+    <string name="type_prompt">Choose a type</string>
+    <string name="ingredient_prompt">Choose an ingredient</string>
+
+
+    <string-array name="category_arrays">
+        <item>-select-</item>
+        <item>Appetizer</item>
+        <item>Breakfast</item>
+        <item>Desert</item>
+        <item>Dinner</item>
+        <item>Lunch</item>
+        <item>Snack</item>
+        <item>Vegetarian</item>
+
+    </string-array>
+
+    <string-array name="type_arrays">
+        <item>-select-</item>
+        <item>American</item>
+        <item>Asian</item>
+        <item>Chinese</item>
+        <item>Colombian</item>
+        <item>French</item>
+        <item>Indian</item>
+        <item>Italian</item>
+        <item>Mexican</item>
+        <item>Spanish</item>
+
+    </string-array>
+
+
+    <string-array name="ingredient_arrays">
+        <item>-select-</item>
+        <item>Apple</item>
+        <item>Banana</item>
+        <item>Dark chocolate</item>
+        <item>Milk</item>
+        <item>Olive Oil</item>
+    </string-array>
+
+    <string name="title_activity_add_recipe">Add New Recipe</string>
+    <string name="title_activity_search_recipe">Search Recipe</string>
+    <string name="title_activity_add_ingredient">Add Ingredient</string>
+    <string name="title_activity_view_recipe">View Recipe</string>
+    <string name="title_activity_add_recipe_information">Input Ingredients</string>
+
+    title_activity_add_recipe_information
+    <string-array name="test_array">
+        <item>Test Item 1</item>
+        <item>Test Item 2</item>
+    </string-array>
+
+    <string-array name="sample_ingredients">
+        <item>Apple</item>
+        <item>Orange</item>
+        <item>Milk</item>
+        <item>Sugar</item>
+        <item>Flour</item>
+        <item>Cream</item>
+        <item>Water</item>
+    </string-array>
+
+    <string-array name="sample_instructions">
+        <item>Struct1</item>
+    </string-array>
+    <string name="title_activity_add_ingredient_to_recipe">AddIngredientToRecipe</string>
+    <string name="title_activity_add_instructions_to_recipe">AddInstructionsToRecipe</string>
+
+</resources>

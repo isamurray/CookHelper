@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.utilisateur.cookhelper.AddRecipe"
+    tools:showIn="@layout/activity_add_recipe"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/addrecipe"
+            android:id="@+id/imageID"
+            android:layout_gravity="center_horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/recipeName"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:hint="(Please enter a recipe name)"
+                android:textAlignment="center" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/categoryNameTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select a category : "
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginBottom="5dp" />
+
+            <Spinner
+                android:id="@+id/categoryChosen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/category_arrays"
+                android:prompt="@string/category_prompt"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+
+            <TextView
+                android:id="@+id/typeTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select a type : "
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginBottom="5dp" />
+
+            <Spinner
+                android:id="@+id/typeChosen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/type_arrays"
+                android:prompt="@string/type_prompt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
+
