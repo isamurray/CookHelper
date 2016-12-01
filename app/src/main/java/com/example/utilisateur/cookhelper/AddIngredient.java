@@ -8,24 +8,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.EditText;
+
+public class AddIngredient extends AppCompatActivity {
+    private EditText ingredientBox;
 
 
-public class AddIngredient extends AppCompatActivity  {
-
-    private EditText ingredientname;
-
+    /**
+     * 
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ingredientBox = (EditText) findViewById(R.id.newIngredient);
         setContentView(R.layout.activity_add_ingredient);
     }
 
+
+    /**
+     * Adds ingredient text to field
+     */
     public void onClickAddIngredient(View view) {
-            ingredientname = (EditText) findViewById(R.id.newIngredient);
-        if(!ingredientname.getText().toString().equals("")) {
+            ingredientBox = (EditText) findViewById(R.id.newIngredient);
+        if(!ingredientBox.getText().toString().equals("")) {
             Toast.makeText(getApplicationContext(), "Ingredient added!",
                     Toast.LENGTH_LONG).show();
-            ingredientname.setText("");
+            ingredientBox.setText("");
         }
         else
         {
@@ -33,5 +41,24 @@ public class AddIngredient extends AppCompatActivity  {
                     .setAction("Action", null).show();
 
         }
+    }
+    
+    /**
+     * Updates the all fields for DB sync
+     */
+    public void updateFields(){
+        ingredientBox = (EditText) findViewById(R.id.newIngredient);
+    }
+    
+    /**
+     * Creates new ingredient entry in the database
+     */
+    public void newIngredient(View view){
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        updateFields();
+        String ingredientName = ingredientBox.getText().toString();
+        Ingredient ingredient = new Ingredient(ingredientName);
+
+        handler.addIngredient(ingredient);
     }
 }

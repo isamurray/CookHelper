@@ -67,6 +67,7 @@
                     android:id="@+id/addIngredientButton"
                     android:layout_gravity="center_horizontal"
                     android:onClick="onClickAddIngredient" />
+                    />
             </LinearLayout>
 
         </LinearLayout>
