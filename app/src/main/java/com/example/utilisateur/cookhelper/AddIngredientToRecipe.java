@@ -56,7 +56,7 @@ public class AddIngredientToRecipe extends ListActivity {
 
     }
 
-    private void addItemsOnSpinner() {
+    private void addItemsOnSpinner() {                                                              //update spinner
         ingredientChosen = (Spinner) findViewById(R.id.ingredientChosen);
 
         ingredientList.add("-select ingredient-");
@@ -81,6 +81,10 @@ public class AddIngredientToRecipe extends ListActivity {
             input_ingredient_qty.setText("");
         }
 
+    }
+
+    public Spinner getSpinner(){
+        return ingredientChosen;
     }
 
 }

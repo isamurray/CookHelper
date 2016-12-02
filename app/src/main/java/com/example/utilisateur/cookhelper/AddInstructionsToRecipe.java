@@ -73,29 +73,4 @@ public class AddInstructionsToRecipe extends ListActivity {
 
 
 
-    //DOESNT WORK YET
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId()==android.R.id.list) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            int itemSelected = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
-
-            menu.setHeaderTitle(instructionList.get(itemSelected));
-
-            String[] menuItems = new String[] {"Edit", "Delete"};
-            for (int i = 0; i<menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
-            }
-        }
-    }
-
-    public boolean onContextItemSelected(MenuItem item){
-            if (item.getTitle() == "Edit") {
-                Toast.makeText(getApplicationContext(), "EDIT",
-                        Toast.LENGTH_LONG).show();
-            }
-        return true;
-
-    }
-
 }

@@ -75,7 +75,7 @@
                                 android:text="SampleCategory"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/textView"
+                                android:id="@+id/input_category"
                                 android:layout_weight="1"
                                 android:textStyle="bold|normal"/>
                         </LinearLayout>
@@ -96,7 +96,7 @@
                                 android:text="SampleType"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/recipeTypeData"
+                                android:id="@+id/input_type"
                                 android:layout_weight="1"
                                 android:textStyle="bold|normal"/>
                         </LinearLayout>
@@ -122,35 +122,53 @@
                     </LinearLayout>
 
                 <!-- Ingredient List -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ingredients"
-                        android:textStyle="bold|normal"
-                        android:id="@+id/ingredientTextField" />
 
                     <!--android:paddingTop="10dp"-->
 
                 <!-- Instructions List -->
-                    <ListView
-                    android:layout_width="match_parent"
-                        android:entries="@array/sample_ingredients"
-                        android:clickable="false"
-                        android:id="@+id/ingredientListView"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Instructions"
-                        android:textStyle="bold|normal"
-                        android:id="@+id/instructionTextField" />
+                        android:id="@+id/linear_layout_ingredient">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ingredients"
+                            android:textStyle="bold|normal"
+                            android:id="@+id/ingredientTextField"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                    <ListView
+                    android:layout_width="match_parent"
+                        android:clickable="false"
+                        android:id="@+id/ingredientListView"
+                        android:layout_height="wrap_content"
+                        android:longClickable="true" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/linear_layout_instruction">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Instructions"
+                            android:textStyle="bold|normal"
+                            android:id="@+id/instructionTextField"
+                            android:layout_weight="1" />
+                    </LinearLayout>
 
                     <ListView
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                        android:id="@+id/instructionListViewCheck" />
+                        android:id="@+id/instructionListViewCheck"
+                        android:longClickable="true" />
 
                 </LinearLayout>
 
