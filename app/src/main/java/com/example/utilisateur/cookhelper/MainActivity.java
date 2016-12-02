@@ -13,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CHDBHandler db = new CHDBHandler(this,null,null,1);
+        db.getWritableDatabase();
+        db.close();
 
     }
     
