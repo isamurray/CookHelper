@@ -47,16 +47,11 @@ public class AddRecipe extends AppCompatActivity {
 
     }
 
-
     private void readItemSelection() {
         typeChoice = (Spinner) findViewById(R.id.typeChosen);
         recipeName = (EditText) findViewById(R.id.recipeName);
         categoryChosen = (Spinner) findViewById(R.id.categoryChosen);
     }
-
-
-
-
 
 
 }
