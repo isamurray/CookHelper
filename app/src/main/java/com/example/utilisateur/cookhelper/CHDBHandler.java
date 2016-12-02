@@ -11,14 +11,15 @@ import android.database.Cursor;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
     private static final String TABLE_RECIPETYPES = "recipetypes";
     private  static final String TABLE_INSTRUCTIONS = "instructions";
     private static final String TABLE_RECIPECATEGORIES = "categories";
-    
+    private static final String[] TABLES = new String[]{TABLE_RECIPES,
+        TABLE_INGREDIENTS,TABLE_RECIPETYPES,TABLE_INSTRUCTIONS,TABLE_RECIPECATEGORIES};
 
     private static final String COL_ID = "_id";
     private static final String COL_RECIPENAME = "title";
@@ -37,8 +38,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
     // Index of instruction in set of instructions
     // Starts at 0
-    private static final String COL_INSTRUCTION_INDEX = "index";
-    private static final String COL_INSTRUCTION_TEXT = "text";
+    private static final String COL_INSTRUCTION_INDEX = "idx";
+    private static final String COL_INSTRUCTION_TEXT = "instruction";
 
     public CHDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version){
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -49,32 +50,36 @@ public class CHDBHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db){
-        String CREATE_RECIPE_TABLE = "CREATE TABLE " +
+        String CREATE_RECIPE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_RECIPES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_RECIPENAME + " TEXT," +
                 COL_RECIPECOUNTRY + " TEXT," +
                 COL_RECIPEDISHTYPE + " TEXT," +
                 COL_RECIPECOOKTIME + " INTEGER" + ")";
-
-        String CREATE_INGREDIENTS_TABLE = "CREATE TABLE " +
+        
+        // CREATE TABLE ingredients(_id INTEGER PRIMARY KEY, title TEXT);
+        String CREATE_INGREDIENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_INGREDIENTS + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_INGREDIENTNAME + " TEXT" + ")";
-
-        String CREATE_INSTRUCTION_TABLE = "CREATE TABLE " +
+        
+        // CREATE TABLE instructions(_id INTEGER PRIMARY KEY, parent INTEGER, idx INTEGER, instruction TEXT);
+        String CREATE_INSTRUCTION_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_INSTRUCTIONS + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_INSTRUCTION_PARENT_RECIPE + " INTEGER," +
                 COL_INSTRUCTION_INDEX + " INTEGER," +
                 COL_INSTRUCTION_TEXT + " TEXT" + ")";
         
-        String CREATE_RECIPETYPE_TABLE = "CREATE TABLE " +
+        // CREATE TABLE recipetypes(_id INTEGER PRIMARY KEY, type TEXT);
+        String CREATE_RECIPETYPE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_RECIPETYPES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_RECIPETYPES_TYPE + " TEXT" + ")";
         
-        String CREATE_RECIPECATEGORY_TABLE = "CREATE TABLE " +
+        // CREATE TABLE categories(_id INTEGER PRIMARY KEY, category TEXT);
+        String CREATE_RECIPECATEGORY_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_RECIPECATEGORIES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_CAT_CATEGORY + " TEXT" + ")";
@@ -92,8 +97,19 @@ public class CHDBHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
+        // dropAllTables();
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECIPES);
         onCreate(db);
+    }
+    
+    public void dropAllTables(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for(int i = 0; i < TABLES.length; i++){
+            db.execSQL("DROP TABLE IF EXISTS " + TABLES[i]);
+        }
+        
+        db.close();
+        System.out.println("All tables dropped");
     }
 
     /**
@@ -247,7 +263,6 @@ public class CHDBHandler extends SQLiteOpenHelper {
             }
 
         }
-
         cursor.close();
         return recipes;
     }
