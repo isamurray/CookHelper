@@ -22,7 +22,7 @@ public class AddIngredient extends AppCompatActivity  {
 
     public void onClickAddIngredient(View view) {
             ingredientname = (EditText) findViewById(R.id.newIngredient);
-        if(!ingredientname.getText().toString().equals("")) {
+        if(/*!ingredientname.getText().toString().equals("")*/false) {                   //commented expression
             Toast.makeText(getApplicationContext(), "Ingredient added!",
                     Toast.LENGTH_LONG).show();
             ingredientname.setText("");
