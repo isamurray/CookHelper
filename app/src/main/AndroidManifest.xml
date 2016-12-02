@@ -31,6 +31,10 @@
             android:name=".ViewRecipe"
             android:label="@string/title_activity_view_recipe" />
 
+        <activity
+            android:name=".ResultsFromSearch"
+            android:label="@string/title_activity_recipeview" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

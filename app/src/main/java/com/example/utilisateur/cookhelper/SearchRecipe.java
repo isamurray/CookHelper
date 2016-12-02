@@ -13,8 +13,9 @@ public class SearchRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_search_recipe);
     }
 
-    public void testSpecificRecipe(View v){
-        Intent intent = new Intent(getApplication(), ViewRecipe.class);
+    public void ViewSpecificRecipes(View v){
+        Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
         startActivityForResult(intent, 0);
     }
+
 }

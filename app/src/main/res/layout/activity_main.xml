@@ -138,6 +138,30 @@
 
         </LinearLayout>
 
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/help"
+                android:id="@+id/imageView5"
+                android:layout_weight="0.01" />
+
+            <Button
+                android:text="TEST"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button111"
+                android:layout_weight="1.06"
+                android:onClick="calculatrice (MainActivity)" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
