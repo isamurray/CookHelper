@@ -11,7 +11,7 @@ import android.database.Cursor;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -86,7 +86,6 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String CREATE_RECIPECATEGORY_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_RECIPECATEGORIES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
-                COL_PARENT_RECIPE + " INTEGER," +
                 COL_CAT_CATEGORY + " TEXT" + ")";
 
         db.execSQL(CREATE_INSTRUCTION_TABLE);
@@ -169,7 +168,6 @@ public class CHDBHandler extends SQLiteOpenHelper {
      */
     public void addRecipeCategory(String recipeCategory){
         ContentValues values = new ContentValues();
-        values.put(COL_PARENT_RECIPE,1);
         values.put(COL_CAT_CATEGORY,recipeCategory);// need to track what
         // recipe belongs to what category
         SQLiteDatabase db = this.getWritableDatabase();
