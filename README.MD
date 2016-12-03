@@ -8,7 +8,7 @@ So does cedric
 
 
 <<<<<<< HEAD
-CATHERINE SAYS HELLO
+CATHERINE 
 catherine local
 =======
 Awignahan
