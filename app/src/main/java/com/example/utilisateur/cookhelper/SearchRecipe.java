@@ -8,6 +8,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
+import android.content.ContentValues;
+import android.database.Cursor;
+
 public class SearchRecipe extends AppCompatActivity {
     private Spinner typeChosen, categoryChosen;
     private EditText recipeName, ingredientBool;
@@ -19,22 +25,40 @@ public class SearchRecipe extends AppCompatActivity {
     }
 
 
-    private void readItemSelection() {
+    private void readItemSelection() {//<------- we should kee our field methods by the same name
         typeChosen = (Spinner) findViewById(R.id.typeChosen);
         categoryChosen = (Spinner) findViewById(R.id.categoryChosen);
         ingredientBool = (EditText) findViewById(R.id.ingredientBool);
         recipeName = (EditText) findViewById(R.id.recipeName);
     }
 
-
+    /**
+     * Searches for a recipe using only the input name
+     */
     public void onClickSearchByName(View v) {
 
-        readItemSelection();
+        readItemSelection();//<----- we should keep our 'field methods' by the same name
+        // input box is empty
         if(recipeName.getText().toString().equals("")) {
             Snackbar.make(v, "Please enter a recipe name", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
         else{
+            // will need case where search returns nothing
+            // if search returns something, THEN we send those parameters with
+            // the intent... figure out how to do this.
+            
+            //>>>> DB
+            CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+            //updateFields(); //<--- function was in other class in order to make sure field values were taken
+            String query = recipeName.getText().toString();
+            
+            
+            Recipe recipe = handler.findRecipe(query);
+            //send this recipe to the intent below
+            System.out.println(recipe);
+            //<<<< DB            
+            
             Intent intent = new Intent(getApplication(), ViewRecipe.class);
             startActivityForResult(intent, 0);}
     }
@@ -48,6 +72,10 @@ public class SearchRecipe extends AppCompatActivity {
 
     }
 
+
+    /**
+     * Searches for a recipe using all provided parameters
+     */
     public void onClickSearch(View v) {
 
         readItemSelection();
