@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import com.example.utilisateur.cookhelper.R;
+
 
 public class MainActivity extends AppCompatActivity {
 
