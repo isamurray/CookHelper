@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-<<<<<<< HEAD
+
     public void calculatrice(View view) {
         Intent intent = new Intent(getApplicationContext(), ViewRecipe.class); //Application Context and Activity
         startActivityForResult (intent,0);
