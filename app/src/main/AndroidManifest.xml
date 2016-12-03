@@ -55,6 +55,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.utilisateur.cookhelper.AddIngredientToRecipe" />
         </activity>
+        <activity android:name=".HelpSearchRecipe" />
+        <activity android:name=".HelpAddRecipe" />
+        <activity android:name=".HelpAddIngredient"></activity>
     </application>
 
 </manifest>
