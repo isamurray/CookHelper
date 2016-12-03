@@ -53,7 +53,8 @@
         </activity>
         <activity android:name=".HelpSearchRecipe" />
         <activity android:name=".HelpAddRecipe" />
-        <activity android:name=".HelpAddIngredient"></activity>
+        <activity android:name=".HelpAddIngredient" />
+        <activity android:name=".HelpMenu"></activity>
     </application>
 
 </manifest>
