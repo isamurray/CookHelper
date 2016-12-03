@@ -1,18 +1,18 @@
 package com.example.utilisateur.cookhelper;
 
 import android.content.Intent;
-<<<<<<< HEAD
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-=======
+
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
->>>>>>> master
+
 
 public class SearchRecipe extends AppCompatActivity {
     private Spinner typeChosen, categoryChosen;
@@ -24,14 +24,14 @@ public class SearchRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_search_recipe);
     }
 
-<<<<<<< HEAD
+
     public void ViewSpecificRecipes(View v){
         Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
         startActivityForResult(intent, 0);
     }
 
 }
-=======
+
 
     private void readItemSelection() {
         typeChosen = (Spinner) findViewById(R.id.typeChosen);
@@ -77,4 +77,3 @@ public class SearchRecipe extends AppCompatActivity {
 
 
 }
->>>>>>> master
