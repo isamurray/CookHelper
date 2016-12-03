@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         String[] listItems = {"Recette A", "Recette B", "Recette C"};
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
         mListView.setAdapter(adapter);*/
-=======
+
     public void GOTOADDINFO(View v) {
         Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
         startActivityForResult(intent, 0);
@@ -114,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
         //handler.addIngredient(ingredient);
     }
 
-
-
->>>>>>> master
 
 }
 
