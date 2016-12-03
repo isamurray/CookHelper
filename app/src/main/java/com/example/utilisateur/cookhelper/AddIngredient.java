@@ -32,6 +32,16 @@ public class AddIngredient extends AppCompatActivity {
 
             ingredientBox = (EditText) findViewById(R.id.newIngredient);
         if(!ingredientBox.getText().toString().equals("")) {
+            
+            //>>>> DB
+            CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+            updateFields();
+            String ingredientName = ingredientBox.getText().toString();
+            Ingredient ingredient = new Ingredient(ingredientName);
+
+            handler.addIngredient(ingredient);
+            //<<<< DB
+            
             Toast.makeText(getApplicationContext(), "Ingredient added!",
                     Toast.LENGTH_LONG).show();
             ingredientBox.setText("");
@@ -53,6 +63,7 @@ public class AddIngredient extends AppCompatActivity {
     
     /**
      * Creates new ingredient entry in the database
+     * TODO: Can be removed, functionality added to onClickAddIngredient
      */
     public void newIngredient(View view){
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);

@@ -19,6 +19,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -29,6 +30,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView"
+=======
+            android:layout_height="166dp">
+
+            <TextView
+                android:text="Click on one of those links to view the instructions of that topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="#25383C"
+>>>>>>> master
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -36,6 +49,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="76dp">
 
             <Button
@@ -58,11 +72,20 @@
                 android:textColor="#800000"
                 android:layout_width="wrap_content"
                 android:layout_height="85dp"
+=======
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="73dp"
+>>>>>>> master
                 app:srcCompat="@android:color/transparent"
                 android:id="@+id/imageButton3"
                 android:layout_weight="1" />
         </LinearLayout>
 
+<<<<<<< HEAD
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -78,6 +101,8 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
+=======
+>>>>>>> master
     </LinearLayout>
 
 </RelativeLayout>

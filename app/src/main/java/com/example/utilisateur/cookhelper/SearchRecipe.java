@@ -47,11 +47,16 @@ public class SearchRecipe extends AppCompatActivity {
             // will need case where search returns nothing
             // if search returns something, THEN we send those parameters with
             // the intent... figure out how to do this.
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> master
             //>>>> DB
             CHDBHandler handler = new CHDBHandler(this, null, null, 1);
             //updateFields(); //<--- function was in other class in order to make sure field values were taken
             String query = recipeName.getText().toString();
+<<<<<<< HEAD
 
 
             Recipe recipe = handler.findRecipe(query);
@@ -59,6 +64,15 @@ public class SearchRecipe extends AppCompatActivity {
             System.out.println(recipe);
             //<<<< DB
 
+=======
+            
+            
+            Recipe recipe = handler.findRecipe(query);
+            //send this recipe to the intent below
+            System.out.println(recipe);
+            //<<<< DB            
+            
+>>>>>>> master
             Intent intent = new Intent(getApplication(), ViewRecipe.class);
             startActivityForResult(intent, 0);}
     }

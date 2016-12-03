@@ -11,7 +11,7 @@ import android.database.Cursor;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -35,6 +35,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
     // INSTRUCTION TABLE CONSTANTS
     // All instructions belong to a recipe... or more?...
     private static final String COL_INSTRUCTION_PARENT_RECIPE = "parent";
+    
+    private static final String COL_PARENT_RECIPE = "parent";
 
     // Index of instruction in set of instructions
     // Starts at 0
@@ -62,13 +64,14 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String CREATE_INGREDIENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_INGREDIENTS + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
+                COL_PARENT_RECIPE + " INTEGER," +
                 COL_INGREDIENTNAME + " TEXT" + ")";
         
         // CREATE TABLE instructions(_id INTEGER PRIMARY KEY, parent INTEGER, idx INTEGER, instruction TEXT);
         String CREATE_INSTRUCTION_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_INSTRUCTIONS + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
-                COL_INSTRUCTION_PARENT_RECIPE + " INTEGER," +
+                COL_PARENT_RECIPE + " INTEGER," +
                 COL_INSTRUCTION_INDEX + " INTEGER," +
                 COL_INSTRUCTION_TEXT + " TEXT" + ")";
         
@@ -76,6 +79,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String CREATE_RECIPETYPE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_RECIPETYPES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
+                COL_PARENT_RECIPE + " INTEGER," +
                 COL_RECIPETYPES_TYPE + " TEXT" + ")";
         
         // CREATE TABLE categories(_id INTEGER PRIMARY KEY, category TEXT);
@@ -83,13 +87,12 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 TABLE_RECIPECATEGORIES + "(" +
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_CAT_CATEGORY + " TEXT" + ")";
-        
-        
 
         db.execSQL(CREATE_INSTRUCTION_TABLE);
         db.execSQL(CREATE_RECIPE_TABLE);
         db.execSQL(CREATE_INGREDIENTS_TABLE);
         db.execSQL(CREATE_RECIPECATEGORY_TABLE);
+        db.execSQL(CREATE_RECIPETYPE_TABLE);
     }
 
     /**
@@ -134,8 +137,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
      */
     public void addIngredient(Ingredient ingredient){
         ContentValues values = new ContentValues();
-        values.put(COL_INGREDIENTNAME,ingredient.getName());
-
+        values.put(COL_PARENT_RECIPE,1);
+        values.put(COL_INGREDIENTNAME,ingredient.getName());//need to track...
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_INGREDIENTS,null,values);
         db.close();
@@ -147,9 +150,11 @@ public class CHDBHandler extends SQLiteOpenHelper {
      * TODO: check for duplicates
      * TODO: SECURITY VULN SQL INJECTION
      */
-    public void addRecipeType(String recipeType){
+    public void addRecipeType(String recipeType){// recipe
         ContentValues values = new ContentValues();
-        values.put(COL_RECIPETYPES_TYPE,recipeType);
+        values.put(COL_PARENT_RECIPE,1);
+        values.put(COL_RECIPETYPES_TYPE,recipeType);// need to track what
+        // recipe belongs to what category
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPETYPES,null,values);
         db.close();
@@ -163,7 +168,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
      */
     public void addRecipeCategory(String recipeCategory){
         ContentValues values = new ContentValues();
-        values.put(COL_CAT_CATEGORY,recipeCategory);
+        values.put(COL_CAT_CATEGORY,recipeCategory);// need to track what
+        // recipe belongs to what category
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPECATEGORIES,null,values);
         db.close();
@@ -218,6 +224,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         cursor.close();
         return categories;
     }
+    
     
     /**
      * Get all recipe types as array of strings from DB
