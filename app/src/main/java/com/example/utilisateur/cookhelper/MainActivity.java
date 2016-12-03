@@ -51,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-
-    public void calculatrice(View view) {
-        Intent intent = new Intent(getApplicationContext(), ViewRecipe.class); //Application Context and Activity
+    public void onClickViewHelp(View view) {
+        Intent intent = new Intent(getApplicationContext(), HelpMenu.class); //Application Context and Activity
         startActivityForResult (intent,0);
     }
+
 //code quand j'ai on simule, ça met Recette A,B,C sur l'écran de viewRecipe
     //donc ça l'affiche toutes les recettes sur l'écran
         /*ListView mListView;

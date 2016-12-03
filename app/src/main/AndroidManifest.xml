@@ -28,7 +28,6 @@
         <activity
             android:name=".ViewRecipe"
             android:label="@string/title_activity_view_recipe" />
-
         <activity
             android:name=".ResultsFromSearch"
             android:label="@string/title_activity_recipeview" />
@@ -57,7 +56,8 @@
         </activity>
         <activity android:name=".HelpSearchRecipe" />
         <activity android:name=".HelpAddRecipe" />
-        <activity android:name=".HelpAddIngredient"></activity>
+        <activity android:name=".HelpAddIngredient" />
+        <activity android:name=".HelpMenu"></activity>
     </application>
 
 </manifest>
