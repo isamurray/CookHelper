@@ -15,30 +15,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        CHDBHandler db = new CHDBHandler(this,null,null,1);
+        db.getWritableDatabase();
+        db.close();
 
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // getMenuInflater().inflate(R.menu.menu_menu_example, menu);
+        getMenuInflater().inflate(R.menu.debug, menu);
+        return true;
     }
 
 
-    public void testAdd(View v) {
+    public void onClickAddRecipePage(View v) {
         Intent intent = new Intent(getApplication(), AddRecipe.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testSearch(View v) {
+    public void onClickSearchPage(View v) {
         Intent intent = new Intent(getApplication(), SearchRecipe.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testAddIngredient(View v) {
+    public void onClickAddIngredientPage(View v) {
         Intent intent = new Intent(getApplication(), AddIngredient.class);
         startActivityForResult(intent, 0);
     }
 
-    public void testViewRecipe(View v) {
+    public void onClickViewAllRecipesPage(View v) {
         Intent intent = new Intent(getApplication(), ViewRecipe.class);
         startActivityForResult(intent, 0);
     }
 
+<<<<<<< HEAD
     public void calculatrice(View view) {
         Intent intent = new Intent(getApplicationContext(), ViewRecipe.class); //Application Context and Activity
         startActivityForResult (intent,0);
@@ -51,6 +62,61 @@ public class MainActivity extends AppCompatActivity {
         String[] listItems = {"Recette A", "Recette B", "Recette C"};
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
         mListView.setAdapter(adapter);*/
+=======
+    public void GOTOADDINFO(View v) {
+        Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
+        startActivityForResult(intent, 0);
+    }
+    
+    // To respond to menu selections
+    // DEBUG
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        if(item.getItemId() == R.id.menu_dbg_1){
+            System.out.println("\ndbg1\n");            
+        }else if(item.getItemId() == R.id.menu_dbg_2){
+            System.out.println("\ndbg2\n");            
+        }else if(item.getItemId() == R.id.menu_dbg_3){
+            System.out.println("\ndbg3\n");
+            dropAllTables();            
+        }else{
+            System.out.println("\nunknown\n");            
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Creates new ingredient entry in the database
+     */
+    public void dropAllTables(){
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        handler.dropAllTables();
+        // System.out.println(recipes);
+        // updateFields();
+        // String ingredientName = ingredientBox.getText().toString();
+        // Ingredient ingredient = new Ingredient(ingredientName);
+
+        //handler.addIngredient(ingredient);
+    }    
+    
+    /**
+     * Creates new ingredient entry in the database
+     */
+    public void newIngredient(){
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        Recipe[] recipes = handler.getAllRecipes();
+        System.out.println(recipes);
+        // updateFields();
+        // String ingredientName = ingredientBox.getText().toString();
+        // Ingredient ingredient = new Ingredient(ingredientName);
+
+        //handler.addIngredient(ingredient);
+    }
+
+
+
+>>>>>>> master
 
 }
 
