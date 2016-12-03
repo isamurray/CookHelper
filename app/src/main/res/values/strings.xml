@@ -46,7 +46,7 @@
     <string name="title_activity_search_recipe">Search Recipe</string>
     <string name="title_activity_add_ingredient">Add Ingredient</string>
     <string name="title_activity_view_recipe">View Recipe</string>
-    <string name="title_activity_add_recipe_information">Input Ingredients</string>
+
 
     title_activity_add_recipe_information
     <string-array name="test_array">
