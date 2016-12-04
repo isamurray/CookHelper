@@ -19,13 +19,25 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_height="86dp">
+
+            <ImageView
+                android:layout_width="358dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/helpaddrecipeinstructions"
+                android:id="@+id/imageView" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/helpaddrecipe"
-                android:id="@+id/imageView2"
+                app:srcCompat="@drawable/helpaddrecipe1"
+                android:id="@+id/imageView6"
                 android:layout_weight="1" />
         </LinearLayout>
 

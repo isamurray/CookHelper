@@ -136,9 +136,10 @@
                 android:id="@+id/helpButton"
                 android:layout_weight="1.06"
                 android:nestedScrollingEnabled="false"
-                android:onClick="GOTOADDINFO" />
+                android:onClick="onClickHelp" />
 
         </LinearLayout>
+
 
     </LinearLayout>
 

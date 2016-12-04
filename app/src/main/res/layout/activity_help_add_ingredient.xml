@@ -19,14 +19,28 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/helpaddingredientinstruction"
+                android:id="@+id/imageView3"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/helpaddingredient"
-                android:id="@+id/imageView"
+                app:srcCompat="@drawable/helpaddingredient1"
+                android:id="@+id/imageView7"
                 android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

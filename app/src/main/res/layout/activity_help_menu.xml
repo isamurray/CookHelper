@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,16 +20,16 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="166dp">
+            android:layout_height="142dp">
 
             <TextView
                 android:text="Click on one of those links to view the instructions of that topic"
+                android:textStyle="bold"
+                android:textColor="#021d2e"
+                android:textSize="30sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="#25383C"
                 android:layout_weight="1" />
 
         </LinearLayout>
@@ -36,15 +37,52 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="76dp">
 
-            <ImageButton
+            <Button
+                android:text="How to search for a recipe"
+                android:textColor="#0101bc"
                 android:layout_width="wrap_content"
-                android:layout_height="73dp"
+                android:layout_height="85dp"
+                android:background="@android:color/transparent"
                 app:srcCompat="@android:color/transparent"
-                android:id="@+id/imageButton3"
-                android:layout_weight="1" />
+                android:id="@+id/hrechercher"
+                android:layout_weight="1"
+                android:onClick="onClickHelpSearch" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="76dp">
+
+            <Button
+                android:text="How to add a recipe"
+                android:textColor="#5a05bc"
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_height="85dp"
+                app:srcCompat="@android:color/transparent"
+                android:id="@+id/hajoutrecette"
+                android:layout_weight="1"
+                android:onClick="onClickHelpAddRecipe" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="76dp">
+
+            <Button
+                android:text="How to add an ingredient"
+                android:textColor="#780268"
+                android:layout_width="wrap_content"
+                android:background="@android:color/transparent"
+                android:layout_height="85dp"
+                app:srcCompat="@android:color/transparent"
+                android:id="@+id/hajouting"
+                android:layout_weight="1"
+                android:onClick="onClickHelpAddIngredient" />
         </LinearLayout>
 
     </LinearLayout>

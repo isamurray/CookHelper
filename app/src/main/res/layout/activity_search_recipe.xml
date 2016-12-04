@@ -191,6 +191,8 @@
                     android:text="search"
                     android:id="@+id/searchRecipes"
                     android:layout_gravity="center_horizontal"
+                    android:onClick="testViewRecipe (SearchRecipe)" />
+=======
                     android:onClick="onClickSearch" />
             </LinearLayout>
         </LinearLayout>
