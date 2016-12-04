@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onClickHelp(View v) {
+        Intent intent = new Intent(getApplicationContext(), HelpMenu.class); //Application Context and Activity
+        startActivityForResult (intent,0);
+    }
 
     public void onClickAddRecipePage(View v) {
         Intent intent = new Intent(getApplication(), AddRecipe.class);
@@ -49,11 +53,6 @@ public class MainActivity extends AppCompatActivity {
     public void onClickViewAllRecipesPage(View v) {
         Intent intent = new Intent(getApplication(), ViewRecipe.class);
         startActivityForResult(intent, 0);
-    }
-
-    public void onClickViewHelp(View view) {
-        Intent intent = new Intent(getApplicationContext(), HelpMenu.class); //Application Context and Activity
-        startActivityForResult (intent,0);
     }
 
 //code quand j'ai on simule, ça met Recette A,B,C sur l'écran de viewRecipe

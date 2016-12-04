@@ -135,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/helpButton"
                 android:layout_weight="1.06"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:onClick="onClickHelp" />
 
         </LinearLayout>
 

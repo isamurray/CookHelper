@@ -46,11 +46,8 @@
     <string name="title_activity_search_recipe">Search Recipe</string>
     <string name="title_activity_add_ingredient">Add Ingredient</string>
     <string name="title_activity_view_recipe">View Recipe</string>
-<<<<<<< HEAD
     <string name="title_activity_add_recipe_information">Input Ingredients</string>
     <string name="title_activity_recipeview">Input Recipe</string>
-=======
->>>>>>> master
 
 
     title_activity_add_recipe_information
