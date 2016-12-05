@@ -20,11 +20,21 @@ public class ResultsFromSearch extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipeview);
 
-/*        ListView mListView;
+/*      Commentaires de comment afficher les recettes dans la liste view
+        ListView mListView;
         mListView = (ListView) findViewById(R.id.listview);
 
         String[] listItems = {"Recette A", "Recette B", "Recette C"};
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
         mListView.setAdapter(adapter);*/
+    }
+
+    public void displayRecipes(String[] listItems){
+        ListView mListView;
+        mListView = (ListView) findViewById(R.id.listview); //listview est le nom de ma liste
+
+        //comment ça va afficher les diffrentes recettes avec la listeView
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+        mListView.setAdapter(adapter);
     }
 }
