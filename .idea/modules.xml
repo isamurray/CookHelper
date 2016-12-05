@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CookHelper.iml" filepath="$PROJECT_DIR$/CookHelper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/git_a.iml" filepath="$PROJECT_DIR$/git_a.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>
