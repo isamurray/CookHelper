@@ -20,11 +20,11 @@ public class ResultsFromSearch extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipeview);
 
-        ListView mListView;
+/*        ListView mListView;
         mListView = (ListView) findViewById(R.id.listview);
 
         String[] listItems = {"Recette A", "Recette B", "Recette C"};
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
-        mListView.setAdapter(adapter);
+        mListView.setAdapter(adapter);*/
     }
 }
