@@ -43,6 +43,7 @@ public class ViewRecipe extends AppCompatActivity {
     private ArrayList<String> instructionData = new ArrayList<String>();
     private ArrayList<String> ingredientData = new ArrayList<String>();
     private ArrayList<String> categoryData = new ArrayList<String>();
+    private ArrayList<String> ingredientList = new ArrayList<String>();
     private ArrayList<String> typeData = new ArrayList<String>();
     private ImageView addInstructionButton, addIngredientButton;
     private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
@@ -94,10 +95,16 @@ public class ViewRecipe extends AppCompatActivity {
         instructionData.add("Instruction 3");
         instructionData.add("Instruction 4");
 
-        ingredientData.add("Ingredient 1");
-        ingredientData.add("Ingredient 2");
-        ingredientData.add("Ingredient 3");
-        ingredientData.add("Ingredient 4");
+        ingredientData.add("-select-");
+        ingredientData.add("Pomme");
+        ingredientData.add("Banane");
+        ingredientData.add("Jus");
+        ingredientData.add("Lait");
+
+        ingredientList.add("45 Pomme");
+        ingredientList.add("14 Banane");
+        ingredientList.add("2.3 Jus");
+        ingredientList.add("9.7 Lait");
 
         categoryData.add("Category 1");
         categoryData.add("Category 2");
@@ -112,10 +119,10 @@ public class ViewRecipe extends AppCompatActivity {
 
         //Create all necessary ArrayAdapter
 
-        arrayAdapterIngredient = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientData);
+        arrayAdapterIngredient = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientList);
         arrayAdapterCheckBoxInstruction = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, instructionData);
         arrayAdapterNoCheckInstruction = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, instructionData);
-        arrayAdapterIngredientEdit = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, ingredientData);
+        arrayAdapterIngredientEdit = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, ingredientList);
 
 
         //Create and populate the 3 spinners (ingredient, category and type)
@@ -359,8 +366,9 @@ public class ViewRecipe extends AppCompatActivity {
                 setListViewHeightBasedOnItems(lView2);
 
             } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
-                ingredientData.remove(menuItemSelected);
+                ingredientList.remove(menuItemSelected);
                 arrayAdapterIngredient.notifyDataSetChanged();
+                arrayAdapterIngredientEdit.notifyDataSetChanged();
                 setListViewHeightBasedOnItems(lView1);
             }
         }
@@ -378,25 +386,40 @@ public class ViewRecipe extends AppCompatActivity {
         final EditText input = new EditText(this);
         input.setGravity(17);
 
-        if (v.getId() == R.id.instructionListViewCheck) {
+        if (v.getId() == R.id.instructionListViewCheck) {               //instruction
             array = instructionData;
             input.setText(array.get(menuItemSelected));
             alert.setTitle("Edit Instruction");
             alert.setView(input);
 
-        } else if (v.getId() == R.id.ingredientListView) {
-            array = ingredientData;
-            input.setText(array.get(menuItemSelected));
-            alert.setTitle("Edit Ingredient");
-            alert.setView(input);
+        } else if (v.getId() == R.id.ingredientListView) {              //ingredient
+            array = ingredientList;
+            input.setGravity(17);
+            linearSpinnerIngredient.addView(input,0);
+            String qtyIngredient = array.get(menuItemSelected);
+            String qty = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // QTY
+            String ingredient = qtyIngredient.substring(qtyIngredient.indexOf(' ')+1); // INGREDIENT
+            System.out.println(qty);
+            System.out.println(ingredient);
+            input.setText(qty);
+            ingredientSpinner.setSelection(ingredientData.indexOf(ingredient));
 
-        } else if(v.getId() == R.id.recipeName) {
+            //reset the child's parent
+            if(linearSpinnerIngredient.getParent()!=null)
+                ((ViewGroup)linearSpinnerIngredient.getParent()).removeView(linearSpinnerIngredient);
+
+
+            alert.setTitle("Edit Ingredient");
+
+            alert.setView(linearSpinnerIngredient);
+
+        } else if(v.getId() == R.id.recipeName) {       //recipe name
             alert.setTitle("Edit Recipe Name");
             input.setText( ((TextView) v).getText().toString());
             alert.setView(input);
         }
 
-        else if(v.getId() == R.id.input_category) {
+        else if(v.getId() == R.id.input_category) {       //recipe category
             alert.setTitle("Edit Category");
             //reset the child's parent
             if(linearSpinnerCategory.getParent()!=null)
@@ -408,7 +431,7 @@ public class ViewRecipe extends AppCompatActivity {
 
         }
 
-        else if(v.getId() == R.id.input_type) {
+        else if(v.getId() == R.id.input_type) {             //recipe type
             alert.setTitle("Edit Type");
             //reset the child's parent
             if(linearSpinnerType.getParent()!=null)
@@ -436,10 +459,12 @@ public class ViewRecipe extends AppCompatActivity {
 
                 } else if (view.getId() == R.id.ingredientListView) {
 
-                    ingredientData.set(menuItemSelected, input.getText().toString());
+                    ingredientList.set(menuItemSelected, input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
+                    linearSpinnerIngredient.removeView(input);
+
 
                 } else if (view.getId() == R.id.input_type){
                     input_type.setText(String.valueOf(typeSpinner.getSelectedItem()));
@@ -456,12 +481,17 @@ public class ViewRecipe extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Recipe name must have at least one character", Toast.LENGTH_LONG).show();
 
                 }
+                setListViewHeightBasedOnItems(lView1);
+                setListViewHeightBasedOnItems(lView2);
             }
+
+
         });
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
+                linearSpinnerIngredient.removeView(input);
 
             }
         });
@@ -527,12 +557,14 @@ public class ViewRecipe extends AppCompatActivity {
     private void addAnIngredient(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final View view = v;
-        ArrayList<String> array = ingredientData;
+        ArrayList<String> array = ingredientList;
         alert.setTitle("Add New Ingredient");
         final EditText input = new EditText(this);
         input.setHint("Quantity");
+        input.setText("");
         input.setGravity(17);
         linearSpinnerIngredient.addView(input,0);
+        ingredientSpinner.setSelection(0);
 
         //reset the child's parent
         if(linearSpinnerIngredient.getParent()!=null)
@@ -544,7 +576,7 @@ public class ViewRecipe extends AppCompatActivity {
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (!input.getText().toString().equals("")) {
-                    ingredientData.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+                    ingredientList.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
