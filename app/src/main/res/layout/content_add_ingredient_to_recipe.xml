@@ -38,8 +38,6 @@
             android:layout_height="55dp"
             android:hint="Enter quantity"
             android:textAlignment="center"
-            android:digits="0123456789."
-            android:inputType="numberDecimal"
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp" />
 

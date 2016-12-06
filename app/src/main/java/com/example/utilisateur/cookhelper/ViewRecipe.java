@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
@@ -397,10 +399,13 @@ public class ViewRecipe extends AppCompatActivity {
             input.setGravity(17);
             linearSpinnerIngredient.addView(input,0);
             String qtyIngredient = array.get(menuItemSelected);
+            //make sure input is numerical
+            input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            input.setKeyListener(DigitsKeyListener.getInstance(false,true));
             String qty = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // QTY
             String ingredient = qtyIngredient.substring(qtyIngredient.indexOf(' ')+1); // INGREDIENT
-            System.out.println(qty);
-            System.out.println(ingredient);
             input.setText(qty);
             ingredientSpinner.setSelection(ingredientData.indexOf(ingredient));
 
@@ -454,16 +459,26 @@ public class ViewRecipe extends AppCompatActivity {
                         menuItemSelected = -1;
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Please, use 'Delete' to delete instruction", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Please, use 'Delete' to delete instruction", Toast.LENGTH_SHORT).show();
                     }
 
                 } else if (view.getId() == R.id.ingredientListView) {
+                    if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select-")) {
+                        editSomeText(view);
+                        linearSpinnerIngredient.removeView(input);
+                        Toast.makeText(getApplicationContext(), "Please select an ingredient", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(input.getText().toString().equals("")){
+                        editSomeText(view);
+                        linearSpinnerIngredient.removeView(input);
+                        Toast.makeText(getApplicationContext(), "Ingredient quantity can't be null", Toast.LENGTH_SHORT).show();}
 
+                    else{
                     ingredientList.set(menuItemSelected, input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
-                    linearSpinnerIngredient.removeView(input);
+                    linearSpinnerIngredient.removeView(input);}
 
 
                 } else if (view.getId() == R.id.input_type){
@@ -478,7 +493,7 @@ public class ViewRecipe extends AppCompatActivity {
                     if (!input.getText().toString().equals(""))
                         ((TextView) view).setText(input.getText().toString());
                     else
-                        Toast.makeText(getApplicationContext(), "Recipe name must have at least one character", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Recipe name must have at least one character", Toast.LENGTH_SHORT).show();
 
                 }
                 setListViewHeightBasedOnItems(lView1);
@@ -518,6 +533,10 @@ public class ViewRecipe extends AppCompatActivity {
                     instructionData.add(input.getText().toString());
                     arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                     arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Instruction must have at least one character", Toast.LENGTH_SHORT).show();
+                    addAnInstruction(view);
                 }
             }
         });
@@ -563,9 +582,15 @@ public class ViewRecipe extends AppCompatActivity {
         input.setHint("Quantity");
         input.setText("");
         input.setGravity(17);
-        linearSpinnerIngredient.addView(input,0);
-        ingredientSpinner.setSelection(0);
 
+        //make sure input is numerical
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input.setKeyListener(DigitsKeyListener.getInstance(false,true));
+
+        ingredientSpinner.setSelection(0);
+        linearSpinnerIngredient.addView(input,0);
         //reset the child's parent
         if(linearSpinnerIngredient.getParent()!=null)
             ((ViewGroup)linearSpinnerIngredient.getParent()).removeView(linearSpinnerIngredient);
@@ -575,7 +600,18 @@ public class ViewRecipe extends AppCompatActivity {
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (!input.getText().toString().equals("")) {
+                if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select-")) {
+                    addAnIngredient(view);
+                    linearSpinnerIngredient.removeView(input);
+                    Toast.makeText(getApplicationContext(), "Please select an ingredient", Toast.LENGTH_SHORT).show();
+                }
+                else if(input.getText().toString().equals("")){
+                    addAnIngredient(view);
+                    linearSpinnerIngredient.removeView(input);
+                    Toast.makeText(getApplicationContext(), "Ingredient quantity can't be null", Toast.LENGTH_SHORT).show();
+
+                }
+                else{
                     ingredientList.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
