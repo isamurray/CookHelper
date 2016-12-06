@@ -46,7 +46,11 @@
     <string name="title_activity_search_recipe">Search Recipe</string>
     <string name="title_activity_add_ingredient">Add Ingredient</string>
     <string name="title_activity_view_recipe">View Recipe</string>
+    <string name="title_activity_add_recipe_information">Input Ingredients</string>
+    <string name="title_activity_recipeview">Input Recipe</string>
 
+
+    title_activity_add_recipe_information
     <string-array name="test_array">
         <item>Test Item 1</item>
         <item>Test Item 2</item>
@@ -65,5 +69,7 @@
     <string-array name="sample_instructions">
         <item>Struct1</item>
     </string-array>
+    <string name="title_activity_add_ingredient_to_recipe">AddIngredientToRecipe</string>
+    <string name="title_activity_add_instructions_to_recipe">AddInstructionsToRecipe</string>
 
 </resources>

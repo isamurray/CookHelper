@@ -65,7 +65,9 @@
                     android:layout_height="wrap_content"
                     android:text="Add"
                     android:id="@+id/addIngredientButton"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:onClick="onClickAddIngredient" />
+                    />
             </LinearLayout>
 
         </LinearLayout>

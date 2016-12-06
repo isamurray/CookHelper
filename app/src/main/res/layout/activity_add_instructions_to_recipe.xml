@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.utilisateur.cookhelper.AddRecipe">
-
+    tools:context="com.example.utilisateur.cookhelper.AddInstructionsToRecipe">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,17 +21,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_add_recipe" />
+    <include layout="@layout/content_add_instructions_to_recipe" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addRecipe"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_media_ff"
-        android:onClick="newRecipe"
-        />
-
+        app:srcCompat="@android:drawable/ic_media_ff" />
 
 </android.support.design.widget.CoordinatorLayout>

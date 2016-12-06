@@ -4,11 +4,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_stroumph_cleaned"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,7 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".AddRecipe"
             android:label="@string/title_activity_add_recipe"
@@ -30,10 +28,44 @@
         <activity
             android:name=".ViewRecipe"
             android:label="@string/title_activity_view_recipe" />
+        <activity
+            android:name=".ResultsFromSearch"
+            android:label="@string/title_activity_recipeview" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".AddIngredientToRecipe"
+            android:label="@string/title_activity_add_ingredient_to_recipe"
+            android:parentActivityName=".AddRecipe"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.utilisateur.cookhelper.AddRecipe" />
+        </activity>
+        <activity
+            android:name=".AddInstructionsToRecipe"
+            android:label="@string/title_activity_add_instructions_to_recipe"
+            android:parentActivityName=".AddIngredientToRecipe"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.utilisateur.cookhelper.AddIngredientToRecipe" />
+        </activity>
+        <activity android:name=".HelpSearchRecipe"
+            android:label="How to search for a recipe" />
+
+
+        <activity android:name=".HelpAddRecipe"
+            android:label="How to add a recipe"/>
+
+        <activity android:name=".HelpAddIngredient"
+            android:label="How to add an ingredient"/>
+
+        <activity android:name=".HelpMenu"
+            android:label="Need Help?"></activity>
     </application>
 
 </manifest>
