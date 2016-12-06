@@ -61,7 +61,7 @@ public class SearchRecipe extends AppCompatActivity {
 
             Intent intent = new Intent(getApplication(), ViewRecipe.class);
             startActivityForResult(intent, 0);}
-    } 
+    }
 
     public void onClickReset(View v) {
         readItemSelection();

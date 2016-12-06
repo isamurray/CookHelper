@@ -40,7 +40,6 @@ public class AddIngredient extends AppCompatActivity {
             Ingredient ingredient = new Ingredient(ingredientName);
 
             handler.addIngredient(ingredient);
-            //<<<< DB
             
             Toast.makeText(getApplicationContext(), "Ingredient added!",
                     Toast.LENGTH_LONG).show();
