@@ -352,6 +352,14 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return categories;
     }
     
+    //public ArrayList<String> getIngredients(){
+    //    ArrayList<String> list = new ArrayList<String>();
+    //}
+    //public ArrayList<String> getInstructions(){
+    //    ArrayList<String> list = new ArrayList<String>();
+    //}
+    //
+    
     
     /**
      * Get all recipe types as array of strings from DB
