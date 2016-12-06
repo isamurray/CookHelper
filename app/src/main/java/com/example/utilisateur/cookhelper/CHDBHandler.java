@@ -6,6 +6,13 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
 import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Blob;
+import java.io.ObjectOutput;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * Created by ced on 2016-11-30.
@@ -390,6 +397,51 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return list;
     }
     
+    public void storeInstructions(ArrayList<String> instructions){
+
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+        byte[] serializedRecipe = serializeObject(instructions);
+        // Blob storeMe = new Blob(serializedRecipe);
+
+        values.put(COL_PARENT_RECIPE,1);
+        values.put(COL_INSTRUCTION_TEXT,serializedRecipe);
+        db.insert(TABLE_INSTRUCTIONS_S,null,values);
+        db.close();                        
+
+
+        
+    }
+    
+    private static byte[] serializeObject(Object o){
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        
+        try{
+            ObjectOutput out = new ObjectOutputStream(byteStream);
+            out.writeObject(o);
+            out.close();
+            byte[] buffer = byteStream.toByteArray();
+            return buffer;
+        } catch(IOException e){
+            return null;
+        }
+        
+    }
+        
+    private static Object deserializeObject(byte[] b){
+        try{
+            ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
+            Object object = in.readObject();
+            in.close();
+            return object;
+        }catch(ClassNotFoundException ea){
+            System.out.println("Class not found");
+            return null;
+        }catch(IOException eb){
+            System.out.println("IOE");
+            return null;
+        }
+    }
     
     
     
@@ -413,6 +465,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return types;
 
     }
+    
     
     /**
      * Get array of recipes
