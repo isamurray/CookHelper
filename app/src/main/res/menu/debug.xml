@@ -6,7 +6,7 @@
     <item android:id="@+id/menu_dbg_1"
         android:orderInCategory="1"
         app:showAsAction="never|ifRoom"
-        android:title="+Cat"/>
+        android:title="serialize"/>
     <item android:id="@+id/menu_dbg_2"
         android:orderInCategory="2"
         app:showAsAction="never|ifRoom"

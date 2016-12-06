@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import com.example.utilisateur.cookhelper.R;
-
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         
         if(item.getItemId() == R.id.menu_dbg_1){
-            System.out.println("\ndbg1\n");            
+            System.out.println("\ndbg1\n");
+            serializeObject();           
         }else if(item.getItemId() == R.id.menu_dbg_2){
             System.out.println("\ndbg2\n");            
             populateDatabase();
@@ -118,6 +119,16 @@ public class MainActivity extends AppCompatActivity {
         // Ingredient ingredient = new Ingredient(ingredientName);
 
         //handler.addIngredient(ingredient);
+    }
+    
+    public void serializeObject(){
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        ArrayList<String> sampleInstructions = new ArrayList<String>();
+        sampleInstructions.add("Step 1");
+        sampleInstructions.add("Step 2");
+        sampleInstructions.add("Step 3");
+        handler.storeInstructions(sampleInstructions);
+        
     }
 
 
