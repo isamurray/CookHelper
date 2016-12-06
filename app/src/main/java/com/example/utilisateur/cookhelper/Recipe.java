@@ -12,7 +12,7 @@ public class Recipe {
     private int stars  = 0, servings;
     //private LinkedList<IngredientQuantity> ingredients;
     //private LinkedList<Instruction> instructions;
-    private int _id;
+    //private int _id;
 
     /**
      * This is a simple constructor of the Recipe class.
@@ -27,22 +27,22 @@ public class Recipe {
      * @param containNuts
      */
 
-    /**
-     public Recipe(String title, String type, String category,float time,String timeUnit,
-     LinkedList<IngredientQuantity> ingredients,LinkedList<Instruction> instructions, CookingTime cookingTime, int servings
-     ,int _id){
-     this.title = title;
-     this.type = type;
-     this.category = category;
-     this.ingredients = ingredients;
-     this.instructions = instructions;
-     this.cookingTime = cookingTime;
-     this.servings = servings;
-     this._id = _id;
+    
+     // public Recipe(String title, String type, String category,float time,String timeUnit,
+     // LinkedList<IngredientQuantity> ingredients,LinkedList<Instruction> instructions, CookingTime cookingTime, int servings
+     // ,int _id){
+     // this.title = title;
+     // this.type = type;
+     // this.category = category;
+     // this.ingredients = ingredients;
+     // this.instructions = instructions;
+     // this.cookingTime = cookingTime;
+     // this.servings = servings;
+     // this._id = _id;
+// 
+     // }
 
-     }*/
-
-    public Recipe(int _id, String title, String type, String category,int time){
+    public Recipe(String title, String type, String category,int time){
         this.title = title;
         this.type = type;
         this.category = category;
@@ -50,7 +50,7 @@ public class Recipe {
         //this.instructions = instructions;
         this.cookingTime = time;
         //this.servings = servings;
-        this._id = _id;
+        // this._id = _id;
 
     }
     public Recipe(){} //DUMMY METHOD NEEDS TO BE DELETED
@@ -130,12 +130,12 @@ public class Recipe {
     public void setServings(int servings) {
         this.servings = servings;
     }
-    public int getID() {
-        return _id;
-    }
-    public void setID(int _id) {
-        this._id = _id;
-    }
+    //public int getID() {
+    //    return _id;
+    //}
+    //public void setID(int _id) {
+    //    this._id = _id;
+    //}
 }
 
 
