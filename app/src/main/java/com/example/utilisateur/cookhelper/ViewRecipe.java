@@ -34,6 +34,8 @@ import static android.R.drawable.ic_menu_add;
 
 public class ViewRecipe extends AppCompatActivity {
 
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -45,6 +47,7 @@ public class ViewRecipe extends AppCompatActivity {
     private ImageView addInstructionButton, addIngredientButton;
     private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
     private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
+    private TextView recipeName, input_category, input_type;
 
     private RatingBar mBar;
     private ListView lView1, lView2;
@@ -55,12 +58,37 @@ public class ViewRecipe extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        //>>>> DB
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        //updateFields(); //<--- function was in other class in order to make sure field values were taken
+        String query = "Burger";
+
+
+        Recipe recipe = handler.findRecipe(query);
+        //send this recipe to the intent below
+        System.out.println(recipe);
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+
+        //Set to Recipe values
+        recipeName = (TextView) findViewById(R.id.recipeName);
+        input_category = (TextView) findViewById(R.id.input_category);
+        input_type = (TextView) findViewById(R.id.input_type);
+
+        recipeName.setText(recipe.getTitle());
+        input_category.setText(recipe.getCategory());
+        input_type.setText(recipe.getType());
+
 
         lView1 = (ListView) findViewById(R.id.ingredientListView);
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
+        //TO REMOVE
         instructionData.add("Instruction 1");
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
@@ -81,13 +109,16 @@ public class ViewRecipe extends AppCompatActivity {
         typeData.add("Type 3");
         typeData.add("Type 4");
 
-        addIngredientButton = createAddIngredientButton();
-        addInstructionButton = createAddInstructionButton();
+
+        //Create all necessary ArrayAdapter
 
         arrayAdapterIngredient = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientData);
         arrayAdapterCheckBoxInstruction = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, instructionData);
         arrayAdapterNoCheckInstruction = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, instructionData);
         arrayAdapterIngredientEdit = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, ingredientData);
+
+
+        //Create and populate the 3 spinners (ingredient, category and type)
 
         typeSpinner = new Spinner(this);
         arrayAdapterTypeSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
@@ -109,7 +140,6 @@ public class ViewRecipe extends AppCompatActivity {
         linearSpinnerCategory.setPadding(0,25,0,0);
         linearSpinnerCategory.addView(categorySpinner);
 
-
         ingredientSpinner = new Spinner(this);
         arrayAdapterIngredientSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ingredientData);
         arrayAdapterIngredientSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -120,7 +150,6 @@ public class ViewRecipe extends AppCompatActivity {
         linearSpinnerIngredient.setPadding(0,25,0,0);
         linearSpinnerIngredient.addView(ingredientSpinner);
 
-
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
         lView2.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -130,7 +159,8 @@ public class ViewRecipe extends AppCompatActivity {
 
         mBar = (RatingBar) findViewById(R.id.ratingScore);
 
-        //Click on element in tournament list
+
+        //Click on element in both list
         lView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position).toString();
@@ -143,16 +173,19 @@ public class ViewRecipe extends AppCompatActivity {
             }
         });
 
-        LinearLayout l_layout = (LinearLayout) findViewById(R.id.linear_layout_ingredient);
 
+        //Create the add ingredient and add instruction button for edit mode
+        addIngredientButton = createAddIngredientButton();
+        addInstructionButton = createAddInstructionButton();
+
+        LinearLayout l_layout = (LinearLayout) findViewById(R.id.linear_layout_ingredient);
         l_layout.addView(addIngredientButton);
         addIngredientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "You would add an ingredient", Toast.LENGTH_SHORT).show();
+                addAnIngredient(v);
             }
         });
-
 
         LinearLayout l_layout2 = (LinearLayout) findViewById(R.id.linear_layout_instruction);
 
@@ -163,13 +196,12 @@ public class ViewRecipe extends AppCompatActivity {
                 addAnInstruction(v);
             }
         });
-
-
+        //Hide the button until EDIT mode activated
         addIngredientButton.setVisibility(View.GONE);
         addInstructionButton.setVisibility(View.GONE);
     }
 
-
+    //menu in title bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_menu_example, menu);
@@ -184,19 +216,21 @@ public class ViewRecipe extends AppCompatActivity {
                 if (item.getTitle().toString().equals("Edit")) {
                     setTitle("Editing recipe...");
                     item.setTitle("done");
+
+                    //long click activated
                     registerForContextMenu(lView1);
                     registerForContextMenu(lView2);
+
+                    //EDIT mode adapter
                     lView1.setAdapter(arrayAdapterIngredientEdit);
                     lView2.setAdapter(arrayAdapterNoCheckInstruction);
 
-                    final TextView recipeName = (TextView) findViewById(R.id.recipeName);
-                    final TextView input_category = (TextView) findViewById(R.id.input_category);
-                    final TextView input_type = (TextView) findViewById(R.id.input_type);
+                    //Indentify what can be modified
                     recipeName.setTextColor(Color.RED);
                     input_category.setTextColor(Color.RED);
                     input_type.setTextColor(Color.RED);
 
-
+                    //Set listener on recipe information
                     recipeName.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             editSomeText(recipeName);
@@ -213,32 +247,38 @@ public class ViewRecipe extends AppCompatActivity {
                         }
                     });
 
+                    //Add buttons are now visible to user
                     addIngredientButton.setVisibility(View.VISIBLE);
                     addInstructionButton.setVisibility(View.VISIBLE);
 
 
                 } else {
+                    //To quit EDIT mode
                     item.setTitle("Edit");
                     setTitle("View Recipe");
+
+                    //List no more clickable
                     unregisterForContextMenu(lView1);
                     unregisterForContextMenu(lView2);
 
+                    //Adapter in mode view only
                     lView2.setAdapter(arrayAdapterCheckBoxInstruction);
                     lView1.setAdapter(arrayAdapterIngredient);
 
-                    final TextView recipeName = (TextView) findViewById(R.id.recipeName);
-                    final TextView input_category = (TextView) findViewById(R.id.input_category);
-                    final TextView input_type = (TextView) findViewById(R.id.input_type);
-
+                    //Recipe information no more clickable
                     recipeName.setOnClickListener(null);
                     input_category.setOnClickListener(null);
                     input_type.setOnClickListener(null);
+
+                    //Back to view only parameters
                     recipeName.setTextColor(Color.BLACK);
                     input_category.setTextColor(Color.BLACK);
                     input_type.setTextColor(Color.BLACK);
 
+                    //Add buttons are now gone
                     addIngredientButton.setVisibility(View.GONE);
                     addInstructionButton.setVisibility(View.GONE);
+
                     Toast.makeText(getApplicationContext(), "Done editing", Toast.LENGTH_SHORT).show();
 
 
@@ -258,6 +298,7 @@ public class ViewRecipe extends AppCompatActivity {
     }
 
 
+    //Adapts the listview height according to number of items
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
 
         ListAdapter listAdapter = listView.getAdapter();
@@ -279,17 +320,20 @@ public class ViewRecipe extends AppCompatActivity {
 
     }
 
-
+    //Creates the popup menu to EDIT or DELETE an element in a listview
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
 
         if (v.getId() == R.id.instructionListViewCheck || v.getId() == R.id.ingredientListView) {
+
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menuItemSelected = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
             menuListViewSelected = (ListView) v;
 
             menu.setHeaderTitle("Pick an option");
             String[] menuItems = new String[]{"Edit", "Delete"};
+
+            //Add options strings to the menu
             for (int i = 0; i < menuItems.length; i++) {
                 menu.add(Menu.NONE, i, i, menuItems[i]);
             }
@@ -297,20 +341,23 @@ public class ViewRecipe extends AppCompatActivity {
         }
     }
 
+
+
+    //Respond to the user selection in the EDIT/DELETE menu
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Edit") {
-
 
             editSomeText(menuListViewSelected);
 
         }
         if (item.getTitle() == "Delete") {
             if (menuListViewSelected.getId() == R.id.instructionListViewCheck) {
+
                 instructionData.remove(menuItemSelected);
                 arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                 arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
                 setListViewHeightBasedOnItems(lView2);
-                Toast.makeText(getApplicationContext(), "You are trying to delete", Toast.LENGTH_LONG).show();
+
             } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
                 ingredientData.remove(menuItemSelected);
                 arrayAdapterIngredient.notifyDataSetChanged();
@@ -320,6 +367,7 @@ public class ViewRecipe extends AppCompatActivity {
         return true;
     }
 
+    //To edit some fields
     private void editSomeText(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final View view = v;
@@ -344,28 +392,34 @@ public class ViewRecipe extends AppCompatActivity {
 
         } else if(v.getId() == R.id.recipeName) {
             alert.setTitle("Edit Recipe Name");
-            array = new ArrayList<String>();
-            array.add(((TextView) v).getText().toString());
-            menuItemSelected = 0;
-            input.setText(array.get(menuItemSelected));
+            input.setText( ((TextView) v).getText().toString());
             alert.setView(input);
         }
 
         else if(v.getId() == R.id.input_category) {
             alert.setTitle("Edit Category");
+            //reset the child's parent
             if(linearSpinnerCategory.getParent()!=null)
                 ((ViewGroup)linearSpinnerCategory.getParent()).removeView(linearSpinnerCategory);
+            //set to the actual selected value
+            categorySpinner.setSelection(categoryData.indexOf(input_category));
+            //set the alert to the spinner view
             alert.setView(linearSpinnerCategory);
 
         }
+
         else if(v.getId() == R.id.input_type) {
             alert.setTitle("Edit Type");
+            //reset the child's parent
             if(linearSpinnerType.getParent()!=null)
                 ((ViewGroup)linearSpinnerType.getParent()).removeView(linearSpinnerType);
+            //set to the actual selected value
+            typeSpinner.setSelection(typeData.indexOf(input_type));
+            //set the alert to the spinner view
             alert.setView(linearSpinnerType);
-
         }
 
+        //update the changed value
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (view.getId() == R.id.instructionListViewCheck) {
@@ -374,6 +428,7 @@ public class ViewRecipe extends AppCompatActivity {
                         instructionData.set(menuItemSelected, input.getText().toString());
                         arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                         arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                        menuItemSelected = -1;
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Please, use 'Delete' to delete instruction", Toast.LENGTH_LONG).show();
@@ -383,8 +438,18 @@ public class ViewRecipe extends AppCompatActivity {
 
                     ingredientData.set(menuItemSelected, input.getText().toString());
                     arrayAdapterIngredient.notifyDataSetChanged();
-                } else {
+                    arrayAdapterIngredientEdit.notifyDataSetChanged();
+                    menuItemSelected = -1;
 
+                } else if (view.getId() == R.id.input_type){
+                    input_type.setText(String.valueOf(typeSpinner.getSelectedItem()));
+                }
+
+                else if ( view.getId() == R.id.input_category){
+                    input_category.setText(String.valueOf(categorySpinner.getSelectedItem()));
+                }
+
+                else{
                     if (!input.getText().toString().equals(""))
                         ((TextView) view).setText(input.getText().toString());
                     else
@@ -456,6 +521,46 @@ public class ViewRecipe extends AppCompatActivity {
         addAnInstruction.setMaxWidth(70);
         addAnInstruction.setId(R.id.add_instruction_button);
         return addAnInstruction;
+    }
+
+
+    private void addAnIngredient(View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        final View view = v;
+        ArrayList<String> array = ingredientData;
+        alert.setTitle("Add New Ingredient");
+        final EditText input = new EditText(this);
+        input.setHint("Quantity");
+        input.setGravity(17);
+        linearSpinnerIngredient.addView(input,0);
+
+        //reset the child's parent
+        if(linearSpinnerIngredient.getParent()!=null)
+            ((ViewGroup)linearSpinnerIngredient.getParent()).removeView(linearSpinnerIngredient);
+
+
+        alert.setView(linearSpinnerIngredient);
+
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                if (!input.getText().toString().equals("")) {
+                    ingredientData.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+                    arrayAdapterIngredient.notifyDataSetChanged();
+                    arrayAdapterIngredientEdit.notifyDataSetChanged();
+                    menuItemSelected = -1;
+                    linearSpinnerIngredient.removeView(input);
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+                linearSpinnerIngredient.removeView(input);
+            }
+        });
+
+        alert.show();
     }
 
 

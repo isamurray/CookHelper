@@ -1,5 +1,6 @@
 package com.example.utilisateur.cookhelper;
 
+
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class SearchRecipe extends AppCompatActivity {
         ingredientBool = (EditText) findViewById(R.id.ingredientBool);
         recipeName = (EditText) findViewById(R.id.recipeName);
     }
+
 
     /**
      * Searches for a recipe using only the input name
