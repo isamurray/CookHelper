@@ -70,12 +70,16 @@ public class AddIngredientToRecipe extends ListActivity {
 
     private void addItemsOnSpinner() {                                                              //update spinner
         ingredientChosen = (Spinner) findViewById(R.id.ingredientChosen);
-
-        ingredientList.add("-select ingredient-");
-        for (int i = 1; i < 100; i++) {
-            ingredientList.add("Ingredient sample " +Integer.toString(i));
-        }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ingredientList);
+        
+        // INGREDIENT LIST HERE IS THE ONE THAT WILL TAKE FROM DB
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        ArrayList<String> dbIngredientList = handler.getIngredients();
+        // ingredientList.add("-select ingredient-");
+        // for (int i = 1; i < 100; i++) {
+            // ingredientList.add("Ingredient sample " +Integer.toString(i));
+        // }
+        // ADDED dbIngredientList
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbIngredientList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingredientChosen.setAdapter(dataAdapter);
     }
