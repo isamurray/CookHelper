@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("\ndbg1\n");            
         }else if(item.getItemId() == R.id.menu_dbg_2){
             System.out.println("\ndbg2\n");            
+            populateDatabase();
         }else if(item.getItemId() == R.id.menu_dbg_3){
             System.out.println("\ndbg3\n");
             dropAllTables();            
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
         // Ingredient ingredient = new Ingredient(ingredientName);
 
         //handler.addIngredient(ingredient);
+    }
+    public void populateDatabase(){
+        CHDBHandler handler = new CHDBHandler(this,null,null,1);
+        handler.populateDatabase();
     }    
     
     /**
