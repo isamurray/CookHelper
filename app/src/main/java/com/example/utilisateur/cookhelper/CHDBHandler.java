@@ -5,21 +5,23 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import java.util.ArrayList;
 
 /**
  * Created by ced on 2016-11-30.
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 15;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
     private static final String TABLE_RECIPETYPES = "recipetypes";
     private  static final String TABLE_INSTRUCTIONS = "instructions";
+    private  static final String TABLE_INSTRUCTIONS_S = "instructions_s";
     private static final String TABLE_RECIPECATEGORIES = "categories";
     private static final String[] TABLES = new String[]{TABLE_RECIPES,
-        TABLE_INGREDIENTS,TABLE_RECIPETYPES,TABLE_INSTRUCTIONS,TABLE_RECIPECATEGORIES};
+        TABLE_INGREDIENTS,TABLE_RECIPETYPES,TABLE_INSTRUCTIONS,TABLE_RECIPECATEGORIES,TABLE_INSTRUCTIONS_S};
 
     private static final String COL_ID = "_id";
     private static final String COL_RECIPENAME = "title";
@@ -88,12 +90,19 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 COL_ID + " INTEGER PRIMARY KEY," +
                 COL_PARENT_RECIPE + " INTEGER," +
                 COL_CAT_CATEGORY + " TEXT" + ")";
-
+        
+        String CREATE_INSTRUCTION_S_TABLE = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_INSTRUCTIONS_S + "(" +
+                COL_ID + " INTEGER PRIMARY KEY," +
+                COL_PARENT_RECIPE + " INTEGER," +
+                COL_INSTRUCTION_TEXT + " BLOB" + ")";
+        
         db.execSQL(CREATE_INSTRUCTION_TABLE);
         db.execSQL(CREATE_RECIPE_TABLE);
         db.execSQL(CREATE_INGREDIENTS_TABLE);
         db.execSQL(CREATE_RECIPECATEGORY_TABLE);
         db.execSQL(CREATE_RECIPETYPE_TABLE);
+        db.execSQL(CREATE_INSTRUCTION_S_TABLE);
     }
 
     /**
@@ -359,6 +368,29 @@ public class CHDBHandler extends SQLiteOpenHelper {
     //    ArrayList<String> list = new ArrayList<String>();
     //}
     //
+    
+    
+    // TODO: get list of alphabetically sort ingredients
+    // TODO: get list of sequential instructions
+    
+    public ArrayList<String> getIngredients(){
+        ArrayList<String> list = new ArrayList<String>();
+        String query = "Select * FROM " + TABLE_INGREDIENTS + 
+            " ORDER BY " + COL_INGREDIENTNAME + " ASC";
+        System.out.println(query);
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            for(int i = 0; i < cursor.getCount(); i++){
+                list.add(cursor.getString(2));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        return list;
+    }
+    
+    
     
     
     /**
