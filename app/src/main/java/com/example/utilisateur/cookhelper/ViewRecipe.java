@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,12 +42,15 @@ public class ViewRecipe extends AppCompatActivity {
     private ArrayList<String> ingredientData = new ArrayList<String>();
     private ArrayList<String> categoryData = new ArrayList<String>();
     private ArrayList<String> typeData = new ArrayList<String>();
-
+    private ImageView addInstructionButton, addIngredientButton;
+    private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
+    private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
 
     private RatingBar mBar;
     private ListView lView1, lView2;
     View menuListViewSelected;
-    private ArrayAdapter<String> arrayAdapterCheckBoxInstruction, arrayAdapterNoCheckInstruction, arrayAdapterIngredient, arrayAdapterIngredientEdit;
+    private ArrayAdapter<String> arrayAdapterCheckBoxInstruction, arrayAdapterNoCheckInstruction, arrayAdapterIngredient, arrayAdapterIngredientEdit,
+            arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner;
     private static int menuItemSelected;
 
     @Override
@@ -77,10 +81,45 @@ public class ViewRecipe extends AppCompatActivity {
         typeData.add("Type 3");
         typeData.add("Type 4");
 
+        addIngredientButton = createAddIngredientButton();
+        addInstructionButton = createAddInstructionButton();
+
         arrayAdapterIngredient = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ingredientData);
         arrayAdapterCheckBoxInstruction = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, instructionData);
         arrayAdapterNoCheckInstruction = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, instructionData);
         arrayAdapterIngredientEdit = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, ingredientData);
+
+        typeSpinner = new Spinner(this);
+        arrayAdapterTypeSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
+        arrayAdapterTypeSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(arrayAdapterTypeSpinner);
+        linearSpinnerType = new LinearLayout(this);
+        linearSpinnerType.setOrientation(LinearLayout.HORIZONTAL);
+        linearSpinnerType.setGravity(Gravity.CENTER);
+        linearSpinnerType.setPadding(0,25,0,0);
+        linearSpinnerType.addView(typeSpinner);
+
+        categorySpinner = new Spinner(this);
+        arrayAdapterCategorySpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoryData);
+        arrayAdapterCategorySpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(arrayAdapterCategorySpinner);
+        linearSpinnerCategory = new LinearLayout(this);
+        linearSpinnerCategory.setOrientation(LinearLayout.HORIZONTAL);
+        linearSpinnerCategory.setGravity(Gravity.CENTER);
+        linearSpinnerCategory.setPadding(0,25,0,0);
+        linearSpinnerCategory.addView(categorySpinner);
+
+
+        ingredientSpinner = new Spinner(this);
+        arrayAdapterIngredientSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ingredientData);
+        arrayAdapterIngredientSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ingredientSpinner.setAdapter(arrayAdapterIngredientSpinner);
+        linearSpinnerIngredient = new LinearLayout(this);
+        linearSpinnerIngredient.setOrientation(LinearLayout.HORIZONTAL);
+        linearSpinnerIngredient.setGravity(Gravity.CENTER);
+        linearSpinnerIngredient.setPadding(0,25,0,0);
+        linearSpinnerIngredient.addView(ingredientSpinner);
+
 
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
@@ -95,13 +134,39 @@ public class ViewRecipe extends AppCompatActivity {
         lView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position).toString();
-    }});
+            }
+        });
 
         lView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
                 final String item = (String) parent.getItemAtPosition(position).toString();
-            }});
+            }
+        });
 
+        LinearLayout l_layout = (LinearLayout) findViewById(R.id.linear_layout_ingredient);
+
+        l_layout.addView(addIngredientButton);
+        addIngredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You would add an ingredient", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        LinearLayout l_layout2 = (LinearLayout) findViewById(R.id.linear_layout_instruction);
+
+        l_layout2.addView(addInstructionButton);
+        addInstructionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAnInstruction(v);
+            }
+        });
+
+
+        addIngredientButton.setVisibility(View.GONE);
+        addInstructionButton.setVisibility(View.GONE);
     }
 
 
@@ -123,6 +188,7 @@ public class ViewRecipe extends AppCompatActivity {
                     registerForContextMenu(lView2);
                     lView1.setAdapter(arrayAdapterIngredientEdit);
                     lView2.setAdapter(arrayAdapterNoCheckInstruction);
+
                     final TextView recipeName = (TextView) findViewById(R.id.recipeName);
                     final TextView input_category = (TextView) findViewById(R.id.input_category);
                     final TextView input_type = (TextView) findViewById(R.id.input_type);
@@ -147,39 +213,8 @@ public class ViewRecipe extends AppCompatActivity {
                         }
                     });
 
-                    LinearLayout l_layout = (LinearLayout) findViewById(R.id.linear_layout_ingredient);
-                    ImageView addAnIngredient = new ImageView(this);
-                    addAnIngredient.setImageResource(R.drawable.add_button);
-                    addAnIngredient.setAdjustViewBounds(true);
-                    addAnIngredient.setMaxHeight(70);
-                    addAnIngredient.setMaxWidth(70);
-                    addAnIngredient.setId(R.id.add_ingredient_button);
-                    l_layout.addView(addAnIngredient);
-                    addAnIngredient.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getApplicationContext(), "You would add an ingredient",Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-                    LinearLayout l_layout2 = (LinearLayout) findViewById(R.id.linear_layout_instruction);
-                    ImageView addAnInstruction = new ImageView(this);
-                    addAnInstruction.setImageResource(R.drawable.add_button);
-                    addAnInstruction.setAdjustViewBounds(true);
-                    addAnInstruction.setMaxHeight(70);
-                    addAnInstruction.setMaxWidth(70);
-                    addAnInstruction.setId(R.id.add_instruction_button);
-                    l_layout2.addView(addAnInstruction);
-                    addAnInstruction.setOnClickListener(new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View v) {
-                            addAnInstruction(v) ;
-                        }
-                    });
-
+                    addIngredientButton.setVisibility(View.VISIBLE);
+                    addInstructionButton.setVisibility(View.VISIBLE);
 
 
                 } else {
@@ -194,6 +229,7 @@ public class ViewRecipe extends AppCompatActivity {
                     final TextView recipeName = (TextView) findViewById(R.id.recipeName);
                     final TextView input_category = (TextView) findViewById(R.id.input_category);
                     final TextView input_type = (TextView) findViewById(R.id.input_type);
+
                     recipeName.setOnClickListener(null);
                     input_category.setOnClickListener(null);
                     input_type.setOnClickListener(null);
@@ -201,28 +237,25 @@ public class ViewRecipe extends AppCompatActivity {
                     input_category.setTextColor(Color.BLACK);
                     input_type.setTextColor(Color.BLACK);
 
-                    ImageView deleteButton = (ImageView) findViewById(R.id.add_ingredient_button);
-                    deleteButton.setVisibility(View.GONE);
-                    deleteButton= (ImageView) findViewById(R.id.add_instruction_button);
-                    deleteButton.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Done editing",Toast.LENGTH_LONG).show();
+                    addIngredientButton.setVisibility(View.GONE);
+                    addInstructionButton.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "Done editing", Toast.LENGTH_SHORT).show();
 
 
                 }
                 return true;
             case R.id.menu_trash:
-                Toast.makeText(getApplicationContext(), "You are trying to delete the recipe",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "You are trying to delete the recipe", Toast.LENGTH_LONG).show();
                 return true;
             default:
-                Toast.makeText(getApplicationContext(), "An error occured",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "An error occured", Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
         }
     }
 
     public void onClickRatingBar(View v) {
-        mBar.getRating() ;
+        mBar.getRating();
     }
-
 
 
     public static boolean setListViewHeightBasedOnItems(ListView listView) {
@@ -250,101 +283,110 @@ public class ViewRecipe extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
 
-        if (v.getId()==R.id.instructionListViewCheck || v.getId()==R.id.ingredientListView) {
+        if (v.getId() == R.id.instructionListViewCheck || v.getId() == R.id.ingredientListView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             menuItemSelected = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
             menuListViewSelected = (ListView) v;
-            System.out.println(menuListViewSelected.getId());
-            System.out.println(R.id.instructionListViewCheck);
-            System.out.println(R.id.ingredientListView);
 
             menu.setHeaderTitle("Pick an option");
-            String[] menuItems = new String[] {"Edit", "Delete"};
-            for (int i = 0; i<menuItems.length; i++) {
-                    menu.add(Menu.NONE, i, i, menuItems[i]);
+            String[] menuItems = new String[]{"Edit", "Delete"};
+            for (int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
             }
 
-    }}
-    public boolean onContextItemSelected(MenuItem item){
-           if (item.getTitle() == "Edit") {
+        }
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Edit") {
 
 
-               editSomeText(menuListViewSelected);
+            editSomeText(menuListViewSelected);
 
+        }
+        if (item.getTitle() == "Delete") {
+            if (menuListViewSelected.getId() == R.id.instructionListViewCheck) {
+                instructionData.remove(menuItemSelected);
+                arrayAdapterNoCheckInstruction.notifyDataSetChanged();
+                arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                setListViewHeightBasedOnItems(lView2);
+                Toast.makeText(getApplicationContext(), "You are trying to delete", Toast.LENGTH_LONG).show();
+            } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
+                ingredientData.remove(menuItemSelected);
+                arrayAdapterIngredient.notifyDataSetChanged();
+                setListViewHeightBasedOnItems(lView1);
             }
-            if(item.getTitle()=="Delete") {
-                if (menuListViewSelected.getId() == R.id.instructionListViewCheck) {
-                    instructionData.remove(menuItemSelected);
-                    arrayAdapterNoCheckInstruction.notifyDataSetChanged();
-                    arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
-                    setListViewHeightBasedOnItems(lView2);
-                    Toast.makeText(getApplicationContext(), "You are trying to delete", Toast.LENGTH_LONG).show();
-                } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
-                    ingredientData.remove(menuItemSelected);
-                    arrayAdapterIngredient.notifyDataSetChanged();
-                    setListViewHeightBasedOnItems(lView1);
-                }
-            }
+        }
         return true;
     }
 
-    private void editSomeText(View v){
+    private void editSomeText(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final View view = v;
         ArrayList<String> array = null;
 
-        if (v.getId() == R.id.instructionListViewCheck) {
-            array = instructionData;
-            alert.setTitle("Edit Instruction");
-        }
-        else if (v.getId() == R.id.ingredientListView)  {
-            array = ingredientData;
-            alert.setTitle("Edit Ingredient");
-        }
-        else /*if(v.getId() == R.id.recipeName)*/ {
-            alert.setTitle("Edit Recipe Information");
-            array = new ArrayList<String>();
-            array.add(((TextView)view).getText().toString());
-            menuItemSelected = 0;
-        }
-       /* else if(v.getId() == R.id.input_category) {
-            final Spinner categorySpinner = new Spinner(this);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoryData);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            categorySpinner.setAdapter(spinnerAdapter);
-        }
-        else if(v.getId() == R.id.input_type) {
-            final Spinner typeSpinner = new Spinner(this);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            typeSpinner.setAdapter(spinnerAdapter);
-        }*/
-
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
-        input.setText(array.get(menuItemSelected));
         input.setGravity(17);
-        alert.setView(input);
+
+        if (v.getId() == R.id.instructionListViewCheck) {
+            array = instructionData;
+            input.setText(array.get(menuItemSelected));
+            alert.setTitle("Edit Instruction");
+            alert.setView(input);
+
+        } else if (v.getId() == R.id.ingredientListView) {
+            array = ingredientData;
+            input.setText(array.get(menuItemSelected));
+            alert.setTitle("Edit Ingredient");
+            alert.setView(input);
+
+        } else if(v.getId() == R.id.recipeName) {
+            alert.setTitle("Edit Recipe Name");
+            array = new ArrayList<String>();
+            array.add(((TextView) v).getText().toString());
+            menuItemSelected = 0;
+            input.setText(array.get(menuItemSelected));
+            alert.setView(input);
+        }
+
+        else if(v.getId() == R.id.input_category) {
+            alert.setTitle("Edit Category");
+            if(linearSpinnerCategory.getParent()!=null)
+                ((ViewGroup)linearSpinnerCategory.getParent()).removeView(linearSpinnerCategory);
+            alert.setView(linearSpinnerCategory);
+
+        }
+        else if(v.getId() == R.id.input_type) {
+            alert.setTitle("Edit Type");
+            if(linearSpinnerType.getParent()!=null)
+                ((ViewGroup)linearSpinnerType.getParent()).removeView(linearSpinnerType);
+            alert.setView(linearSpinnerType);
+
+        }
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 if (view.getId() == R.id.instructionListViewCheck) {
-                    if(!input.getText().toString().equals("")){
-                        instructionData.set(menuItemSelected,input.getText().toString());
-                    arrayAdapterNoCheckInstruction.notifyDataSetChanged();
-                    arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "Please, use 'Delete' to delete instruction", Toast.LENGTH_LONG).show();}}
-                else if (view.getId() == R.id.ingredientListView){
+                    if (!input.getText().toString().equals("")) {
 
-                    ingredientData.set(menuItemSelected,input.getText().toString());
-                    arrayAdapterIngredient.notifyDataSetChanged();
+                        instructionData.set(menuItemSelected, input.getText().toString());
+                        arrayAdapterNoCheckInstruction.notifyDataSetChanged();
+                        arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please, use 'Delete' to delete instruction", Toast.LENGTH_LONG).show();
                     }
-                else{
-                    if(!input.getText().toString().equals(""))
-                    ((TextView)view).setText(input.getText().toString());
+
+                } else if (view.getId() == R.id.ingredientListView) {
+
+                    ingredientData.set(menuItemSelected, input.getText().toString());
+                    arrayAdapterIngredient.notifyDataSetChanged();
+                } else {
+
+                    if (!input.getText().toString().equals(""))
+                        ((TextView) view).setText(input.getText().toString());
                     else
                         Toast.makeText(getApplicationContext(), "Recipe name must have at least one character", Toast.LENGTH_LONG).show();
 
@@ -355,6 +397,7 @@ public class ViewRecipe extends AppCompatActivity {
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
+
             }
         });
 
@@ -362,10 +405,10 @@ public class ViewRecipe extends AppCompatActivity {
     }
 
 
-    private void addAnInstruction(View v){
+    private void addAnInstruction(View v) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final View view = v;
-        ArrayList<String> array ;
+        ArrayList<String> array;
         array = instructionData;
         alert.setTitle("Add new instruction");
 
@@ -376,12 +419,13 @@ public class ViewRecipe extends AppCompatActivity {
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if(!input.getText().toString().equals("")) {
+                if (!input.getText().toString().equals("")) {
                     instructionData.add(input.getText().toString());
                     arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                     arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
                 }
-            }});
+            }
+        });
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
@@ -391,4 +435,28 @@ public class ViewRecipe extends AppCompatActivity {
 
         alert.show();
     }
-}
+
+
+    private ImageView createAddIngredientButton() {
+
+        ImageView addAnIngredient = new ImageView(this);
+        addAnIngredient.setImageResource(R.drawable.add_button);
+        addAnIngredient.setAdjustViewBounds(true);
+        addAnIngredient.setMaxHeight(70);
+        addAnIngredient.setMaxWidth(70);
+        addAnIngredient.setId(R.id.add_ingredient_button);
+        return  addAnIngredient;
+    }
+
+    private ImageView createAddInstructionButton() {
+        ImageView addAnInstruction = new ImageView(this);
+        addAnInstruction.setImageResource(R.drawable.add_button);
+        addAnInstruction.setAdjustViewBounds(true);
+        addAnInstruction.setMaxHeight(70);
+        addAnInstruction.setMaxWidth(70);
+        addAnInstruction.setId(R.id.add_instruction_button);
+        return addAnInstruction;
+    }
+
+
+    }
