@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 31;
+    private static final int DATABASE_VERSION = 32;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -552,14 +552,14 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String newType = recipe.getType();
         String newCat = recipe.getType();
         byte[] structs = serializeObject(recipe.getInstructions());
-        int newTime = recipe.getCookingTime();
+        float newStars = recipe.getStars();
         
         record.put(COL_RECIPENAME, newTitle);
         record.put(COL_RECIPECOUNTRY, newType);
         record.put(COL_RECIPEDISHTYPE, newCat);
-        record.put(COL_RECIPECOOKTIME, newTime);
+        record.put(COL_RECIPERATING, newStars);
         record.put(COL_INSTRUCTION_TEXT, structs);
-        String whereClause = " WHERE " + COL_ID + " = ?";
+        String whereClause = COL_ID + " = ?";
         int index = getRecipeIndex(oldName);
         String[] str = new String[]{Integer.toString(index)};
         int result = db.update(TABLE_RECIPES,record,whereClause,str);
