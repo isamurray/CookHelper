@@ -570,6 +570,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             ", " + COL_RECIPECOOKTIME + " = " + getCookingTime() + " WHERE " + COL_ID +
             " = " getRecipeIndex(oldName);
         Cursor cursor = db.rawQuery(queryUpdate,null);
+        System.out.println(queryUpdate);
         cursor.moveToFirst();
         cursor.close();
         
