@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void deserialize(){
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
-        handler.getInstructions();
+        handler.getInstructions("Burger");
     }
     public void populateDatabase(){
         CHDBHandler handler = new CHDBHandler(this,null,null,1);
