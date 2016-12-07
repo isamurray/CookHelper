@@ -46,10 +46,10 @@ public class Recipe implements Serializable {
      // }
 
     public Recipe(String title, String type, String category,float stars){
-        this.title = title;
-        this.type = type;
-        this.category = category;
-        this.ingredientsList = null;
+        this.title = title.toLowerCase();
+        this.type = type.toLowerCase();
+        this.category = category.toLowerCase();
+        // this.ingredientsList = null;
 
         this.stars = stars;
         ArrayList<String> struct = new ArrayList<String>();
@@ -66,19 +66,19 @@ public class Recipe implements Serializable {
         return title;
     }
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.toLowerCase();
     }
     public String getType() {
         return type;
     }
     public void setType(String type) {
-        this.type = type;
+        this.type = type.toLowerCase();
     }
     public String getCategory() {
         return category;
     }
     public void setCategory(String category) {
-        this.category = category;
+        this.category = category.toLowerCase();
     }
     public void setCookingTime(int time){
         this.cookingTime = time;
@@ -130,7 +130,7 @@ public class Recipe implements Serializable {
     }
     
     public void addIngredient(String ingredient){
-        ingredientsList.add(ingredient);
+        ingredientsList.add(ingredient.toLowerCase());
     }
     public ArrayList<String> getIngredients(){
         return ingredientsList;
