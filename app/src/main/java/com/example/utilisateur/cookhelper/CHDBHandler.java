@@ -131,9 +131,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<String> sampleInstructions = new ArrayList<String>();
-        sampleInstructions.add("Instruction A");
-        sampleInstructions.add("Instruction B");
-        sampleInstructions.add("Instruction C");
+        sampleInstructions.add("Stop");
+        sampleInstructions.add("Drop");
+        sampleInstructions.add("Roll");
         // POPULATE 3 SAMPLE RECIPES
         values.put(COL_RECIPENAME,"Burger");
         values.put(COL_RECIPECOUNTRY,"Canadian");
@@ -543,7 +543,40 @@ public class CHDBHandler extends SQLiteOpenHelper {
         cursor.close();
         return recipes;
     }
+    
+    public static void updateRecipe(Recipe recipe, String oldName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "Select * FROM " + TABLE_RECIPES +
+            " WHERE " + COL_RECIPENAME + " =\"" +
+            oldName + "\"";
 
+                // COL_RECIPENAME + " TEXT," +
+                // COL_RECIPECOUNTRY + " TEXT," +
+                // COL_RECIPEDISHTYPE + " TEXT," +
+                // COL_INSTRUCTION_TEXT + " BLOB," +
+                // COL_RECIPECOOKTIME + " INTEGER" + ")";
+
+    // private static final String COL_RECIPENAME = "title";
+    // private static final String COL_RECIPECOUNTRY = "type";
+    // private static final String COL_RECIPEDISHTYPE = "category";
+    // private static final String COL_RECIPECOOKTIME = "time";
+
+
+        // test string below
+        // UPDATE recipes SET title="newTitle",type="newType",category="newCat",time=1111 WHERE _id=1;
+        String queryUpdate = "UPDATE " + TABLE_RECIPES +
+            " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() +
+            ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + 
+            ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() +
+            ", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
+            ", " + COL_RECIPECOOKTIME + " = " + getCookingTime() + " WHERE " + COL_ID +
+            " = " getRecipeIndex(oldName);
+        Cursor cursor = db.rawQuery(queryUpdate,null);
+        System.out.println(queryUpdate);
+        cursor.moveToFirst();
+        cursor.close();
+        
+    }
 
     /**
      *
