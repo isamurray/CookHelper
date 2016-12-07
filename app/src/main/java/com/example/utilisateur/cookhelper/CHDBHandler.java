@@ -532,8 +532,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 String title = cursor.getString(1);
                 String type = cursor.getString(2);
                 String category = cursor.getString(3);
-                int time = cursor.getInt(4);
+                ArrayList<String> structs = deserializeObject(cursor.getBlob(4));
+                int time = cursor.getInt(5);
                 recipes[i] = new Recipe(title,type,category,time);
+                recipes[i].setInstructions(structs);
                 cursor.moveToNext();
             }
 
