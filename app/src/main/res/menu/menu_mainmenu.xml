@@ -7,13 +7,5 @@
         android:orderInCategory="1"
         app:showAsAction="never|ifRoom"
         android:title="Menu"/>
-    <item android:id="@+id/menu_edit"
-        android:orderInCategory="2"
-        app:showAsAction="never|ifRoom"
-        android:title="Edit"/>
-    <item android:id="@+id/menu_trash"
-        android:orderInCategory="3"
-        app:showAsAction="never|ifRoom"
-        android:title="Trash"/>
 
 </menu>

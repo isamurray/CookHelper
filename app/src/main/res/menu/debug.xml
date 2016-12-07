@@ -6,15 +6,19 @@
     <item android:id="@+id/menu_dbg_1"
         android:orderInCategory="1"
         app:showAsAction="never|ifRoom"
-        android:title="+Cat"/>
+        android:title="serialize"/>
     <item android:id="@+id/menu_dbg_2"
         android:orderInCategory="2"
         app:showAsAction="never|ifRoom"
-        android:title="-Cat"/>
+        android:title="PopulateDB"/>
     <item android:id="@+id/menu_dbg_3"
         android:orderInCategory="2"
         app:showAsAction="never|ifRoom"
-        android:title="DropAll"
+        android:title="DropAllDB"/>
+    <item android:id="@+id/menu_dbg_4"
+        android:orderInCategory="2"
+        app:showAsAction="never|ifRoom"
+        android:title="deserialize"
         />
 
 </menu>

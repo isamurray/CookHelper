@@ -1,18 +1,26 @@
 package com.example.utilisateur.cookhelper;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import java.util.ArrayList;
 
 /**
  * Created by ced on 2016-11-30.
  */
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     private String title, type, category; //type  = entree sauce // category = vegetarien italien
     private int cookingTime;
     //private CookingTime cookingTime;
-    private int stars  = 0, servings;
+    private float stars  = 0;
+    int servings;
+    private ArrayList<String> ingredientsList;
+    private ArrayList<String> instructions;
+    
     //private LinkedList<IngredientQuantity> ingredients;
     //private LinkedList<Instruction> instructions;
-    private int _id;
+    //private int _id;
 
     /**
      * This is a simple constructor of the Recipe class.
@@ -20,60 +28,36 @@ public class Recipe {
      * @param type
      * @param category
      * @param time
-     * @param servings
-     * @param ingredients
-     * @param instructionSet
-     * @param comments
-     * @param containNuts
      */
 
-    /**
-     public Recipe(String title, String type, String category,float time,String timeUnit,
-     LinkedList<IngredientQuantity> ingredients,LinkedList<Instruction> instructions, CookingTime cookingTime, int servings
-     ,int _id){
-     this.title = title;
-     this.type = type;
-     this.category = category;
-     this.ingredients = ingredients;
-     this.instructions = instructions;
-     this.cookingTime = cookingTime;
-     this.servings = servings;
-     this._id = _id;
+    
+     // public Recipe(String title, String type, String category,float time,String timeUnit,
+     // LinkedList<IngredientQuantity> ingredients,LinkedList<Instruction> instructions, CookingTime cookingTime, int servings
+     // ,int _id){
+     // this.title = title;
+     // this.type = type;
+     // this.category = category;
+     // this.ingredients = ingredients;
+     // this.instructions = instructions;
+     // this.cookingTime = cookingTime;
+     // this.servings = servings;
+     // this._id = _id;
+// 
+     // }
 
-     }*/
-
-    public Recipe(int _id, String title, String type, String category,int time){
+    public Recipe(String title, String type, String category,float stars){
         this.title = title;
         this.type = type;
         this.category = category;
-        //this.ingredients = ingredients;
-        //this.instructions = instructions;
-        this.cookingTime = time;
-        //this.servings = servings;
-        this._id = _id;
+        this.ingredientsList = null;
+
+        this.stars = stars;
+        ArrayList<String> struct = new ArrayList<String>();
+        struct.add("Go to kitchen");
+        this.instructions = struct;
 
     }
     public Recipe(){} //DUMMY METHOD NEEDS TO BE DELETED
-
-
-
-    //public void addInstruction(Instruction instruction){instructions.add(instruction);} // to reverify
-    //public void addInstructionSetWithIndex(int index,Instruction set){instructions.add(index,set);} // to reverify
-
-    //public void removeInstruction(Instruction instruction){instructions.remove(instruction);}
-    //public void removeInstructionByIndex(int index){instructions.remove(index);}
-
-
-    //public void addIngredientAmount(IngredientQuantity ingredient){ingredients.add(ingredient);}
-    //public void addIngredientAmountWithIndex(int index,IngredientQuantity ingredient){ingredients.add(index,ingredient);}
-
-    //public void removeIngredientAmount(IngredientQuantity ingredient){ingredients.remove(ingredient);}
-    //public void removeIngredientAmountByIndex(int index){ingredients.remove(index);}
-
-
-
-
-
 
     public String getTitle() {
         return title;
@@ -106,13 +90,14 @@ public class Recipe {
     //public void setCookingTime(CookingTime cookingTime) {
     //    this.cookingTime = cookingTime;
     //}
-    public int getStars() {
+    public float getStars() {
         return stars;
     }
-    public void setStars(int stars) {
+    public void setStars(float stars) {
         this.stars = stars;
     }
-    //public LinkedList<IngredientQuantity> getIngredients() {
+
+    //public ArrayList<String> getIngredients() {
     //    return ingredients;
     //}
     //public void setIngredients(LinkedList<IngredientQuantity> ingredients) {
@@ -130,12 +115,21 @@ public class Recipe {
     public void setServings(int servings) {
         this.servings = servings;
     }
-    public int getID() {
-        return _id;
+    public void addInstruction(String instruction){
+        instructions.add(instruction);
     }
-    public void setID(int _id) {
-        this._id = _id;
+    public ArrayList<String> getInstructions(){
+        return instructions;
     }
+    public void setInstructions(ArrayList<String> instructions){
+        this.instructions = instructions;
+    }
+    //public int getID() {
+    //    return _id;
+    //}
+    //public void setID(int _id) {
+    //    this._id = _id;
+    //}
 }
 
 
