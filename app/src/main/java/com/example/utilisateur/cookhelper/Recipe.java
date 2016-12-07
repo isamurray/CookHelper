@@ -130,6 +130,13 @@ public class Recipe implements Serializable {
     //public void setID(int _id) {
     //    this._id = _id;
     //}
+
+
+    //public ArrayList<String> getIngredients() {
+    //    return ingredients;
+    //}
+
+
 }
 
 

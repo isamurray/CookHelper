@@ -20,14 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-<<<<<<< HEAD
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/helpaddrecipeinstructions"
                 android:id="@+id/imageView" />
         </LinearLayout>
-=======
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -77,7 +77,6 @@
                     android:id="@+id/imageView8"
                     android:layout_weight="1" />
             </LinearLayout>
->>>>>>> master
 
         </LinearLayout>
     </ScrollView>

@@ -14,6 +14,15 @@ import java.io.ObjectOutput;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
 /**
  * Created by ced on 2016-11-30.
  */
@@ -610,4 +619,315 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return result;
     }
 
+    //Modifification  //Modifification    //Modifification     //Modifification     //Modifification
+    public LinkedList<Recipe> searchRecipe(String type, String category, String instructions) {
+        LinkedList<Recipe> recipeDatabase = getAllRecipesLList();
+        int[] score = new int[recipeDatabase.size()];
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int i = 0;
+        while (iter.hasNext()) {
+            score[i] = 0;
+            Recipe r = iter.next();
+            if(type!=null){
+                if (r.getType() == type) {
+                    score[i]++;
+                }
+            }
+            if(category!=null){
+                if (r.getCategory() == category) {
+                    score[i]++;
+                }
+            }
+            i++;
+        }
+        int previousSpace = 0;
+        LinkedList<String> test = new LinkedList<String>();
+        if (instructions != null) {
+
+            for (int j = 0; j < instructions.length(); j++) {
+                if (instructions.charAt(j) == ' ' || j == instructions.length() - 1) {
+                    test.push(instructions.substring(previousSpace, j - 1));
+                    previousSpace = j + 1;
+                }
+            }
+            String first = "";
+            String second = "";
+            String third = "";
+
+            while (!test.isEmpty()) {
+
+                if (first != "") {
+                    first = test.pop();
+                }
+
+                if (!test.isEmpty()) {
+                    second = test.pop();
+                }
+
+                if (second != "") {
+
+                    if (second.equals("OR")) {
+
+                        if (!test.isEmpty()) {
+                            third = test.pop();
+                            OR(recipeDatabase,first, third, score);
+                            first = "";
+                            second = "";
+                            third = "";
+
+                        } else if (second.equals("NOT")) {
+                            NOT(recipeDatabase,first, score);
+                            first = "";
+                            second = "";
+                            third = "";
+
+                        } else if (second.equals("AND")) {
+                            if (!test.isEmpty()) {
+                                third = test.pop();
+                                AND(recipeDatabase,first, third, score);
+                                first = "";
+                                second = "";
+                                third = "";
+
+                            } else {
+                                ONE(recipeDatabase,first, score);
+                                first = second;
+                                second = "";
+
+                            }
+
+                        } else {
+                            ONE(recipeDatabase,first, score);
+                            first = second;
+                        }
+                    }
+
+                } else {
+                    ONE(recipeDatabase,first, score);
+                    first = second;
+                }
+            }
+        }
+
+        LinkedList<Recipe> returnedlist = new LinkedList<Recipe>(); // initie la liste de retour
+        i = 0;
+        int recipeindex = 0; // pour guarder en place la location que l'on ajoute dans la liste
+        LinkedList<Integer> scorelist = new LinkedList<Integer>(); // pour garder la position dans score que chaque recette que j'ajoute dans returnedlist est.
+        Iterator<Recipe> iterRecipe = recipeDatabase.iterator();
+        Boolean added = false; // pour s'assurer que si l'element que j'observe est le plus petit qu'on le met a la fin
+
+        while (iterRecipe.hasNext() && i < score.length) {
+            Recipe rec = iter.next();
+            Iterator<Recipe> rliter = returnedlist.iterator(); // pour comparer  a la recette rec que l'on desire ajouter a la liste
+            Iterator<Integer> sliter = scorelist.iterator(); // pour pouvoir comparer les scores
+
+
+            if (score[i] != -1) { // on ne met pas les -1 car c'est le seul  temps qu'il y a un ingredient NOT.
+
+                while (rliter.hasNext() && sliter.hasNext()) {
+                    Recipe comp = rliter.next();
+                    Integer sindex = sliter.next();
+
+                    if (score[sindex] < score[i]) { // si le score de la recette qu'on observe est plus grand alors on peut l'ajouter a la bonne place.
+                        scorelist.add(recipeindex, score[i]);
+                        returnedlist.add(recipeindex, rec);
+                        added = true;
+                        break;
+                    } else if (score[sindex] == score[i]) {// si le score est  egal on compare avec les etoiles
+
+                        if (comp.getStars() < returnedlist.get(i).getStars()) {
+                            returnedlist.add(recipeindex, rec);
+                            scorelist.add(recipeindex, score[i]);
+                            added = true;
+                            break;
+                        }
+                        recipeindex++;
+
+                    }
+
+                }
+                if (!added) { //si non ajouter on l'ajoute a la fin de la liste
+                    returnedlist.add(recipeindex,rec);
+                    scorelist.add(recipeindex,score[i]);
+
+                }
+                recipeindex = 0;
+                i++;
+                added = false;
+            }
+
+        }
+        return returnedlist;
+
+    }
+    private void ONE(LinkedList<Recipe> recipeDatabase,String first, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            //Iterator<IngredientQuantity> iterI = r.getIngredients().iterator();
+
+            //while (iterI.hasNext()) {
+
+            if (score[index] == -1) { //verifie que la recette n'a pas deja un NOT
+                break;
+            }
+            //  String s = iterI.next().getIngredient().getName();
+
+            //if (s == first) { //attribue un point si la recette a l'ingredient demander.
+            score[index]++;
+            break;
+        }
+    }
+    // index++;
+    // }
+
+    //   }
+
+    private void NOT(LinkedList<Recipe> recipeDatabase,String first, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            //Iterator<IngredientQuantity> iterI = r.getIngredients().iterator();
+
+            //while (iterI.hasNext()) {
+
+            if (score[index] == -1) {
+                break;
+            }
+            //  String s = iterI.next().getIngredient().getName();
+
+            //if (s == first) {
+            score[index] = -1;
+            break;
+        }
+    }
+    //     index++;
+    //}
+    // }
+
+    private void OR(LinkedList<Recipe> recipeDatabase,String first, String third, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            // Iterator<IngredientQuantity> iterI = r.getIngredients().iterator();
+
+            // while (iterI.hasNext()) {
+            if (score[index] == -1) {
+                break;
+            }
+            //  String s = iterI.next().getIngredient().getName();
+
+            //  if (s == first || s == third) {
+            score[index]++;
+            break;
+        }
+
+        //  }
+        //  index++;
+        //   }
+
+    }
+
+    private void AND(LinkedList<Recipe> recipeDatabase,String first, String third, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+        Boolean and1 = false;
+        Boolean and2 = false;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            //Iterator<IngredientQuantity> iterI = r.getIngredients().iterator();
+
+            //  while (iterI.hasNext()) {
+            if (score[index] == -1) {
+                break;
+            }
+            //  String s = iterI.next().getIngredient().getName();
+
+            //  if (s == first) {
+            and1 = true;
+            //}
+            //  if (s == third) {
+            and2 = true;
+            //   }
+            //  if (and1 && and2) {
+            //   score[index]++;
+            //  break;
+            // }
+
+        }
+        index++;
+        and1 = false;
+        and2 = false;
+    }
+
+
+    public LinkedList<Recipe> getAllRecipesLList(){
+        String query = "Select * FROM " + TABLE_RECIPES + "\"";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+        int queryCount = cursor.getCount();
+
+        LinkedList<Recipe> recipes = new LinkedList<Recipe>();
+        if(cursor.moveToFirst()){
+            for(int i=0; i < queryCount; i++){
+                int index = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String type = cursor.getString(2);
+                String category = cursor.getString(3);
+                int time = cursor.getInt(4);
+                recipes.add(new Recipe(index,title,type,category,time));
+                cursor.moveToNext();
+            }
+
+        }
+
+        cursor.close();
+
+
+        LinkedList<Recipe> returnedrecipes = new LinkedList<Recipe>();
+        Iterator<Recipe> iter = recipes.iterator();
+        while(iter.hasNext()){
+            int classeur = 0;
+            Iterator<Recipe> iter1 = returnedrecipes.iterator();
+            Recipe rec = iter.next();
+            boolean notadded = true;
+            while(iter1.hasNext()){
+
+                Recipe tocompareto= iter1.next();
+                int reclength = rec.getTitle().length();
+                int tocomparetolength =  tocompareto.getTitle().length();
+                int recint = 0;
+                int tocomparetoint = 0;
+
+                while(recint<reclength && tocomparetoint < tocomparetolength){
+                    if(rec.getTitle().charAt(recint) < tocompareto.getTitle().charAt(tocomparetoint) ){
+                        returnedrecipes.add(classeur,rec);
+                        notadded = false;
+                        break;
+                    }else if(rec.getTitle().charAt(recint) > tocompareto.getTitle().charAt(tocomparetoint) ){
+                        break;
+                    }else{
+                        recint++;
+                        tocomparetoint++;
+                    }
+                }
+
+                classeur++;
+
+            }
+            if(notadded){
+                returnedrecipes.add(classeur,rec);
+
+            }
+        }
+        return returnedrecipes;
+    }
 }
