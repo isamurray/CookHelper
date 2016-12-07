@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SearchRecipe extends AppCompatActivity {
     private Spinner typeChosen, categoryChosen;
@@ -114,7 +115,7 @@ public class SearchRecipe extends AppCompatActivity {
         }
         else{
             String boolExpression = ingredientBool.getText().toString();
-            boolExpression = boolExpression.toLowerCase();
+            //boolExpression = boolExpression.toLowerCase();
             String []arrayBool = boolExpression.split("\\s+");
            // Recipe[] recipeFound = advancedFindRecipe(String.valueOf(categoryChosen.getSelectedItem()),ingredientBool.getText().toString(), arrayBool);
 
@@ -126,6 +127,17 @@ public class SearchRecipe extends AppCompatActivity {
             String type = String.valueOf(typeChosen.getSelectedItem());
 
             Recipe[] recipeFound = handler.advancedFindRecipe(cat, type);
+            System.out.println(boolExpression);
+
+            LinkedList<Recipe> secondSearch = handler.searchRecipe(recipeFound, boolExpression);
+            Recipe [] toSend = new Recipe[secondSearch.size()];
+
+            for(int i = 0 ; i< secondSearch.size(); i++){
+                toSend[i] = secondSearch.get(i);
+            }
+            System.out.println("did it work");
+            System.out.println(toSend.length);
+
 
            if(recipeFound.length == 1)
                 {
@@ -135,7 +147,7 @@ public class SearchRecipe extends AppCompatActivity {
                 }
             else{
                 Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
-                intent.putExtra("recipeList", recipeFound);
+                intent.putExtra("recipeList", toSend);
                 startActivityForResult(intent, 0);
             }
 
@@ -149,6 +161,7 @@ public class SearchRecipe extends AppCompatActivity {
             // Intent intent = new Intent(getApplication(), ViewRecipe.class);                 //FAIRE QQCH AVEC LES CHOIX VIDE POS 0
             // startActivityForResult(intent, 0);
         */
+
         }
     }
 

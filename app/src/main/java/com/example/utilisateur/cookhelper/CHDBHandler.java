@@ -13,13 +13,15 @@ import java.sql.Blob;
 import java.io.ObjectOutput;
 import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Created by ced on 2016-11-30.
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 38;
+    private static final int DATABASE_VERSION = 39;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -137,10 +139,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
         sampleInstructions.add("Drop".toLowerCase());
         sampleInstructions.add("Roll".toLowerCase());
         ArrayList<String> sampleIngredients = new ArrayList<String>();
-        sampleIngredients.add("Apple".toLowerCase());
-        sampleIngredients.add("Orange".toLowerCase());
-        sampleIngredients.add("Banana".toLowerCase());
-        sampleIngredients.add("Nectar of the Gods".toLowerCase());
+        sampleIngredients.add("Apple (1 Cup)".toLowerCase());
+        sampleIngredients.add("Orange (1 Tbs)".toLowerCase());
+        sampleIngredients.add("Banana (1)".toLowerCase());
+        sampleIngredients.add("Milk (3 kg)".toLowerCase());
         // POPULATE 3 SAMPLE RECIPES
         values.put(COL_RECIPENAME,"Burger".toLowerCase());
         values.put(COL_RECIPECOUNTRY,"Canadian".toLowerCase());
@@ -673,6 +675,307 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
 
     //Gabriel-modification
-    
+
+
+    /**
+
+     *@param instructions
+     *@return returnedlist
+     *This method finds the list of recipes ordered by their level of pertinence according to the
+     *instructions (the ingredients that the user wants or doesn't want in his recipe) the category
+     *and type that the user put in the application. The level of pertinence works as follow: Each
+     *ingredient that the user wants in the recipe that is in the recipe gives the recipe 1 extra point
+     * and each boolean operations (or,and) give 1 point per operation, the category and type also go for 1
+     *point each, but if the users says " NOT ingredient " then the score goes to -1 and isn't considered
+     *pertinent anymore, in other terms it is no longer considered.
+     */
+    public LinkedList<Recipe> searchRecipe(Recipe[] recipeList, String instructions) {
+
+        LinkedList<Recipe> recipeDatabase = new LinkedList<Recipe>();
+        for(int j =0 ; j<recipeList.length; j++) {
+            recipeDatabase.add(recipeList[j]);
+        }
+
+        int[] score = new int[recipeDatabase.size()];
+
+        for(int j =0 ; j<recipeList.length; j++) {
+            score[j]=0;
+        }
+
+        int previousSpace = 0;
+
+        LinkedList<String> test = new LinkedList<String>();
+
+        if (instructions != null) {
+
+            for (int j = 0; j < instructions.length(); j++) {
+                if (instructions.charAt(j) == ' ' ) {
+                    System.out.println("decoupage des mots " + j + " "+ instructions.substring(previousSpace, j));
+                    test.push(instructions.substring(previousSpace, j));
+                    previousSpace = j + 1;
+                }
+                else if(j == instructions.length()-1){
+                    System.out.println("decoupage des mots " + j + " "+ instructions.substring(previousSpace));
+                    test.push(instructions.substring(previousSpace));
+                }
+            }
+
+            String first = "";
+            String second = "";
+            String third = "";
+
+            while (!test.isEmpty()) {
+
+                if (first.equals("")) {
+                    first = test.pop();
+                }
+
+                if (!test.isEmpty()) {
+                    second = test.pop();
+                    System.out.println("second : " + second);
+                }
+
+                if (!second.equals("")) {
+                    System.out.println("second dans le if: " + second);
+                    System.out.println("first dans le if: " + first);
+
+                    if (second.equals("or")) {
+
+                        if (!test.isEmpty()) {
+                            third = test.pop();
+                            OR(recipeDatabase,first, third, score);
+                            first = "";
+                            second = "";
+                            third = "";
+
+                        }}
+                        else if (second.equals("not")) {
+                            NOT(recipeDatabase,first, score);
+                            first = "";
+                            second = "";
+                            third = "";
+
+                        }
+                        else if (second.equals("and")) {
+                            if (!test.isEmpty()) {
+                                third = test.pop();
+                                AND(recipeDatabase,first, third, score);
+                                first = "";
+                                second = "";
+                                third = "";
+
+                            } else {
+                                ONE(recipeDatabase,first, score);
+                                first = second;
+                                second = "";
+
+                            }
+
+                        }
+                        else {
+                            ONE(recipeDatabase,first, score);
+                            first = second;
+                        }
+
+
+                } else {
+                    ONE(recipeDatabase,first, score);
+                    first = second;
+                }
+                System.out.println("0 de la recette score " + score[0]);
+                System.out.println( "1 de la recette score " + score[1]);
+                System.out.println("2 de la recette score " + score[2]);
+                if(second.equals("not"))
+                    break;
+
+            }
+        }
+
+        LinkedList<Recipe> returnedlist = new LinkedList<Recipe>(); // initie la liste de retour
+        int i = 0;
+        int recipeindex = 0; // pour guarder en place la location que l'on ajoute dans la liste
+        LinkedList<Integer> scorelist = new LinkedList<Integer>(); // pour garder la position dans score que chaque recette que j'ajoute dans returnedlist est.
+        Iterator<Recipe> iterRecipe = recipeDatabase.iterator();
+        Boolean added = false; // pour s'assurer que si l'element que j'observe est le plus petit qu'on le met a la fin
+
+        while (iterRecipe.hasNext() && i < score.length) {
+            Recipe rec = iterRecipe.next();
+            Iterator<Recipe> rliter = returnedlist.iterator(); // pour comparer  a la recette rec que l'on desire ajouter a la liste
+            Iterator<Integer> sliter = scorelist.iterator(); // pour pouvoir comparer les scores
+
+            System.out.println("Le score de la recette : " + score[i]);
+
+            if (score[i] != -1) { // on ne met pas les -1 car c'est le seul  temps qu'il y a un ingredient NOT.
+
+                while (rliter.hasNext() && sliter.hasNext()) {
+                    Recipe comp = rliter.next();
+                    Integer sindex = sliter.next();
+
+                    if (score[sindex] < score[i]) { // si le score de la recette qu'on observe est plus grand alors on peut l'ajouter a la bonne place.
+                        scorelist.add(recipeindex, score[i]);
+                        returnedlist.add(recipeindex, rec);
+                        added = true;
+                        break;
+                    } else if (score[sindex] == score[i]) {// si le score est  egal on compare avec les etoiles
+
+                       /* if (comp.getStars() < returnedlist.get(i).getStars()) {
+                            returnedlist.add(recipeindex, rec);
+                            scorelist.add(recipeindex, score[i]);
+                            added = true;
+                            break;
+                        }*/
+                        recipeindex++;
+
+                    }
+
+
+                }
+                if (!added) { //si non ajouter on l'ajoute a la fin de la liste
+                    returnedlist.add(recipeindex,rec);
+                    scorelist.add(recipeindex,score[i]);
+
+                }
+              
+            }
+            recipeindex = 0;
+            i++;
+            added = false;
+
+        }
+
+        System.out.println(returnedlist.size());
+        return returnedlist;
+
+    }
+    private void ONE(LinkedList<Recipe> recipeDatabase,String first, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            System.out.println(r);
+            Iterator<String> iterI = splitL(r.getIngredients()).iterator();
+
+            while (iterI.hasNext()) {
+
+                if (score[index] == -1) { //verifie que la recette n'a pas deja un NOT
+                    break;
+                }
+                String s = iterI.next();
+                System.out.println("this is s : " + s);
+                System.out.println("this is first :  " + first);
+
+
+                if (s.equals(first)) { //attribue un point si la recette a l'ingredient demander.
+                    score[index]++;
+                    System.out.println("score was updated for recipe " + index);
+                    break;
+                }
+            }
+            index++;
+        }
+
+    }
+
+    private ArrayList<String> splitL(ArrayList<String> list){
+        ArrayList<String> newList = new ArrayList<String>();
+        for(int i = 0; i<list.size() ; i++ ){
+            newList.add((list.get(i)).substring(0,(list.get(i)).indexOf(' ')));
+        }
+        return newList;
+    }
+
+    private void NOT(LinkedList<Recipe> recipeDatabase, String first, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            Iterator<String> iterI = splitL(r.getIngredients()).iterator();
+
+            while (iterI.hasNext()) {
+
+                if (score[index] == -1) {
+                    break;
+                }
+                String s = iterI.next();
+                System.out.println("first :  " + first);
+                System.out.println("s :  " + s);
+
+                if (s.equals(first) ) {
+                    score[index] = -1;
+                    System.out.println("we found a not element in " + index);
+                    break;
+                }
+            }
+            index++;
+        }
+    }
+
+    private void OR(LinkedList<Recipe> recipeDatabase,String first, String third, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            Iterator<String> iterI = splitL(r.getIngredients()).iterator();
+
+            while (iterI.hasNext()) {
+                if (score[index] == -1) {
+                    break;
+                }
+                String s = iterI.next();
+
+                if (s.equals(first) || s.equals(third)) {
+                    score[index]++;
+                    break;
+                }
+
+            }
+            index++;
+        }
+
+    }
+
+    private void AND(LinkedList<Recipe> recipeDatabase,String first, String third, int[] score) {
+        Iterator<Recipe> iter = recipeDatabase.iterator();
+        int index = 0;
+        Boolean and1 = false;
+        Boolean and2 = false;
+
+        while (iter.hasNext()) {
+            Recipe r = iter.next();
+            Iterator<String> iterI = splitL(r.getIngredients()).iterator();
+
+            while (iterI.hasNext()) {
+                if (score[index] == -1) {
+                    break;
+                }
+                String s = iterI.next();
+
+                if (s.equals(first)) {
+                    and1 = true;
+                }
+                if (s.equals(third)) {
+                    and2 = true;
+                }
+                if (and1 && and2) {
+                    score[index]++;
+                    break;
+                }
+
+            }
+            index++;
+            and1 = false;
+            and2 = false;
+        }
+
+    }
 
 }
+
+
+
+    
+
+

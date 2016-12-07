@@ -30,6 +30,8 @@ public class ResultsFromSearch extends AppCompatActivity{
 
         if( getIntent().getExtras()!= null) {
             recipe = (Recipe[]) getIntent().getSerializableExtra("recipeList");
+            System.out.println("received extra");
+            System.out.println(recipe.length);
         }
         else{
         //>>>> DB
