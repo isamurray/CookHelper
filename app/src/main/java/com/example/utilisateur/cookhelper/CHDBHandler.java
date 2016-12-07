@@ -284,6 +284,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_RECIPENAME,recipe.getTitle());
         values.put(COL_RECIPECOUNTRY,recipe.getType());
         values.put(COL_RECIPEDISHTYPE,recipe.getCategory());
+        values.put(COL_INSTRUCTION_TEXT,serializeObject(recipe.getInstructions()));
         values.put(COL_RECIPECOOKTIME,recipe.getCookingTime());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -456,6 +457,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
         int index = cursor.getInt(0);
         System.out.println(index);
+        cursor.close();
         return index;
     }
     
