@@ -653,4 +653,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
         // return result;
     }
 
+
+
+    //Gabriel-modification
+    
+
 }
