@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 34;
+    private static final int DATABASE_VERSION = 36;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -137,10 +137,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
         sampleInstructions.add("Drop");
         sampleInstructions.add("Roll");
         ArrayList<String> sampleIngredients = new ArrayList<String>();
-        sampleIngredients.add("Apple");
-        sampleIngredients.add("Orange");
-        sampleIngredients.add("Banana");
-        sampleIngredients.add("Nectar of the Gods");
+        sampleIngredients.add("Apple (1 Cup)");
+        sampleIngredients.add("Milk (5)");
+        sampleIngredients.add("Banana (34.5 Tsp)");
         // POPULATE 3 SAMPLE RECIPES
         values.put(COL_RECIPENAME,"Burger");
         values.put(COL_RECIPECOUNTRY,"Canadian");
@@ -404,6 +403,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     //        
     //}
     
+
     /**
      * Get all recipe categories as array of strings from DB
      */
@@ -652,5 +652,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
         db.close();
         // return result;
     }
+
+
+
+    //Gabriel-modification
+    
 
 }
