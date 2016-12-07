@@ -27,7 +27,7 @@ public class AddRecipe extends AppCompatActivity {
         setSupportActionBar(toolbar);
         readItemSelection();
 
-        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        final CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         String[] dbCategoryList = handler.getAllRecipeCategories();
         String[] dbTypeList = handler.getAllRecipeTypes();
 
@@ -49,7 +49,12 @@ public class AddRecipe extends AppCompatActivity {
                                                recipeName.getText().toString().equals("")){
                                            Snackbar.make(view, "Please enter all information", Snackbar.LENGTH_LONG)
                                                    .setAction("Action", null).show();                                       }
-                                       else {
+                                       else if(handler.findRecipe(recipeName.getText().toString()) != null){
+                                           Snackbar.make(view,recipeName.getText().toString() + " already exists in database", Snackbar.LENGTH_LONG)
+                                                   .setAction("Action", null).show();
+                                       }
+
+                                       else{
                                            Intent intent = new Intent(getApplication(), AddIngredientToRecipe.class);
                                            startActivityForResult(intent, 0);
 
