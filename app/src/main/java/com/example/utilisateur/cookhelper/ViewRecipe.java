@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static android.R.drawable.ic_menu_add;
 
@@ -42,11 +43,11 @@ public class ViewRecipe extends AppCompatActivity {
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private ArrayList<String> instructionData = new ArrayList<String>();
+    private ArrayList<String> instructionData= new ArrayList<String>();
+    private ArrayList<String> typeData, categoryData;
     private ArrayList<String> ingredientData = new ArrayList<String>();
-    private ArrayList<String> categoryData = new ArrayList<String>();
+    private String [] dbCategories, dbTypes;
     private ArrayList<String> ingredientList = new ArrayList<String>();
-    private ArrayList<String> typeData = new ArrayList<String>();
     private ImageView addInstructionButton, addIngredientButton;
     private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
     private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
@@ -62,17 +63,20 @@ public class ViewRecipe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        String query = getIntent().getExtras().getString("recipeName");
 
         //>>>> DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
-        String query = "Burger";
 
-
+        //get DBvalues to populate spinners
         Recipe recipe = handler.findRecipe(query);
-        //send this recipe to the intent below
-        System.out.println(recipe);
+        dbCategories = handler.getAllRecipeCategories();
+        dbTypes = handler.getAllRecipeTypes();
+        ingredientData = handler.getIngredients();
 
+        categoryData = new ArrayList<String>(Arrays.asList(dbCategories));
+        typeData = new ArrayList<String>(Arrays.asList(dbTypes));
 
 
         super.onCreate(savedInstanceState);
@@ -97,27 +101,10 @@ public class ViewRecipe extends AppCompatActivity {
         instructionData.add("Instruction 3");
         instructionData.add("Instruction 4");
 
-        ingredientData.add("-select-");
-        ingredientData.add("Pomme");
-        ingredientData.add("Banane");
-        ingredientData.add("Jus");
-        ingredientData.add("Lait");
-
         ingredientList.add("45 Pomme");
         ingredientList.add("14 Banane");
         ingredientList.add("2.3 Jus");
         ingredientList.add("9.7 Lait");
-
-        categoryData.add("Category 1");
-        categoryData.add("Category 2");
-        categoryData.add("Category 3");
-        categoryData.add("Category 4");
-
-        typeData.add("Type 1");
-        typeData.add("Type 2");
-        typeData.add("Type 3");
-        typeData.add("Type 4");
-
 
         //Create all necessary ArrayAdapter
 
@@ -365,6 +352,7 @@ public class ViewRecipe extends AppCompatActivity {
                 instructionData.remove(menuItemSelected);
                 arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                 arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                setListViewHeightBasedOnItems(lView1);
                 setListViewHeightBasedOnItems(lView2);
 
             } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
@@ -372,7 +360,7 @@ public class ViewRecipe extends AppCompatActivity {
                 arrayAdapterIngredient.notifyDataSetChanged();
                 arrayAdapterIngredientEdit.notifyDataSetChanged();
                 setListViewHeightBasedOnItems(lView1);
-            }
+                setListViewHeightBasedOnItems(lView2);            }
         }
         return true;
     }
@@ -430,7 +418,7 @@ public class ViewRecipe extends AppCompatActivity {
             if(linearSpinnerCategory.getParent()!=null)
                 ((ViewGroup)linearSpinnerCategory.getParent()).removeView(linearSpinnerCategory);
             //set to the actual selected value
-            categorySpinner.setSelection(categoryData.indexOf(input_category));
+            categorySpinner.setSelection(categoryData.indexOf(input_category.getText().toString()));
             //set the alert to the spinner view
             alert.setView(linearSpinnerCategory);
 
@@ -442,7 +430,7 @@ public class ViewRecipe extends AppCompatActivity {
             if(linearSpinnerType.getParent()!=null)
                 ((ViewGroup)linearSpinnerType.getParent()).removeView(linearSpinnerType);
             //set to the actual selected value
-            typeSpinner.setSelection(typeData.indexOf(input_type));
+            typeSpinner.setSelection(typeData.indexOf(input_type.getText().toString()));
             //set the alert to the spinner view
             alert.setView(linearSpinnerType);
         }
@@ -463,7 +451,7 @@ public class ViewRecipe extends AppCompatActivity {
                     }
 
                 } else if (view.getId() == R.id.ingredientListView) {
-                    if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select-")) {
+                    if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select ingredient-")) {
                         editSomeText(view);
                         linearSpinnerIngredient.removeView(input);
                         Toast.makeText(getApplicationContext(), "Please select an ingredient", Toast.LENGTH_SHORT).show();
@@ -482,11 +470,19 @@ public class ViewRecipe extends AppCompatActivity {
 
 
                 } else if (view.getId() == R.id.input_type){
-                    input_type.setText(String.valueOf(typeSpinner.getSelectedItem()));
+                    if (String.valueOf(typeSpinner.getSelectedItem()).equals("-select-")) {
+                        editSomeText(view);
+                        Toast.makeText(getApplicationContext(), "Please select a type", Toast.LENGTH_SHORT).show();
+                    }else{
+                    input_type.setText(String.valueOf(typeSpinner.getSelectedItem()));}
                 }
 
                 else if ( view.getId() == R.id.input_category){
-                    input_category.setText(String.valueOf(categorySpinner.getSelectedItem()));
+                    if (String.valueOf(categorySpinner.getSelectedItem()).equals("-select-")) {
+                        editSomeText(view);
+                        Toast.makeText(getApplicationContext(), "Please select a category", Toast.LENGTH_SHORT).show();
+                    }else{
+                    input_category.setText(String.valueOf(categorySpinner.getSelectedItem()));}
                 }
 
                 else{
@@ -533,6 +529,8 @@ public class ViewRecipe extends AppCompatActivity {
                     instructionData.add(input.getText().toString());
                     arrayAdapterNoCheckInstruction.notifyDataSetChanged();
                     arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Instruction must have at least one character", Toast.LENGTH_SHORT).show();
@@ -600,7 +598,7 @@ public class ViewRecipe extends AppCompatActivity {
 
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select-")) {
+                if (String.valueOf(ingredientSpinner.getSelectedItem()).equals("-select ingredient-")) {
                     addAnIngredient(view);
                     linearSpinnerIngredient.removeView(input);
                     Toast.makeText(getApplicationContext(), "Please select an ingredient", Toast.LENGTH_SHORT).show();
@@ -617,6 +615,8 @@ public class ViewRecipe extends AppCompatActivity {
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
                     linearSpinnerIngredient.removeView(input);
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
                 }
             }
         });

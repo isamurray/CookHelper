@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickViewAllRecipesPage(View v) {
-        Intent intent = new Intent(getApplication(), ViewRecipe.class);
+        Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
         startActivityForResult(intent, 0);
     }
 

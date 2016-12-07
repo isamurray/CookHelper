@@ -41,11 +41,10 @@ public class SearchRecipe extends AppCompatActivity {
 
         readItemSelection();//<----- we should keep our 'field methods' by the same name
         // input box is empty
-        if(recipeName.getText().toString().equals("")) {
+        if (recipeName.getText().toString().equals("")) {
             Snackbar.make(v, "Please enter a recipe name", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-        }
-        else{
+        } else {
             // will need case where search returns nothing
             // if search returns something, THEN we send those parameters with
             // the intent... figure out how to do this.
@@ -61,10 +60,16 @@ public class SearchRecipe extends AppCompatActivity {
             System.out.println(recipe);
             //<<<< DB
 
-            Intent intent = new Intent(getApplication(), ViewRecipe.class);
-            startActivityForResult(intent, 0);}
+            if (recipe != null) {
+                Intent intent = new Intent(getApplication(), ViewRecipe.class);
+                intent.putExtra("recipeName", query);
+                startActivityForResult(intent, 0);
+            } else {
+                Snackbar.make(v, query + " does not exist in recipe database", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        }
     }
-
     public void onClickReset(View v) {
         readItemSelection();
         recipeName.setText("");
