@@ -383,9 +383,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
     
     /**
-     *
+     * Bypass being true skips the BOOLEAN search phase
      */
-    public Recipe[] advancedFindRecipe(String category, String type, String[] ingredients){
+    public Recipe[] advancedFindRecipe(String category, String type){
         SQLiteDatabase db = this.getWritableDatabase();
         
         String query = "Select * FROM " + TABLE_RECIPES +
@@ -413,7 +413,6 @@ public class CHDBHandler extends SQLiteOpenHelper {
             }
         }
         // FILTER RESULTS FOR RECIPES FOUND IN PREVIOUS STEP BY BOOLEAN
-        
         
         System.out.println("Records found "+returnRecipes.length);
         cursor.close();
