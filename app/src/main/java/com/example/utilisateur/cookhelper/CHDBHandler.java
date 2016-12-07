@@ -383,6 +383,28 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
     
     /**
+     *
+     */
+    //public Recipe[] advancedFindRecipe(String category, String type, String ingredients){
+    //    Recipe[] returnRecipes;
+    //    SQLiteDatabase db = this.getWritableDatabase();
+    //    
+    //    String query = "Select * FROM " + TABLE_RECIPES +
+    //        " WHERE " + COL_RECIPECOUNTRY + " = " + type +
+    //        " AND " + COL_RECIPEDISHTYPE + " = " + category;
+    //    Cursor cursor = db.rawQuery(query, null);
+    //    int queryCount = cursor.getCount();
+    //    System.out.println("QueryCount for advancedFind is "+ queryCount);
+    //    if(cursor.moveToFirst()){
+    //        for(int i = 0; i < queryCount; i++){
+    //            
+    //        }
+    //    }
+    //    return returnRecipes;
+    //        
+    //}
+    
+    /**
      * Get all recipe categories as array of strings from DB
      */
     public String[] getAllRecipeCategories(){
