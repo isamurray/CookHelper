@@ -1,4 +1,5 @@
 package com.example.utilisateur.cookhelper;
+import java.util.ArrayList;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,9 @@ public class Recipe {
     //private CookingTime cookingTime;
     private int stars  = 0, servings;
     private ArrayList<String> ingredientsList;
+    private ArrayList<String> instructions;
+    
+    //private LinkedList<IngredientQuantity> ingredients;
     //private LinkedList<Instruction> instructions;
     //private int _id;
 
@@ -22,11 +26,6 @@ public class Recipe {
      * @param type
      * @param category
      * @param time
-     * @param servings
-     * @param ingredients
-     * @param instructionSet
-     * @param comments
-     * @param containNuts
      */
 
     
@@ -49,34 +48,14 @@ public class Recipe {
         this.type = type;
         this.category = category;
         this.ingredientsList = null;
-        //this.ingredients = ingredients;
-        //this.instructions = instructions;
+
         this.cookingTime = time;
-        //this.servings = servings;
-        // this._id = _id;
+        ArrayList<String> struct = new ArrayList<String>();
+        struct.add("Go to kitchen");
+        this.instructions = struct;
 
     }
     public Recipe(){} //DUMMY METHOD NEEDS TO BE DELETED
-
-
-
-    //public void addInstruction(Instruction instruction){instructions.add(instruction);} // to reverify
-    //public void addInstructionSetWithIndex(int index,Instruction set){instructions.add(index,set);} // to reverify
-
-    //public void removeInstruction(Instruction instruction){instructions.remove(instruction);}
-    //public void removeInstructionByIndex(int index){instructions.remove(index);}
-
-
-    //public void addIngredientAmount(IngredientQuantity ingredient){ingredients.add(ingredient);}
-    //public void addIngredientAmountWithIndex(int index,IngredientQuantity ingredient){ingredients.add(index,ingredient);}
-
-    //public void removeIngredientAmount(IngredientQuantity ingredient){ingredients.remove(ingredient);}
-    //public void removeIngredientAmountByIndex(int index){ingredients.remove(index);}
-
-
-
-
-
 
     public String getTitle() {
         return title;
@@ -133,6 +112,15 @@ public class Recipe {
     }
     public void setServings(int servings) {
         this.servings = servings;
+    }
+    public void addInstruction(String instruction){
+        instructions.add(instruction);
+    }
+    public ArrayList<String> getInstructions(){
+        return instructions;
+    }
+    public void setInstructions(ArrayList<String> instructions){
+        this.instructions = instructions;
     }
     //public int getID() {
     //    return _id;

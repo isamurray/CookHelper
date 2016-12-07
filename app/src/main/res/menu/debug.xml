@@ -6,7 +6,7 @@
     <item android:id="@+id/menu_dbg_1"
         android:orderInCategory="1"
         app:showAsAction="never|ifRoom"
-        android:title="+Cat"/>
+        android:title="serialize"/>
     <item android:id="@+id/menu_dbg_2"
         android:orderInCategory="2"
         app:showAsAction="never|ifRoom"
@@ -14,7 +14,11 @@
     <item android:id="@+id/menu_dbg_3"
         android:orderInCategory="2"
         app:showAsAction="never|ifRoom"
-        android:title="DropAllDB"
+        android:title="DropAllDB"/>
+    <item android:id="@+id/menu_dbg_4"
+        android:orderInCategory="2"
+        app:showAsAction="never|ifRoom"
+        android:title="deserialize"
         />
 
 </menu>
