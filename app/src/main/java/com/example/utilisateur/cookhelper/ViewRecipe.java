@@ -74,6 +74,7 @@ public class ViewRecipe extends AppCompatActivity {
         dbCategories = handler.getAllRecipeCategories();
         dbTypes = handler.getAllRecipeTypes();
         ingredientData = handler.getIngredients();
+        instructionData = handler.getInstructions(query);
 
         categoryData = new ArrayList<String>(Arrays.asList(dbCategories));
         typeData = new ArrayList<String>(Arrays.asList(dbTypes));
@@ -96,10 +97,10 @@ public class ViewRecipe extends AppCompatActivity {
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
         //TO REMOVE
-        instructionData.add("Instruction 1");
+       /* instructionData.add("Instruction 1");
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
-        instructionData.add("Instruction 4");
+        instructionData.add("Instruction 4");*/
 
         ingredientList.add("45 Pomme");
         ingredientList.add("14 Banane");
