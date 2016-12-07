@@ -116,12 +116,8 @@ public class SearchRecipe extends AppCompatActivity {
         else{
             String boolExpression = ingredientBool.getText().toString();
             boolExpression = boolExpression.toLowerCase();
-            String []arrayBool = boolExpression.split("\\s+");
-           // Recipe[] recipeFound = advancedFindRecipe(String.valueOf(categoryChosen.getSelectedItem()),ingredientBool.getText().toString(), arrayBool);
-
 
            CHDBHandler handler = new CHDBHandler(this, null, null, 1);  //FOR TESTING
-           // Recipe[] recipeFound = handler.getAllRecipes();             //FOR TESTING
 
             String cat = String.valueOf(categoryChosen.getSelectedItem());
             String type = String.valueOf(typeChosen.getSelectedItem());
@@ -129,8 +125,15 @@ public class SearchRecipe extends AppCompatActivity {
             Recipe[] recipeFound = handler.advancedFindRecipe(cat, type);
             System.out.println(boolExpression);
 
-            if (recipeFound.length !=0){
-            LinkedList<Recipe> secondSearch = handler.searchRecipe(recipeFound, boolExpression);
+            if (!(cat.equals("-select-") || type.equals("-select-")) ){
+
+                if (cat.equals("-select-") && type.equals("-select-") )
+                recipeFound = handler.getAllRecipes();             //FOR TESTING
+
+            if(recipeFound.length ==0)
+                Toast.makeText(getApplicationContext(), "No recipe found", Toast.LENGTH_SHORT).show();
+
+                LinkedList<Recipe> secondSearch = handler.searchRecipe(recipeFound, boolExpression);
             Recipe [] toSend = new Recipe[secondSearch.size()];
 
             for(int i = 0 ; i< secondSearch.size(); i++){
@@ -154,20 +157,9 @@ public class SearchRecipe extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
 
-/*
-            CHDBHandler handler = new CHDBHandler(this, null, null, 1);
-            String cat = String.valueOf(categoryChosen.getSelectedItem());
-            String type = String.valueOf(typeChosen.getSelectedItem());
-            String[] ingredients = new String[5];
-            Recipe[] recipes = handler.advancedFindRecipe(cat, type);
-            System.out.println(recipes);
-            // Intent intent = new Intent(getApplication(), ViewRecipe.class);                 //FAIRE QQCH AVEC LES CHOIX VIDE POS 0
-            // startActivityForResult(intent, 0);
-        */
-
         }
         else
-                Toast.makeText(getApplicationContext(), "No recipe found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Please enter both type and category", Toast.LENGTH_LONG).show();
         }
     }
 
