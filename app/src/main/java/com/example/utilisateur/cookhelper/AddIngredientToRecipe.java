@@ -31,7 +31,7 @@ public class AddIngredientToRecipe extends AppCompatActivity {
     private ArrayAdapter<String> adapter1;
 
     private EditText input_ingredient_qty;
-    private Spinner ingredientChosen;
+    private Spinner ingredientChosen, unitChosen;
     private Recipe newRecipe;
 
     @Override
@@ -83,6 +83,7 @@ public class AddIngredientToRecipe extends AppCompatActivity {
 
     private void addItemsOnSpinner() {                                                              //update spinner
         ingredientChosen = (Spinner) findViewById(R.id.ingredientChosen);
+        unitChosen= (Spinner) findViewById(R.id.unitChosen);
         
         // INGREDIENT LIST HERE IS THE ONE THAT WILL TAKE FROM DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
@@ -98,13 +99,19 @@ public class AddIngredientToRecipe extends AppCompatActivity {
 
 
         if (!String.valueOf(ingredientChosen.getSelectedItem()).equals("-select ingredient-") && !input_ingredient_qty.getText().toString().equals("")) {
-            listIngredient.add(input_ingredient_qty.getText().toString() + " " + String.valueOf(ingredientChosen.getSelectedItem()));
-            adapter1.notifyDataSetChanged();
-            ingredientChosen.setSelection(0);
-            input_ingredient_qty.setText("");
+            if( String.valueOf(unitChosen.getSelectedItem()).equals("per unit"))
+                listIngredient.add(String.valueOf(ingredientChosen.getSelectedItem()) +" (" + input_ingredient_qty.getText().toString() + ")" );
+            else
+                listIngredient.add(String.valueOf(ingredientChosen.getSelectedItem()) +" (" + input_ingredient_qty.getText().toString() + " " + String.valueOf(unitChosen.getSelectedItem()) + ") " );
         }
 
-    }
+        adapter1.notifyDataSetChanged();
+        ingredientChosen.setSelection(0);
+        unitChosen.setSelection(0);
+        input_ingredient_qty.setText("");
+        }
+
+
 
     //menu in title bar
     @Override

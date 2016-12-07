@@ -44,12 +44,12 @@ public class ViewRecipe extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private ArrayList<String> instructionData= new ArrayList<String>();
-    private ArrayList<String> typeData, categoryData;
+    private ArrayList<String> typeData, categoryData, unitData;
     private ArrayList<String> ingredientData = new ArrayList<String>();
     private String [] dbCategories, dbTypes;
     private ArrayList<String> ingredientList = new ArrayList<String>();
     private ImageView addInstructionButton, addIngredientButton;
-    private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
+    private Spinner typeSpinner, categorySpinner, ingredientSpinner, unitSpinner ;
     private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
     private TextView recipeName, input_category, input_type;
     private String oldname;
@@ -59,7 +59,7 @@ public class ViewRecipe extends AppCompatActivity {
     private ListView lView1, lView2;
     View menuListViewSelected;
     private ArrayAdapter<String> arrayAdapterCheckBoxInstruction, arrayAdapterNoCheckInstruction, arrayAdapterIngredient, arrayAdapterIngredientEdit,
-            arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner;
+            arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner, arrayAdapterUnitSpinner;
     private static int menuItemSelected;
     private CHDBHandler handler;
     private Recipe recipe;
@@ -79,10 +79,12 @@ public class ViewRecipe extends AppCompatActivity {
         dbTypes = handler.getAllRecipeTypes();
         ingredientData = handler.getIngredients();
         instructionData = handler.getInstructions(query);
+        String [] unitString = {"per unit","Cup","Tsp" ,"Tbs" ,"Oz" , "kg" ,"mL"};
+
 
         categoryData = new ArrayList<String>(Arrays.asList(dbCategories));
         typeData = new ArrayList<String>(Arrays.asList(dbTypes));
-
+        unitData = new ArrayList<String>(Arrays.asList(unitString));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
@@ -105,11 +107,10 @@ public class ViewRecipe extends AppCompatActivity {
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
         instructionData.add("Instruction 4");*/
-
-        ingredientList.add("45 Pomme");
-        ingredientList.add("14 Banane");
-        ingredientList.add("2.3 Jus");
-        ingredientList.add("9.7 Lait");
+        ingredientList.add("Milk (3 Cup)");
+        ingredientList.add("Juice (2)");
+        ingredientList.add("Banana (1 Tsp)");
+        ingredientList.add("Chocolate (5)");
 
         //Create all necessary ArrayAdapter
 
@@ -145,11 +146,23 @@ public class ViewRecipe extends AppCompatActivity {
         arrayAdapterIngredientSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ingredientData);
         arrayAdapterIngredientSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingredientSpinner.setAdapter(arrayAdapterIngredientSpinner);
+
+        unitSpinner = new Spinner(this);
+        arrayAdapterUnitSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, unitData);
+        arrayAdapterUnitSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(arrayAdapterUnitSpinner);
+
         linearSpinnerIngredient = new LinearLayout(this);
         linearSpinnerIngredient.setOrientation(LinearLayout.HORIZONTAL);
         linearSpinnerIngredient.setGravity(Gravity.CENTER);
         linearSpinnerIngredient.setPadding(0,25,0,0);
         linearSpinnerIngredient.addView(ingredientSpinner);
+        linearSpinnerIngredient.addView(unitSpinner, 0);
+
+
+
+
+
 
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
@@ -410,24 +423,38 @@ public class ViewRecipe extends AppCompatActivity {
             array = ingredientList;
             input.setGravity(17);
             linearSpinnerIngredient.addView(input,0);
-            String qtyIngredient = array.get(menuItemSelected);
+
             //make sure input is numerical
             input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
             input.setInputType(InputType.TYPE_CLASS_NUMBER);
             input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
             input.setKeyListener(DigitsKeyListener.getInstance(false,true));
-            String qty = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // QTY
-            String ingredient = qtyIngredient.substring(qtyIngredient.indexOf(' ')+1); // INGREDIENT
+
+            //set values to actual values
+            String qtyIngredient = array.get(menuItemSelected);
+            String ingredient = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // INGREDIENT
+            String qtyInfo = qtyIngredient.substring(qtyIngredient.indexOf('(')+1, qtyIngredient.indexOf(')')); // QTY+UNIT
+            String[] info = qtyInfo.split(" ");
+            String qty = info[0];
+            String unit = "per unit";
+            if(info.length==2)
+                unit = info[1];
+
+            System.out.println(ingredient);
+            System.out.println(qtyInfo);
+            System.out.println(qty);
+            System.out.println(unit);
+
             input.setText(qty);
             ingredientSpinner.setSelection(ingredientData.indexOf(ingredient));
+            unitSpinner.setSelection(unitData.indexOf(unit));
+
 
             //reset the child's parent
             if(linearSpinnerIngredient.getParent()!=null)
                 ((ViewGroup)linearSpinnerIngredient.getParent()).removeView(linearSpinnerIngredient);
 
-
             alert.setTitle("Edit Ingredient");
-
             alert.setView(linearSpinnerIngredient);
 
         } else if(v.getId() == R.id.recipeName) {       //recipe name
@@ -486,7 +513,12 @@ public class ViewRecipe extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Ingredient quantity can't be null", Toast.LENGTH_SHORT).show();}
 
                     else{
-                    ingredientList.set(menuItemSelected, input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+                      //if per unit do not print
+                        if( String.valueOf(unitSpinner.getSelectedItem()).equals("per unit"))
+                            ingredientList.set(menuItemSelected,String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + ")" );
+                        else
+                            ingredientList.set(menuItemSelected, String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + " " + String.valueOf(unitSpinner.getSelectedItem()) + ") " );
+
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
@@ -612,6 +644,8 @@ public class ViewRecipe extends AppCompatActivity {
         input.setKeyListener(DigitsKeyListener.getInstance(false,true));
 
         ingredientSpinner.setSelection(0);
+        unitSpinner.setSelection(0);
+
         linearSpinnerIngredient.addView(input,0);
         //reset the child's parent
         if(linearSpinnerIngredient.getParent()!=null)
@@ -634,7 +668,12 @@ public class ViewRecipe extends AppCompatActivity {
 
                 }
                 else{
-                    ingredientList.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+
+                    if( String.valueOf(unitSpinner.getSelectedItem()).equals("per unit"))
+                        ingredientList.add(String.valueOf(ingredientSpinner.getSelectedItem())+ " (" + input.getText().toString() + ")");
+                    else
+                        ingredientList.add(String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + " " + String.valueOf(unitSpinner.getSelectedItem()) + ") " );
+
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
