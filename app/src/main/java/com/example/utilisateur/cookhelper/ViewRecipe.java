@@ -44,41 +44,46 @@ public class ViewRecipe extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private ArrayList<String> instructionData= new ArrayList<String>();
-    private ArrayList<String> typeData, categoryData;
+    private ArrayList<String> typeData, categoryData, unitData;
     private ArrayList<String> ingredientData = new ArrayList<String>();
     private String [] dbCategories, dbTypes;
     private ArrayList<String> ingredientList = new ArrayList<String>();
     private ImageView addInstructionButton, addIngredientButton;
-    private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
+    private Spinner typeSpinner, categorySpinner, ingredientSpinner, unitSpinner ;
     private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
     private TextView recipeName, input_category, input_type;
+    private String oldname;
+    private Boolean editing = false;
 
     private RatingBar mBar;
     private ListView lView1, lView2;
     View menuListViewSelected;
     private ArrayAdapter<String> arrayAdapterCheckBoxInstruction, arrayAdapterNoCheckInstruction, arrayAdapterIngredient, arrayAdapterIngredientEdit,
-            arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner;
+            arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner, arrayAdapterUnitSpinner;
     private static int menuItemSelected;
+    private CHDBHandler handler;
+    private Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         String query = getIntent().getExtras().getString("recipeName");
-
         //>>>> DB
-        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
 
         //get DBvalues to populate spinners
-        Recipe recipe = handler.findRecipe(query);
+        recipe = handler.findRecipe(query);
         dbCategories = handler.getAllRecipeCategories();
         dbTypes = handler.getAllRecipeTypes();
         ingredientData = handler.getIngredients();
         instructionData = handler.getInstructions(query);
+        String [] unitString = {"per unit","Cup","Tsp" ,"Tbs" ,"Oz" , "kg" ,"mL"};
+
 
         categoryData = new ArrayList<String>(Arrays.asList(dbCategories));
         typeData = new ArrayList<String>(Arrays.asList(dbTypes));
-
+        unitData = new ArrayList<String>(Arrays.asList(unitString));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
@@ -97,15 +102,14 @@ public class ViewRecipe extends AppCompatActivity {
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
         //TO REMOVE
-       /* instructionData.add("Instruction 1");
+      /* instructionData.add("Instruction 1");
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
         instructionData.add("Instruction 4");*/
-
-        ingredientList.add("45 Pomme");
-        ingredientList.add("14 Banane");
-        ingredientList.add("2.3 Jus");
-        ingredientList.add("9.7 Lait");
+        ingredientList.add("Milk (3 Cup)");
+        ingredientList.add("Juice (2)");
+        ingredientList.add("Banana (1 Tsp)");
+        ingredientList.add("Chocolate (5)");
 
         //Create all necessary ArrayAdapter
 
@@ -141,11 +145,19 @@ public class ViewRecipe extends AppCompatActivity {
         arrayAdapterIngredientSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ingredientData);
         arrayAdapterIngredientSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingredientSpinner.setAdapter(arrayAdapterIngredientSpinner);
+
+        unitSpinner = new Spinner(this);
+        arrayAdapterUnitSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, unitData);
+        arrayAdapterUnitSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(arrayAdapterUnitSpinner);
+
         linearSpinnerIngredient = new LinearLayout(this);
         linearSpinnerIngredient.setOrientation(LinearLayout.HORIZONTAL);
         linearSpinnerIngredient.setGravity(Gravity.CENTER);
         linearSpinnerIngredient.setPadding(0,25,0,0);
         linearSpinnerIngredient.addView(ingredientSpinner);
+        linearSpinnerIngredient.addView(unitSpinner, 0);
+
 
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
@@ -154,8 +166,9 @@ public class ViewRecipe extends AppCompatActivity {
         setListViewHeightBasedOnItems(lView1);
         setListViewHeightBasedOnItems(lView2);
 
+        //set rating
         mBar = (RatingBar) findViewById(R.id.ratingScore);
-
+        mBar.setRating(recipe.getStars());
 
         //Click on element in both list
         lView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -196,6 +209,9 @@ public class ViewRecipe extends AppCompatActivity {
         //Hide the button until EDIT mode activated
         addIngredientButton.setVisibility(View.GONE);
         addInstructionButton.setVisibility(View.GONE);
+
+        oldname = recipeName.getText().toString();
+
     }
 
     //menu in title bar
@@ -210,10 +226,10 @@ public class ViewRecipe extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                if (item.getTitle().toString().equals("Edit")) {
+                if (editing == false) {
                     setTitle("Editing recipe...");
                     item.setTitle("done");
-
+                    editing = true;
                     //long click activated
                     registerForContextMenu(lView1);
                     registerForContextMenu(lView2);
@@ -248,8 +264,9 @@ public class ViewRecipe extends AppCompatActivity {
                     addIngredientButton.setVisibility(View.VISIBLE);
                     addInstructionButton.setVisibility(View.VISIBLE);
 
+                    //save the recipe name for database purpose
 
-                } else {
+                } else if(editing ==true){
                     //To quit EDIT mode
                     item.setTitle("Edit");
                     setTitle("View Recipe");
@@ -276,13 +293,35 @@ public class ViewRecipe extends AppCompatActivity {
                     addIngredientButton.setVisibility(View.GONE);
                     addInstructionButton.setVisibility(View.GONE);
 
+                    //update database
+                    updateRecipeValues();
+                    handler.updateRecipe(recipe, oldname);
+                    oldname = recipeName.getText().toString();
+                    editing = false;
                     Toast.makeText(getApplicationContext(), "Done editing", Toast.LENGTH_SHORT).show();
 
 
                 }
                 return true;
             case R.id.menu_trash:
+                handler.deleteRecipe(oldname);
                 Toast.makeText(getApplicationContext(), "You are trying to delete the recipe", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+            case R.id.menu_main:
+                if(editing == false){   //if we are done editing
+                    recipe.setStars(mBar.getRating());
+                    handler.updateRecipe(recipe, oldname);                                                          //should be change to update rating only
+                    System.out.println(recipe.getStars());
+                    System.out.println("apres update");
+
+                    Intent intent2 = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent2, 0);}
+                else{
+                    Toast.makeText(getApplicationContext(), "Please finish editing before leaving", Toast.LENGTH_SHORT).show();
+
+                }
                 return true;
             default:
                 Toast.makeText(getApplicationContext(), "An error occured", Toast.LENGTH_LONG).show();
@@ -291,7 +330,7 @@ public class ViewRecipe extends AppCompatActivity {
     }
 
     public void onClickRatingBar(View v) {
-        mBar.getRating();
+        recipe.setStars(mBar.getRating());
     }
 
 
@@ -349,19 +388,28 @@ public class ViewRecipe extends AppCompatActivity {
         }
         if (item.getTitle() == "Delete") {
             if (menuListViewSelected.getId() == R.id.instructionListViewCheck) {
-
-                instructionData.remove(menuItemSelected);
-                arrayAdapterNoCheckInstruction.notifyDataSetChanged();
-                arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
-                setListViewHeightBasedOnItems(lView1);
-                setListViewHeightBasedOnItems(lView2);
-
+                if(instructionData.size()==1){
+                    Toast.makeText(getApplicationContext(), "Impossible to delete: Recipe must have at least one instruction", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    instructionData.remove(menuItemSelected);
+                    arrayAdapterNoCheckInstruction.notifyDataSetChanged();
+                    arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
+                }
             } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
-                ingredientList.remove(menuItemSelected);
-                arrayAdapterIngredient.notifyDataSetChanged();
-                arrayAdapterIngredientEdit.notifyDataSetChanged();
-                setListViewHeightBasedOnItems(lView1);
-                setListViewHeightBasedOnItems(lView2);            }
+                if(ingredientList.size()==1){
+                    Toast.makeText(getApplicationContext(), "Impossible to delete: Recipe must have at least one ingredient", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    ingredientList.remove(menuItemSelected);
+                    arrayAdapterIngredient.notifyDataSetChanged();
+                    arrayAdapterIngredientEdit.notifyDataSetChanged();
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
+                }
+            }
         }
         return true;
     }
@@ -387,24 +435,33 @@ public class ViewRecipe extends AppCompatActivity {
             array = ingredientList;
             input.setGravity(17);
             linearSpinnerIngredient.addView(input,0);
-            String qtyIngredient = array.get(menuItemSelected);
+
             //make sure input is numerical
             input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
             input.setInputType(InputType.TYPE_CLASS_NUMBER);
             input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
             input.setKeyListener(DigitsKeyListener.getInstance(false,true));
-            String qty = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // QTY
-            String ingredient = qtyIngredient.substring(qtyIngredient.indexOf(' ')+1); // INGREDIENT
+
+            //set values to actual values
+            String qtyIngredient = array.get(menuItemSelected);
+            String ingredient = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // INGREDIENT
+            String qtyInfo = qtyIngredient.substring(qtyIngredient.indexOf('(')+1, qtyIngredient.indexOf(')')); // QTY+UNIT
+            String[] info = qtyInfo.split(" ");
+            String qty = info[0];
+            String unit = "per unit";
+            if(info.length==2)
+                unit = info[1];
+
             input.setText(qty);
             ingredientSpinner.setSelection(ingredientData.indexOf(ingredient));
+            unitSpinner.setSelection(unitData.indexOf(unit));
+
 
             //reset the child's parent
             if(linearSpinnerIngredient.getParent()!=null)
                 ((ViewGroup)linearSpinnerIngredient.getParent()).removeView(linearSpinnerIngredient);
 
-
             alert.setTitle("Edit Ingredient");
-
             alert.setView(linearSpinnerIngredient);
 
         } else if(v.getId() == R.id.recipeName) {       //recipe name
@@ -463,7 +520,12 @@ public class ViewRecipe extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Ingredient quantity can't be null", Toast.LENGTH_SHORT).show();}
 
                     else{
-                    ingredientList.set(menuItemSelected, input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+                      //if per unit do not print
+                        if( String.valueOf(unitSpinner.getSelectedItem()).equals("per unit"))
+                            ingredientList.set(menuItemSelected,String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + ")" );
+                        else
+                            ingredientList.set(menuItemSelected, String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + " " + String.valueOf(unitSpinner.getSelectedItem()) + ") " );
+
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
@@ -589,6 +651,8 @@ public class ViewRecipe extends AppCompatActivity {
         input.setKeyListener(DigitsKeyListener.getInstance(false,true));
 
         ingredientSpinner.setSelection(0);
+        unitSpinner.setSelection(0);
+
         linearSpinnerIngredient.addView(input,0);
         //reset the child's parent
         if(linearSpinnerIngredient.getParent()!=null)
@@ -611,7 +675,12 @@ public class ViewRecipe extends AppCompatActivity {
 
                 }
                 else{
-                    ingredientList.add(input.getText().toString() + " " + String.valueOf(ingredientSpinner.getSelectedItem()));
+
+                    if( String.valueOf(unitSpinner.getSelectedItem()).equals("per unit"))
+                        ingredientList.add(String.valueOf(ingredientSpinner.getSelectedItem())+ " (" + input.getText().toString() + ")");
+                    else
+                        ingredientList.add(String.valueOf(ingredientSpinner.getSelectedItem()) +" (" + input.getText().toString() + " " + String.valueOf(unitSpinner.getSelectedItem()) + ") " );
+
                     arrayAdapterIngredient.notifyDataSetChanged();
                     arrayAdapterIngredientEdit.notifyDataSetChanged();
                     menuItemSelected = -1;
@@ -632,5 +701,14 @@ public class ViewRecipe extends AppCompatActivity {
         alert.show();
     }
 
+    private void updateRecipeValues(){
+        recipe.setTitle(recipeName.getText().toString());
+        recipe.setType(input_type.getText().toString());
+        recipe.setCategory(input_category.getText().toString());
+        recipe.setInstructions(instructionData);
+        recipe.setStars(mBar.getRating());
+        //recipe.setIngredient(ingredientData);
+
+    }
 
     }

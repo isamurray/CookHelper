@@ -99,8 +99,6 @@
                     android:id="@+id/categoryChosen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/category_arrays"
-                    android:prompt="@string/category_prompt"
                     android:textAlignment="center" />
 
             </LinearLayout>
@@ -125,8 +123,6 @@
                     android:id="@+id/typeChosen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/type_arrays"
-                    android:prompt="@string/type_prompt"
                     android:textAlignment="center" />
             </LinearLayout>
 

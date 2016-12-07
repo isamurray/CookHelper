@@ -1,4 +1,5 @@
 package com.example.utilisateur.cookhelper;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.ArrayList;
@@ -7,12 +8,13 @@ import java.util.ArrayList;
  * Created by ced on 2016-11-30.
  */
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     private String title, type, category; //type  = entree sauce // category = vegetarien italien
     private int cookingTime;
     //private CookingTime cookingTime;
-    private int stars  = 0, servings;
+    private float stars  = 0;
+    int servings;
     private ArrayList<String> ingredientsList;
     private ArrayList<String> instructions;
     
@@ -43,13 +45,13 @@ public class Recipe {
 // 
      // }
 
-    public Recipe(String title, String type, String category,int time){
+    public Recipe(String title, String type, String category,float stars){
         this.title = title;
         this.type = type;
         this.category = category;
         this.ingredientsList = null;
 
-        this.cookingTime = time;
+        this.stars = stars;
         ArrayList<String> struct = new ArrayList<String>();
         struct.add("Go to kitchen");
         this.instructions = struct;
@@ -88,10 +90,10 @@ public class Recipe {
     //public void setCookingTime(CookingTime cookingTime) {
     //    this.cookingTime = cookingTime;
     //}
-    public int getStars() {
+    public float getStars() {
         return stars;
     }
-    public void setStars(int stars) {
+    public void setStars(float stars) {
         this.stars = stars;
     }
 

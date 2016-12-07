@@ -42,6 +42,16 @@
         <item>Olive Oil</item>
     </string-array>
 
+    <string-array name="unit_arrays">
+        <item>per unit</item>
+        <item>Cup</item>
+        <item>Tsp</item>
+        <item>Tbs</item>
+        <item>Oz</item>
+        <item>kg</item>
+        <item>mL</item>
+    </string-array>
+
     <string name="title_activity_add_recipe">Add New Recipe</string>
     <string name="title_activity_search_recipe">Search Recipe</string>
     <string name="title_activity_add_ingredient">Add Ingredient</string>

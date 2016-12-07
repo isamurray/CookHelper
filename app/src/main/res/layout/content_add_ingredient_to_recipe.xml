@@ -32,14 +32,42 @@
             android:id="@+id/imageID"
             android:layout_gravity="center_horizontal" />
 
-        <EditText
-            android:id="@+id/input_ingredient_recipe"
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:hint="Enter quantity"
-            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="25dp"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="25dp">
+
+                <EditText
+                    android:id="@+id/input_ingredient_recipe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter quantity"
+                    android:textAlignment="center"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="0dp"
+                    android:layout_marginLeft="50dp" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:id="@+id/unitChosen"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:entries="@array/unit_arrays"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_weight="1"
+                    android:paddingRight="0dp" />
+
+
+        </LinearLayout>
 
         <Spinner
             android:layout_width="match_parent"

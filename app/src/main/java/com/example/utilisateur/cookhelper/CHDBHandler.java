@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 31;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -34,7 +34,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     private static final String COL_RECIPENAME = "title";
     private static final String COL_RECIPECOUNTRY = "type";
     private static final String COL_RECIPEDISHTYPE = "category";
-    private static final String COL_RECIPECOOKTIME = "time";
+    private static final String COL_RECIPERATING = "stars";
 
     private static final String COL_INGREDIENTNAME = "title";
     private static final String COL_RECIPETYPES_TYPE = "type";
@@ -68,7 +68,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 COL_RECIPECOUNTRY + " TEXT," +
                 COL_RECIPEDISHTYPE + " TEXT," +
                 COL_INSTRUCTION_TEXT + " BLOB," +
-                COL_RECIPECOOKTIME + " INTEGER" + ")";
+                COL_RECIPERATING + " FLOAT" + ")";
         
         // CREATE TABLE ingredients(_id INTEGER PRIMARY KEY, title TEXT);
         String CREATE_INGREDIENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -139,7 +139,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_RECIPECOUNTRY,"Canadian");
         values.put(COL_RECIPEDISHTYPE,"Lunch");
         values.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
-        values.put(COL_RECIPECOOKTIME,25);
+        values.put(COL_RECIPERATING,1);
         db.insert(TABLE_RECIPES,null,values);
 
         ContentValues values2 = new ContentValues();
@@ -147,7 +147,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values2.put(COL_RECIPECOUNTRY,"Indian");
         values2.put(COL_RECIPEDISHTYPE,"Breakfast");
         values2.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
-        values2.put(COL_RECIPECOOKTIME,3);
+        values2.put(COL_RECIPERATING,3);
         db.insert(TABLE_RECIPES,null,values2);
 
         ContentValues values3 = new ContentValues();
@@ -155,7 +155,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values3.put(COL_RECIPECOUNTRY,"American");
         values3.put(COL_RECIPEDISHTYPE,"Dinner");
         values3.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
-        values3.put(COL_RECIPECOOKTIME,1);
+        values3.put(COL_RECIPERATING,4);
         db.insert(TABLE_RECIPES,null,values3);
         
         // POPULATE 3 SAMPLE INGREDIENTS
@@ -285,7 +285,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_RECIPECOUNTRY,recipe.getType());
         values.put(COL_RECIPEDISHTYPE,recipe.getCategory());
         values.put(COL_INSTRUCTION_TEXT,serializeObject(recipe.getInstructions()));
-        values.put(COL_RECIPECOOKTIME,recipe.getCookingTime());
+        values.put(COL_RECIPERATING,recipe.getStars());
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPES,null,values);
@@ -337,6 +337,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         System.out.println("Recipecategory "+recipeCategory+" was added to db");
     }
 
+
     /**
      * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      * !!! NOT CURRENTLY SAFE - VULN. TO SQL-INJECTIONS !!!
@@ -358,7 +359,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             recipe.setType(cursor.getString(2));
             recipe.setCategory(cursor.getString(3));
             recipe.setInstructions(deserializeObject(cursor.getBlob(4)));
-            recipe.setCookingTime(Integer.parseInt(cursor.getString(5)));
+            recipe.setStars(Float.parseFloat(cursor.getString(5)));
             cursor.close();
         } else{
             recipe = null;
@@ -434,6 +435,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         int index = getRecipeIndex(recipeName);
+        System.out.println(index);
         String query = "Select * FROM " + TABLE_RECIPES +
                 " WHERE " + COL_ID + " = " + index;
         System.out.println(query);
@@ -455,6 +457,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         int index = cursor.getInt(0);
+        System.out.println(index);
         cursor.close();
         return index;
     }
@@ -531,8 +534,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 String type = cursor.getString(2);
                 String category = cursor.getString(3);
                 ArrayList<String> structs = deserializeObject(cursor.getBlob(4));
-                int time = cursor.getInt(5);
-                recipes[i] = new Recipe(title,type,category,time);
+                float stars = cursor.getFloat(5);
+                recipes[i] = new Recipe(title,type,category,stars);
                 recipes[i].setInstructions(structs);
                 cursor.moveToNext();
             }
@@ -544,20 +547,6 @@ public class CHDBHandler extends SQLiteOpenHelper {
     
     public void updateRecipe(Recipe recipe, String oldName){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "Select * FROM " + TABLE_RECIPES +
-            " WHERE " + COL_RECIPENAME + " =\"" +
-            oldName + "\"";
-
-        // test string below
-        // UPDATE recipes SET title="newTitle",type="newType",category="newCat",time=1111 WHERE _id=1;
-        // String queryUpdate = "UPDATE " + TABLE_RECIPES +
-            // " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() + "\"" +
-            // ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + "\"" + 
-            // ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() + "\"" +
-////            ", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
-            // ", " + COL_RECIPECOOKTIME + " = " + recipe.getCookingTime() + " WHERE " + COL_ID +
-            // " = " + getRecipeIndex(oldName);
-        
         ContentValues record = new ContentValues();
         String newTitle = recipe.getTitle();
         String newType = recipe.getType();
@@ -575,11 +564,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String[] str = new String[]{Integer.toString(index)};
         int result = db.update(TABLE_RECIPES,record,whereClause,str);
 
-        // Cursor cursor = db.rawQuery(queryUpdate,null);
         System.out.println("Updated "+result+" records.");
-        // cursor.moveToFirst();
-        // cursor.close();
-        
     }
 
     /**

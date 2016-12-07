@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -14,6 +17,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.widget.Toast;
 
 public class SearchRecipe extends AppCompatActivity {
     private Spinner typeChosen, categoryChosen;
@@ -23,6 +27,20 @@ public class SearchRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_recipe);
+        readItemSelection();
+
+        final CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        String[] dbCategoryList = handler.getAllRecipeCategories();
+        String[] dbTypeList = handler.getAllRecipeTypes();
+
+        ArrayAdapter<String> dataAdapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbCategoryList);
+        dataAdapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryChosen.setAdapter(dataAdapterCategory);
+
+        ArrayAdapter<String> dataAdapterType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbTypeList);
+        dataAdapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeChosen.setAdapter(dataAdapterType);
+
     }
 
 
@@ -96,5 +114,24 @@ public class SearchRecipe extends AppCompatActivity {
             startActivityForResult(intent, 0);}
     }
 
+    //menu in title bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_mainmenu, menu);
+        return true;
+    }
 
+    // To respond to menu selections
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main:
+                Intent intent2 = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent2, 0);
+                return true;
+            default:
+                Toast.makeText(getApplicationContext(), "An error occured", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
