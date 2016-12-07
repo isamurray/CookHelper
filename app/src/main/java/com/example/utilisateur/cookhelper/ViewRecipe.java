@@ -160,10 +160,6 @@ public class ViewRecipe extends AppCompatActivity {
         linearSpinnerIngredient.addView(unitSpinner, 0);
 
 
-
-
-
-
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
         lView2.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -171,8 +167,9 @@ public class ViewRecipe extends AppCompatActivity {
         setListViewHeightBasedOnItems(lView1);
         setListViewHeightBasedOnItems(lView2);
 
+        //set rating
         mBar = (RatingBar) findViewById(R.id.ratingScore);
-
+        mBar.setRating(recipe.getStars());
 
         //Click on element in both list
         lView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -328,6 +325,7 @@ public class ViewRecipe extends AppCompatActivity {
 
     public void onClickRatingBar(View v) {
         mBar.getRating();
+        recipe.setStars(mBar.getRating());
     }
 
 

@@ -13,7 +13,8 @@ public class Recipe implements Serializable {
     private String title, type, category; //type  = entree sauce // category = vegetarien italien
     private int cookingTime;
     //private CookingTime cookingTime;
-    private int stars  = 0, servings;
+    private float stars  = 0;
+    int servings;
     private ArrayList<String> ingredientsList;
     private ArrayList<String> instructions;
     
@@ -89,10 +90,10 @@ public class Recipe implements Serializable {
     //public void setCookingTime(CookingTime cookingTime) {
     //    this.cookingTime = cookingTime;
     //}
-    public int getStars() {
+    public float getStars() {
         return stars;
     }
-    public void setStars(int stars) {
+    public void setStars(float stars) {
         this.stars = stars;
     }
 
