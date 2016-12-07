@@ -50,8 +50,10 @@ public class AddInstructionsToRecipe extends ListActivity {
             public void onClick(View view) {
                 if(instructionList.size()>0){
                     newRecipe.setInstructions(instructionList);
+
+
                     Intent intent = new Intent(getApplication(), ViewRecipe.class);
-                    //intent.putExtra("recipeName", newRecipe.getTitle());
+                    intent.putExtra("recipeName", newRecipe.getTitle());
                     startActivityForResult(intent, 0);
                 }
                 else{

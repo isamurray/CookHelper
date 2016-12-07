@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 26;
+    private static final int DATABASE_VERSION = 28;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -433,12 +433,13 @@ public class CHDBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         int index = getRecipeIndex(recipeName);
-        String query = "Select * FROM " + TABLE_INSTRUCTIONS_S +
+        System.out.println(index);
+        String query = "Select * FROM " + TABLE_RECIPES +
                 " WHERE " + COL_ID + " = " + index;
         System.out.println(query);
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
-        ArrayList<String> obj = deserializeObject(cursor.getBlob(2));
+        ArrayList<String> obj = deserializeObject(cursor.getBlob(4));
         System.out.println(obj);
         cursor.close();
         return obj;
@@ -454,6 +455,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         int index = cursor.getInt(0);
+        System.out.println(index);
         return index;
     }
     

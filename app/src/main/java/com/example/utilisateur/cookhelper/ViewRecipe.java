@@ -64,7 +64,7 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         String query = getIntent().getExtras().getString("recipeName");
-
+        System.out.println(query);
         //>>>> DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
@@ -97,10 +97,10 @@ public class ViewRecipe extends AppCompatActivity {
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
         //TO REMOVE
-       /* instructionData.add("Instruction 1");
+       instructionData.add("Instruction 1");
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
-        instructionData.add("Instruction 4");*/
+        instructionData.add("Instruction 4");
 
         ingredientList.add("45 Pomme");
         ingredientList.add("14 Banane");
