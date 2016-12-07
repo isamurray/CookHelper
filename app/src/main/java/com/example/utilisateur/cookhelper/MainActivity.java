@@ -75,14 +75,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         
         if(item.getItemId() == R.id.menu_dbg_1){
-            System.out.println("\ndbg1\n");
+            System.out.println("\nSerializing and inserting into DB\n");
             serializeObject();           
         }else if(item.getItemId() == R.id.menu_dbg_2){
-            System.out.println("\ndbg2\n");            
+            System.out.println("\nPopulating DB\n");            
             populateDatabase();
         }else if(item.getItemId() == R.id.menu_dbg_3){
-            System.out.println("\ndbg3\n");
+            System.out.println("\nDropping All Tables\n");
             dropAllTables();            
+        }else if(item.getItemId() == R.id.menu_dbg_4){
+            System.out.println("\nDeserialized\n");
+            deserialize();            
         }else{
             System.out.println("\nunknown\n");            
         }
@@ -101,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
         // Ingredient ingredient = new Ingredient(ingredientName);
 
         //handler.addIngredient(ingredient);
+    }
+    public void deserialize(){
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        handler.getInstructions();
     }
     public void populateDatabase(){
         CHDBHandler handler = new CHDBHandler(this,null,null,1);
