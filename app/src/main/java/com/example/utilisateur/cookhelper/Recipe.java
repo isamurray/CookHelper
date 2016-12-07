@@ -27,7 +27,7 @@ public class Recipe implements Serializable {
      * @param title
      * @param type
      * @param category
-     * @param time
+     * @param stars
      */
 
     
@@ -53,8 +53,11 @@ public class Recipe implements Serializable {
 
         this.stars = stars;
         ArrayList<String> struct = new ArrayList<String>();
+        ArrayList<String> ingredients = new ArrayList<String>();
+        ingredients.add("Hope");
         struct.add("Go to kitchen");
         this.instructions = struct;
+        this.ingredientsList = ingredients;
 
     }
     public Recipe(){} //DUMMY METHOD NEEDS TO BE DELETED
@@ -115,6 +118,7 @@ public class Recipe implements Serializable {
     public void setServings(int servings) {
         this.servings = servings;
     }
+    
     public void addInstruction(String instruction){
         instructions.add(instruction);
     }
@@ -124,6 +128,17 @@ public class Recipe implements Serializable {
     public void setInstructions(ArrayList<String> instructions){
         this.instructions = instructions;
     }
+    
+    public void addIngredient(String ingredient){
+        ingredientsList.add(ingredient);
+    }
+    public ArrayList<String> getIngredients(){
+        return ingredientsList;
+    }
+    public void setIngredients(ArrayList<String> ingredients){
+        ingredientsList = ingredients;
+    }
+    
     //public int getID() {
     //    return _id;
     //}

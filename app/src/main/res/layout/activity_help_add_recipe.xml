@@ -19,6 +19,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+<<<<<<< HEAD
 
 
             <ImageView
@@ -78,6 +79,59 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+=======
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="358dp"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/helpadd1"
+                    android:id="@+id/imageView" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="375dp"
+                    app:srcCompat="@drawable/helpadd2"
+                    android:id="@+id/imageView2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/helpadd3"
+                    android:id="@+id/imageView6"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/helpadd4"
+                    android:id="@+id/imageView8"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+>>>>>>> master
         </LinearLayout>
     </ScrollView>
 

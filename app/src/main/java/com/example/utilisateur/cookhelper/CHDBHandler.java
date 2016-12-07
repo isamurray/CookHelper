@@ -28,7 +28,7 @@ import java.util.LinkedList;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 31;
+    private static final int DATABASE_VERSION = 36;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -44,6 +44,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     private static final String COL_RECIPECOUNTRY = "type";
     private static final String COL_RECIPEDISHTYPE = "category";
     private static final String COL_RECIPERATING = "stars";
+    private static final String COL_RECIPE_INGREDIENTS = "ingredients";
 
     private static final String COL_INGREDIENTNAME = "title";
     private static final String COL_RECIPETYPES_TYPE = "type";
@@ -77,7 +78,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 COL_RECIPECOUNTRY + " TEXT," +
                 COL_RECIPEDISHTYPE + " TEXT," +
                 COL_INSTRUCTION_TEXT + " BLOB," +
-                COL_RECIPERATING + " FLOAT" + ")";
+                COL_RECIPERATING + " FLOAT," + 
+                COL_RECIPE_INGREDIENTS + " BLOB" + ")";
         
         // CREATE TABLE ingredients(_id INTEGER PRIMARY KEY, title TEXT);
         String CREATE_INGREDIENTS_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -143,12 +145,17 @@ public class CHDBHandler extends SQLiteOpenHelper {
         sampleInstructions.add("Stop");
         sampleInstructions.add("Drop");
         sampleInstructions.add("Roll");
+        ArrayList<String> sampleIngredients = new ArrayList<String>();
+        sampleIngredients.add("Apple (1 Cup)");
+        sampleIngredients.add("Milk (5)");
+        sampleIngredients.add("Banana (34.5 Tsp)");
         // POPULATE 3 SAMPLE RECIPES
         values.put(COL_RECIPENAME,"Burger");
         values.put(COL_RECIPECOUNTRY,"Canadian");
         values.put(COL_RECIPEDISHTYPE,"Lunch");
         values.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
         values.put(COL_RECIPERATING,1);
+        values.put(COL_RECIPE_INGREDIENTS,serializeObject(sampleIngredients));
         db.insert(TABLE_RECIPES,null,values);
 
         ContentValues values2 = new ContentValues();
@@ -157,6 +164,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values2.put(COL_RECIPEDISHTYPE,"Breakfast");
         values2.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
         values2.put(COL_RECIPERATING,3);
+        values2.put(COL_RECIPE_INGREDIENTS,serializeObject(sampleIngredients));
         db.insert(TABLE_RECIPES,null,values2);
 
         ContentValues values3 = new ContentValues();
@@ -165,6 +173,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values3.put(COL_RECIPEDISHTYPE,"Dinner");
         values3.put(COL_INSTRUCTION_TEXT,serializeObject(sampleInstructions));
         values3.put(COL_RECIPERATING,4);
+        values3.put(COL_RECIPE_INGREDIENTS,serializeObject(sampleIngredients));
         db.insert(TABLE_RECIPES,null,values3);
         
         // POPULATE 3 SAMPLE INGREDIENTS
@@ -285,7 +294,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Add recipe to db
+     * Adds a recipe object to the database.
+     * Some fields are deserilized/serialized on read/write
      * TODO: check for duplicates
      */
     public void addRecipe(Recipe recipe){
@@ -295,6 +305,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_RECIPEDISHTYPE,recipe.getCategory());
         values.put(COL_INSTRUCTION_TEXT,serializeObject(recipe.getInstructions()));
         values.put(COL_RECIPERATING,recipe.getStars());
+        values.put(COL_RECIPE_INGREDIENTS,serializeObject(recipe.getIngredients()));
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TABLE_RECIPES,null,values);
@@ -302,7 +313,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Add ingredient to DB
+     * Adds an ingredient to the general ingredients list.
+     * This is used to add ingredients which are not a part of a recipe.
      * TODO: check for duplicates
      */
     public void addIngredient(Ingredient ingredient){
@@ -369,6 +381,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             recipe.setCategory(cursor.getString(3));
             recipe.setInstructions(deserializeObject(cursor.getBlob(4)));
             recipe.setStars(Float.parseFloat(cursor.getString(5)));
+            recipe.setIngredients(deserializeObject(cursor.getBlob(6)));
             cursor.close();
         } else{
             recipe = null;
@@ -376,6 +389,28 @@ public class CHDBHandler extends SQLiteOpenHelper {
         db.close();
         return recipe;
     }
+    
+    /**
+     *
+     */
+    //public Recipe[] advancedFindRecipe(String category, String type, String ingredients){
+    //    Recipe[] returnRecipes;
+    //    SQLiteDatabase db = this.getWritableDatabase();
+    //    
+    //    String query = "Select * FROM " + TABLE_RECIPES +
+    //        " WHERE " + COL_RECIPECOUNTRY + " = " + type +
+    //        " AND " + COL_RECIPEDISHTYPE + " = " + category;
+    //    Cursor cursor = db.rawQuery(query, null);
+    //    int queryCount = cursor.getCount();
+    //    System.out.println("QueryCount for advancedFind is "+ queryCount);
+    //    if(cursor.moveToFirst()){
+    //        for(int i = 0; i < queryCount; i++){
+    //            
+    //        }
+    //    }
+    //    return returnRecipes;
+    //        
+    //}
     
     /**
      * Get all recipe categories as array of strings from DB
@@ -394,6 +429,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             }
         }
         cursor.close();
+        // db.close();
         return categories;
     }
     
@@ -423,6 +459,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             }
         }
         cursor.close();
+        // db.close();
         return list;
     }
     
@@ -453,6 +490,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         ArrayList<String> obj = deserializeObject(cursor.getBlob(4));
         System.out.println(obj);
         cursor.close();
+        // db.close();
         return obj;
         
     }
@@ -468,6 +506,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         int index = cursor.getInt(0);
         System.out.println(index);
         cursor.close();
+        // db.close();
         return index;
     }
     
@@ -520,6 +559,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
             }
         }
         cursor.close();
+        // db.close();
         return types;
 
     }
@@ -544,81 +584,84 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 String category = cursor.getString(3);
                 ArrayList<String> structs = deserializeObject(cursor.getBlob(4));
                 float stars = cursor.getFloat(5);
+                ArrayList<String> ingredients = deserializeObject(cursor.getBlob(6));
                 recipes[i] = new Recipe(title,type,category,stars);
                 recipes[i].setInstructions(structs);
+                recipes[i].setIngredients(ingredients);
                 cursor.moveToNext();
             }
 
         }
         cursor.close();
+        // db.close();
         return recipes;
     }
-    
+    /**
+     * Updates the recipe which currently has the title of oldName.
+     * 
+     */
     public void updateRecipe(Recipe recipe, String oldName){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "Select * FROM " + TABLE_RECIPES +
-            " WHERE " + COL_RECIPENAME + " =\"" +
-            oldName + "\"";
-
-                // COL_RECIPENAME + " TEXT," +
-                // COL_RECIPECOUNTRY + " TEXT," +
-                // COL_RECIPEDISHTYPE + " TEXT," +
-                // COL_INSTRUCTION_TEXT + " BLOB," +
-                // COL_RECIPECOOKTIME + " INTEGER" + ")";
-
-    // private static final String COL_RECIPENAME = "title";
-    // private static final String COL_RECIPECOUNTRY = "type";
-    // private static final String COL_RECIPEDISHTYPE = "category";
-    // private static final String COL_RECIPECOOKTIME = "time";
-
-
-        // test string below
-        // UPDATE recipes SET title="newTitle",type="newType",category="newCat",time=1111 WHERE _id=1;
-        String queryUpdate = "UPDATE " + TABLE_RECIPES +
-            " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() +"\""+
-            ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + "\""+
-            ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() + "\""+
-            //", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
-            ", " + COL_RECIPERATING + " = " + recipe.getStars() + " WHERE " + COL_ID +
-            " = " + getRecipeIndex(oldName);
-        Cursor cursor = db.rawQuery(queryUpdate,null);
-        System.out.println(queryUpdate);
-        cursor.moveToFirst();
-        cursor.close();
+        ContentValues record = new ContentValues();
+        String newTitle = recipe.getTitle();
+        String newType = recipe.getType();
+        String newCat = recipe.getType();
+        byte[] structs = serializeObject(recipe.getInstructions());
+        float newStars = recipe.getStars();
+        byte[] ingredients = serializeObject(recipe.getIngredients());
         
+        record.put(COL_RECIPENAME, newTitle);
+        record.put(COL_RECIPECOUNTRY, newType);
+        record.put(COL_RECIPEDISHTYPE, newCat);
+        record.put(COL_RECIPERATING, newStars);
+        record.put(COL_INSTRUCTION_TEXT, structs);
+        record.put(COL_RECIPE_INGREDIENTS, ingredients);
+        String whereClause = COL_ID + " = ?";
+        int index = getRecipeIndex(oldName);
+        String[] str = new String[]{Integer.toString(index)};
+        int result = db.update(TABLE_RECIPES,record,whereClause,str);
+
+        System.out.println("Updated "+result+" records.");
+        db.close();
     }
 
     /**
-     *
+     * TODO: broken
      */
-    public boolean deleteRecipe(String recipeName){
-        boolean result = false;
+    public void deleteRecipe(String recipeName){
+        // boolean result = false;
 
-        String query = "Select * FROM " + TABLE_RECIPES +
-                " WHERE " + COL_RECIPENAME + " = \"" +
-                recipeName + "\"";
+        // String query = "Select * FROM " + TABLE_RECIPES +
+                // " WHERE " + COL_RECIPENAME + " = \"" +
+                // recipeName + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
-        Recipe recipe = new Recipe();
-
-        if(cursor.moveToFirst()){
-            
-            String indexQuery = "Select * FROM " + TABLE_RECIPES +
-                    " WHERE " + COL_RECIPENAME + " =\"" +
-                    recipeName + "\"";
-            Cursor indexCursor = db.rawQuery(indexQuery,null);
-            
-            int delIdx = indexCursor.getInt(0);
-            // recipe.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_RECIPES, COL_ID + " =?", new String[]{String.valueOf(delIdx)});
-            cursor.close();
-            result = true;
-        }
+        // Cursor cursor = db.rawQuery(query,null);
+        // Recipe recipe = new Recipe();
+        
+        int index = getRecipeIndex(recipeName);
+        String whereClause = COL_ID + " = ?";
+        String[] str = new String[]{Integer.toString(index)};
+        db.delete(TABLE_RECIPES,whereClause,str);
+        
+        // if(cursor.moveToFirst()){
+            // 
+            // String indexQuery = "Select * FROM " + TABLE_RECIPES +
+                    // " WHERE " + COL_RECIPENAME + " =\"" +
+                    // recipeName + "\"";
+            // Cursor indexCursor = db.rawQuery(indexQuery,null);
+            // 
+            // int delIdx = indexCursor.getInt(0);
+////            recipe.setID(Integer.parseInt(cursor.getString(0)));
+            // db.delete(TABLE_RECIPES, COL_ID + " =?", new String[]{String.valueOf(delIdx)});
+            // cursor.close();
+            // result = true;
+        // }
         db.close();
-        return result;
+        // return result;
     }
 
+<<<<<<< HEAD
     //Modifification  //Modifification    //Modifification     //Modifification     //Modifification
     public LinkedList<Recipe> searchRecipe(String type, String category, String instructions) {
         LinkedList<Recipe> recipeDatabase = getAllRecipesLList();
@@ -930,4 +973,11 @@ public class CHDBHandler extends SQLiteOpenHelper {
         }
         return returnedrecipes;
     }
+=======
+
+
+    //Gabriel-modification
+    
+
+>>>>>>> master
 }
