@@ -120,9 +120,12 @@ public class SearchRecipe extends AppCompatActivity {
 
 
            CHDBHandler handler = new CHDBHandler(this, null, null, 1);  //FOR TESTING
-            Recipe[] recipeFound = handler.getAllRecipes();             //FOR TESTING
-            System.out.println("this should be recicpe number");
-            System.out.println(recipeFound.length);
+           // Recipe[] recipeFound = handler.getAllRecipes();             //FOR TESTING
+
+            String cat = String.valueOf(categoryChosen.getSelectedItem());
+            String type = String.valueOf(typeChosen.getSelectedItem());
+
+            Recipe[] recipeFound = handler.advancedFindRecipe(cat, type);
 
            if(recipeFound.length == 1)
                 {
@@ -136,6 +139,16 @@ public class SearchRecipe extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
 
+/*
+            CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+            String cat = String.valueOf(categoryChosen.getSelectedItem());
+            String type = String.valueOf(typeChosen.getSelectedItem());
+            String[] ingredients = new String[5];
+            Recipe[] recipes = handler.advancedFindRecipe(cat, type);
+            System.out.println(recipes);
+            // Intent intent = new Intent(getApplication(), ViewRecipe.class);                 //FAIRE QQCH AVEC LES CHOIX VIDE POS 0
+            // startActivityForResult(intent, 0);
+        */
         }
     }
 
