@@ -304,7 +304,7 @@ public class ViewRecipe extends AppCompatActivity {
                 return true;
             case R.id.menu_trash:
                 handler.deleteRecipe(oldname);
-                Toast.makeText(getApplicationContext(), "You are trying to delete the recipe", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), oldname + " was deleted from database", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplication(), MainActivity.class);
                 startActivityForResult(intent, 0);
                 return true;
@@ -312,8 +312,6 @@ public class ViewRecipe extends AppCompatActivity {
                 if(editing == false){   //if we are done editing
                     recipe.setStars(mBar.getRating());
                     handler.updateRecipe(recipe, oldname);                                                          //should be change to update rating only
-                    System.out.println(recipe.getStars());
-                    System.out.println("apres update");
 
                     Intent intent2 = new Intent(getApplication(), MainActivity.class);
                 startActivityForResult(intent2, 0);}
@@ -708,8 +706,7 @@ public class ViewRecipe extends AppCompatActivity {
         recipe.setInstructions(instructionData);
         recipe.setStars(mBar.getRating());
         recipe.setIngredients(ingredientList);
-        System.out.println("update");
-        System.out.println(ingredientList.size());
+
     }
 
     }

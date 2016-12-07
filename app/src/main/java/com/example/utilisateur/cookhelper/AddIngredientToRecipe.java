@@ -65,10 +65,7 @@ public class AddIngredientToRecipe extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(listIngredient.size()>0){
-                    newRecipe.setIngredients(ingredientList);
-
-                    System.out.println("dans addingredient");
-                    System.out.println(ingredientList.size());
+                    newRecipe.setIngredients(listIngredient);
 
                     Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
                     intent.putExtra("recipe", newRecipe);

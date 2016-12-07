@@ -403,6 +403,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     //        
     //}
     
+
     /**
      * Get all recipe categories as array of strings from DB
      */

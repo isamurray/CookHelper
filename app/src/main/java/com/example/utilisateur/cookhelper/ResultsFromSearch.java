@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -53,5 +54,26 @@ public class ResultsFromSearch extends AppCompatActivity{
                 startActivityForResult(intent, 0);
             }
         });
+    }
+
+    //menu in title bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_mainmenu, menu);
+        return true;
+    }
+
+    // To respond to menu selections
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_main:
+                Intent intent2 = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent2, 0);
+                return true;
+            default:
+                Toast.makeText(getApplicationContext(), "An error occured", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
