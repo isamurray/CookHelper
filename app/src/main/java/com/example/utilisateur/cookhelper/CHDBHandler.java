@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 15;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -28,7 +28,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     private  static final String TABLE_INSTRUCTIONS_S = "instructions_s";
     private static final String TABLE_RECIPECATEGORIES = "categories";
     private static final String[] TABLES = new String[]{TABLE_RECIPES,
-        TABLE_INGREDIENTS,TABLE_RECIPETYPES,TABLE_INSTRUCTIONS,TABLE_RECIPECATEGORIES,TABLE_INSTRUCTIONS_S};
+        TABLE_INGREDIENTS,TABLE_RECIPETYPES,TABLE_INSTRUCTIONS,TABLE_RECIPECATEGORIES};
 
     private static final String COL_ID = "_id";
     private static final String COL_RECIPENAME = "title";
@@ -67,6 +67,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 COL_RECIPENAME + " TEXT," +
                 COL_RECIPECOUNTRY + " TEXT," +
                 COL_RECIPEDISHTYPE + " TEXT," +
+                COL_INSTRUCTION_TEXT + " BLOB," +
                 COL_RECIPECOOKTIME + " INTEGER" + ")";
         
         // CREATE TABLE ingredients(_id INTEGER PRIMARY KEY, title TEXT);
@@ -98,18 +99,12 @@ public class CHDBHandler extends SQLiteOpenHelper {
                 COL_PARENT_RECIPE + " INTEGER," +
                 COL_CAT_CATEGORY + " TEXT" + ")";
         
-        String CREATE_INSTRUCTION_S_TABLE = "CREATE TABLE IF NOT EXISTS " +
-                TABLE_INSTRUCTIONS_S + "(" +
-                COL_ID + " INTEGER PRIMARY KEY," +
-                COL_PARENT_RECIPE + " INTEGER," +
-                COL_INSTRUCTION_TEXT + " BLOB" + ")";
         
         db.execSQL(CREATE_INSTRUCTION_TABLE);
         db.execSQL(CREATE_RECIPE_TABLE);
         db.execSQL(CREATE_INGREDIENTS_TABLE);
         db.execSQL(CREATE_RECIPECATEGORY_TABLE);
         db.execSQL(CREATE_RECIPETYPE_TABLE);
-        db.execSQL(CREATE_INSTRUCTION_S_TABLE);
     }
 
     /**
@@ -411,18 +406,32 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
     
     //String recipeName
-    public void getInstructions(){
+    public ArrayList<String> getInstructions(String recipeName){
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
+        int index = getRecipeIndex(recipeName);
         String query = "Select * FROM " + TABLE_INSTRUCTIONS_S +
-                " WHERE " + COL_ID + " = 1";
+                " WHERE " + COL_ID + " = " + index;
         System.out.println(query);
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         ArrayList<String> obj = deserializeObject(cursor.getBlob(2));
         System.out.println(obj);
         cursor.close();
+        return obj;
         
+    }
+    
+    private int getRecipeIndex(String recipeName){
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "Select * FROM " + TABLE_RECIPES +
+            " WHERE " + COL_RECIPENAME + " = " + recipeName;
+        System.out.println(query);
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        int index = cursor.getInt(0);
+        return index;
     }
     
     private static byte[] serializeObject(Object o){
