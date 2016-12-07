@@ -21,7 +21,7 @@ import java.util.LinkedList;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 39;
+    private static final int DATABASE_VERSION = 40;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -710,12 +710,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
             for (int j = 0; j < instructions.length(); j++) {
                 if (instructions.charAt(j) == ' ' ) {
-                    System.out.println("decoupage des mots " + j + " "+ instructions.substring(previousSpace, j));
                     test.push(instructions.substring(previousSpace, j));
                     previousSpace = j + 1;
                 }
                 else if(j == instructions.length()-1){
-                    System.out.println("decoupage des mots " + j + " "+ instructions.substring(previousSpace));
                     test.push(instructions.substring(previousSpace));
                 }
             }
@@ -732,12 +730,13 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
                 if (!test.isEmpty()) {
                     second = test.pop();
-                    System.out.println("second : " + second);
                 }
 
                 if (!second.equals("")) {
-                    System.out.println("second dans le if: " + second);
                     System.out.println("first dans le if: " + first);
+                    System.out.println("second dans le if: " + second);
+                    System.out.println("third dans le if: " + third);
+
 
                     if (second.equals("or")) {
 
@@ -782,11 +781,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
                     ONE(recipeDatabase,first, score);
                     first = second;
                 }
-                System.out.println("0 de la recette score " + score[0]);
-                System.out.println( "1 de la recette score " + score[1]);
-                System.out.println("2 de la recette score " + score[2]);
-                if(second.equals("not"))
-                    break;
+
 
             }
         }
@@ -795,28 +790,29 @@ public class CHDBHandler extends SQLiteOpenHelper {
         int i = 0;
         int recipeindex = 0; // pour guarder en place la location que l'on ajoute dans la liste
         LinkedList<Integer> scorelist = new LinkedList<Integer>(); // pour garder la position dans score que chaque recette que j'ajoute dans returnedlist est.
+
         Iterator<Recipe> iterRecipe = recipeDatabase.iterator();
         Boolean added = false; // pour s'assurer que si l'element que j'observe est le plus petit qu'on le met a la fin
 
-        while (iterRecipe.hasNext() && i < score.length) {
+        while (iterRecipe.hasNext() ) {
             Recipe rec = iterRecipe.next();
             Iterator<Recipe> rliter = returnedlist.iterator(); // pour comparer  a la recette rec que l'on desire ajouter a la liste
             Iterator<Integer> sliter = scorelist.iterator(); // pour pouvoir comparer les scores
 
-            System.out.println("Le score de la recette : " + score[i]);
+            System.out.println("Le score de la recette : " + score[i] +" est la recette " + i);
 
             if (score[i] != -1) { // on ne met pas les -1 car c'est le seul  temps qu'il y a un ingredient NOT.
 
                 while (rliter.hasNext() && sliter.hasNext()) {
                     Recipe comp = rliter.next();
-                    Integer sindex = sliter.next();
+                    Integer scoreIndex = sliter.next();
 
-                    if (score[sindex] < score[i]) { // si le score de la recette qu'on observe est plus grand alors on peut l'ajouter a la bonne place.
+                    if (score[scoreIndex] < score[i]) { // si le score de la recette qu'on observe est plus grand alors on peut l'ajouter a la bonne place.
                         scorelist.add(recipeindex, score[i]);
                         returnedlist.add(recipeindex, rec);
                         added = true;
                         break;
-                    } else if (score[sindex] == score[i]) {// si le score est  egal on compare avec les etoiles
+                    } else if (score[scoreIndex] == score[i]) {// si le score est  egal on compare avec les etoiles
 
                        /* if (comp.getStars() < returnedlist.get(i).getStars()) {
                             returnedlist.add(recipeindex, rec);
@@ -831,11 +827,11 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
                 }
                 if (!added) { //si non ajouter on l'ajoute a la fin de la liste
-                    returnedlist.add(recipeindex,rec);
-                    scorelist.add(recipeindex,score[i]);
+                    returnedlist.add(rec);
+                    scorelist.add(score[i]);
 
                 }
-              
+
             }
             recipeindex = 0;
             i++;
@@ -847,6 +843,8 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return returnedlist;
 
     }
+
+
     private void ONE(LinkedList<Recipe> recipeDatabase,String first, int[] score) {
         Iterator<Recipe> iter = recipeDatabase.iterator();
         int index = 0;
@@ -877,6 +875,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
     }
 
+    //Get the ingredient list of a recipe without it's qty
     private ArrayList<String> splitL(ArrayList<String> list){
         ArrayList<String> newList = new ArrayList<String>();
         for(int i = 0; i<list.size() ; i++ ){
@@ -938,6 +937,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
     }
 
     private void AND(LinkedList<Recipe> recipeDatabase,String first, String third, int[] score) {
+        System.out.println("first dans le AND: " + first);
+        System.out.println("third dans le AND: " + third);
+
         Iterator<Recipe> iter = recipeDatabase.iterator();
         int index = 0;
         Boolean and1 = false;

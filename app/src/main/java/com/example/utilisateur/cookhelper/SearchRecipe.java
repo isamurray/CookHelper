@@ -75,7 +75,7 @@ public class SearchRecipe extends AppCompatActivity {
             CHDBHandler handler = new CHDBHandler(this, null, null, 1);
             //updateFields(); //<--- function was in other class in order to make sure field values were taken
             String query = recipeName.getText().toString();
-
+            query = query.toLowerCase();
 
             Recipe recipe = handler.findRecipe(query);
             //send this recipe to the intent below
@@ -115,7 +115,7 @@ public class SearchRecipe extends AppCompatActivity {
         }
         else{
             String boolExpression = ingredientBool.getText().toString();
-            //boolExpression = boolExpression.toLowerCase();
+            boolExpression = boolExpression.toLowerCase();
             String []arrayBool = boolExpression.split("\\s+");
            // Recipe[] recipeFound = advancedFindRecipe(String.valueOf(categoryChosen.getSelectedItem()),ingredientBool.getText().toString(), arrayBool);
 
@@ -129,6 +129,7 @@ public class SearchRecipe extends AppCompatActivity {
             Recipe[] recipeFound = handler.advancedFindRecipe(cat, type);
             System.out.println(boolExpression);
 
+            if (recipeFound.length !=0){
             LinkedList<Recipe> secondSearch = handler.searchRecipe(recipeFound, boolExpression);
             Recipe [] toSend = new Recipe[secondSearch.size()];
 
@@ -138,11 +139,13 @@ public class SearchRecipe extends AppCompatActivity {
             System.out.println("did it work");
             System.out.println(toSend.length);
 
+          if(toSend.length == 0)
+              Toast.makeText(getApplicationContext(), "No recipe found", Toast.LENGTH_SHORT).show();
 
-           if(recipeFound.length == 1)
+          else if(toSend.length == 1)
                 {
                 Intent intent = new Intent(getApplication(), ViewRecipe.class);
-                intent.putExtra("recipeName", recipeFound[0].getTitle());
+                intent.putExtra("recipeName", toSend[0].getTitle());
                 startActivityForResult(intent, 0);
                 }
             else{
@@ -162,6 +165,9 @@ public class SearchRecipe extends AppCompatActivity {
             // startActivityForResult(intent, 0);
         */
 
+        }
+        else
+                Toast.makeText(getApplicationContext(), "No recipe found", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -9,12 +9,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 /**
- * Created by Catherine on 30/11/16.
+ * Created by Catherine on 30/11/16. Updated by isa 01/01/16
  */
 
 public class ResultsFromSearch extends AppCompatActivity{
@@ -26,12 +27,15 @@ public class ResultsFromSearch extends AppCompatActivity{
         setTitle("View All Recipes");
         ListView recipeListView;
         recipeListView = (ListView) findViewById(R.id.listview);
+        TextView relevanceField = (TextView) findViewById(R.id.relevantTextField);
         Recipe[]recipe;
 
         if( getIntent().getExtras()!= null) {
             recipe = (Recipe[]) getIntent().getSerializableExtra("recipeList");
             System.out.println("received extra");
             System.out.println(recipe.length);
+            relevanceField.setVisibility(View.VISIBLE);
+
         }
         else{
         //>>>> DB

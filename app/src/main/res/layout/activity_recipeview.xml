@@ -15,6 +15,18 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+        <TextView
+            android:text="Most relevant to least relevant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relevantTextField"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="normal|italic"
+            android:autoText="false"
+            android:layout_marginBottom="20dp"
+            android:visibility="invisible" />
+
         <ListView android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/listview">
