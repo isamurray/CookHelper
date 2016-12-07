@@ -1,6 +1,5 @@
 package com.example.utilisateur.cookhelper;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -28,12 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static android.R.drawable.ic_menu_add;
 
 public class ViewRecipe extends AppCompatActivity {
 
@@ -70,7 +65,6 @@ public class ViewRecipe extends AppCompatActivity {
         String query = getIntent().getExtras().getString("recipeName");
         //>>>> DB
         handler = new CHDBHandler(this, null, null, 1);
-        //updateFields(); //<--- function was in other class in order to make sure field values were taken
 
         //get DBvalues to populate spinners
         recipe = handler.findRecipe(query);
@@ -103,12 +97,6 @@ public class ViewRecipe extends AppCompatActivity {
         lView1 = (ListView) findViewById(R.id.ingredientListView);
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
-        //TO REMOVE
-      /*
-        ingredientList.add("Milk (3 Cup)");
-        ingredientList.add("Juice (2)");
-        ingredientList.add("Banana (1 Tsp)");
-        ingredientList.add("Chocolate (5)");*/
 
         //Create all necessary ArrayAdapter
 
@@ -118,7 +106,7 @@ public class ViewRecipe extends AppCompatActivity {
         arrayAdapterIngredientEdit = new ArrayAdapter<String>(this, R.layout.edit_recipe_list_view, ingredientList);
 
 
-        //Create and populate the 3 spinners (ingredient, category and type)
+        //Create and populate the 4 spinners (ingredient, category, unit and type)
 
         typeSpinner = new Spinner(this);
         arrayAdapterTypeSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, typeData);
@@ -150,6 +138,7 @@ public class ViewRecipe extends AppCompatActivity {
         arrayAdapterUnitSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         unitSpinner.setAdapter(arrayAdapterUnitSpinner);
 
+        //linear view for the add/edit ingredient
         linearSpinnerIngredient = new LinearLayout(this);
         linearSpinnerIngredient.setOrientation(LinearLayout.HORIZONTAL);
         linearSpinnerIngredient.setGravity(Gravity.CENTER);
@@ -160,7 +149,7 @@ public class ViewRecipe extends AppCompatActivity {
 
         lView1.setAdapter(arrayAdapterIngredient);
         lView2.setAdapter(arrayAdapterCheckBoxInstruction);
-        lView2.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        lView2.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE); //check box
 
         setListViewHeightBasedOnItems(lView1);
         setListViewHeightBasedOnItems(lView2);
@@ -183,7 +172,7 @@ public class ViewRecipe extends AppCompatActivity {
         });
 
 
-        //Create the add ingredient and add instruction button for edit mode
+        //Create the add ingredient and add instruction buttons for edit mode
         addIngredientButton = createAddIngredientButton();
         addInstructionButton = createAddInstructionButton();
 
@@ -229,6 +218,7 @@ public class ViewRecipe extends AppCompatActivity {
                     setTitle("Editing recipe...");
                     item.setTitle("done");
                     editing = true;
+
                     //long click activated
                     registerForContextMenu(lView1);
                     registerForContextMenu(lView2);
@@ -311,7 +301,7 @@ public class ViewRecipe extends AppCompatActivity {
             case R.id.menu_main:
                 if(editing == false){   //if we are done editing
                     recipe.setStars(mBar.getRating());
-                    handler.updateRecipe(recipe, oldname);                                                          //should be change to update rating only
+                    handler.updateRecipe(recipe, oldname);                                                          //should be change to update rating only in a better world
 
                     Intent intent2 = new Intent(getApplication(), MainActivity.class);
                 startActivityForResult(intent2, 0);}
@@ -443,8 +433,8 @@ public class ViewRecipe extends AppCompatActivity {
             String qtyIngredient = array.get(menuItemSelected);
             String ingredient = qtyIngredient.substring(0,qtyIngredient.indexOf(' ')); // INGREDIENT
             String qtyInfo = qtyIngredient.substring(qtyIngredient.indexOf('(')+1, qtyIngredient.indexOf(')')); // QTY+UNIT
-            String[] info = qtyInfo.split(" ");
-            String qty = info[0];
+            String[] info = qtyInfo.split(" ");     //QTY
+            String qty = info[0];           //UNIT
             String unit = "per unit";
             if(info.length==2)
                 unit = info[1];
@@ -688,7 +678,6 @@ public class ViewRecipe extends AppCompatActivity {
             }
         });
 
-        //Commentaire Cedric
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.

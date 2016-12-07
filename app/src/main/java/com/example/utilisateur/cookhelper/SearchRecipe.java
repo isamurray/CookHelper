@@ -11,15 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.content.Context;
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class SearchRecipe extends AppCompatActivity {
@@ -67,9 +59,6 @@ public class SearchRecipe extends AppCompatActivity {
             Snackbar.make(v, "Please enter a recipe name", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            // will need case where search returns nothing
-            // if search returns something, THEN we send those parameters with
-            // the intent... figure out how to do this.
 
             //>>>> DB
             CHDBHandler handler = new CHDBHandler(this, null, null, 1);
@@ -125,7 +114,7 @@ public class SearchRecipe extends AppCompatActivity {
             Recipe[] recipeFound = handler.advancedFindRecipe(cat, type);
             System.out.println(boolExpression);
 
-            if (!(cat.equals("-select-") || type.equals("-select-")) ){
+            if (!(cat.equals("-select-") ^ type.equals("-select-")) ){
 
                 if (cat.equals("-select-") && type.equals("-select-") )
                 recipeFound = handler.getAllRecipes();             //FOR TESTING

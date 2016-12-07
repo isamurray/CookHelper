@@ -15,7 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- * Created by Catherine on 30/11/16. Updated by isa 01/01/16
+ * Created by Catherine on 30/11/16. Updated by Isa 01/01/16
  */
 
 public class ResultsFromSearch extends AppCompatActivity{
@@ -40,7 +40,6 @@ public class ResultsFromSearch extends AppCompatActivity{
         else{
         //>>>> DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
-        //updateFields(); //<--- function was in other class in order to make sure field values were taken
         //get DBvalues to populate spinners
         recipe = handler.getAllRecipes();
         System.out.println(recipe.length);

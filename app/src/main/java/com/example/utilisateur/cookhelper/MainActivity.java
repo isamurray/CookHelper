@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import com.example.utilisateur.cookhelper.R;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // getMenuInflater().inflate(R.menu.menu_menu_example, menu);
         getMenuInflater().inflate(R.menu.debug, menu);
         return true;
     }
@@ -55,20 +51,7 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-//code quand j'ai on simule, ça met Recette A,B,C sur l'écran de viewRecipe
-    //donc ça l'affiche toutes les recettes sur l'écran
-        /*ListView mListView;
-        mListView = (ListView) findViewById(R.id.listview);
 
-        String[] listItems = {"Recette A", "Recette B", "Recette C"};
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
-        mListView.setAdapter(adapter);*/
-
-    public void GOTOADDINFO(View v) {
-        Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
-        startActivityForResult(intent, 0);
-    }
-    
     // To respond to menu selections
     // DEBUG
     @Override

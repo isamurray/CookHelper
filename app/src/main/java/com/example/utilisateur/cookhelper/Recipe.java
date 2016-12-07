@@ -2,8 +2,6 @@ package com.example.utilisateur.cookhelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import java.util.ArrayList;
-
 /**
  * Created by ced on 2016-11-30.
  */
@@ -17,33 +15,6 @@ public class Recipe implements Serializable {
     int servings;
     private ArrayList<String> ingredientsList;
     private ArrayList<String> instructions;
-    
-    //private LinkedList<IngredientQuantity> ingredients;
-    //private LinkedList<Instruction> instructions;
-    //private int _id;
-
-    /**
-     * This is a simple constructor of the Recipe class.
-     * @param title
-     * @param type
-     * @param category
-     * @param stars
-     */
-
-    
-     // public Recipe(String title, String type, String category,float time,String timeUnit,
-     // LinkedList<IngredientQuantity> ingredients,LinkedList<Instruction> instructions, CookingTime cookingTime, int servings
-     // ,int _id){
-     // this.title = title;
-     // this.type = type;
-     // this.category = category;
-     // this.ingredients = ingredients;
-     // this.instructions = instructions;
-     // this.cookingTime = cookingTime;
-     // this.servings = servings;
-     // this._id = _id;
-// 
-     // }
 
     public Recipe(String title, String type, String category,float stars){
         this.title = title.toLowerCase();
@@ -87,12 +58,6 @@ public class Recipe implements Serializable {
         return cookingTime;
     }
 
-    //public CookingTime getCookingTime() {
-    //    return cookingTime;
-    //}
-    //public void setCookingTime(CookingTime cookingTime) {
-    //    this.cookingTime = cookingTime;
-    //}
     public float getStars() {
         return stars;
     }
@@ -100,19 +65,7 @@ public class Recipe implements Serializable {
         this.stars = stars;
     }
 
-    //public ArrayList<String> getIngredients() {
-    //    return ingredients;
-    //}
-    //public void setIngredients(LinkedList<IngredientQuantity> ingredients) {
-    //    this.ingredients = ingredients;
-    //}
-    //public LinkedList<Instruction> getInstructions() {
-    //    return instructions;
-    //}
-    //public void setInstructions(LinkedList<Instruction> instructions) {
-    //    this.instructions = instructions;
-    //}
-    public int getServings() {
+        public int getServings() {
         return servings;
     }
     public void setServings(int servings) {
@@ -138,13 +91,7 @@ public class Recipe implements Serializable {
     public void setIngredients(ArrayList<String> ingredients){
         ingredientsList = ingredients;
     }
-    
-    //public int getID() {
-    //    return _id;
-    //}
-    //public void setID(int _id) {
-    //    this._id = _id;
-    //}
+
 }
 
 
