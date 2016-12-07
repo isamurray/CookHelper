@@ -388,19 +388,28 @@ public class ViewRecipe extends AppCompatActivity {
         }
         if (item.getTitle() == "Delete") {
             if (menuListViewSelected.getId() == R.id.instructionListViewCheck) {
-
-                instructionData.remove(menuItemSelected);
-                arrayAdapterNoCheckInstruction.notifyDataSetChanged();
-                arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
-                setListViewHeightBasedOnItems(lView1);
-                setListViewHeightBasedOnItems(lView2);
-
+                if(instructionData.size()==1){
+                    Toast.makeText(getApplicationContext(), "Impossible to delete: Recipe must have at least one instruction", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    instructionData.remove(menuItemSelected);
+                    arrayAdapterNoCheckInstruction.notifyDataSetChanged();
+                    arrayAdapterCheckBoxInstruction.notifyDataSetChanged();
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
+                }
             } else if (menuListViewSelected.getId() == R.id.ingredientListView) {
-                ingredientList.remove(menuItemSelected);
-                arrayAdapterIngredient.notifyDataSetChanged();
-                arrayAdapterIngredientEdit.notifyDataSetChanged();
-                setListViewHeightBasedOnItems(lView1);
-                setListViewHeightBasedOnItems(lView2);            }
+                if(ingredientList.size()==1){
+                    Toast.makeText(getApplicationContext(), "Impossible to delete: Recipe must have at least one ingredient", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    ingredientList.remove(menuItemSelected);
+                    arrayAdapterIngredient.notifyDataSetChanged();
+                    arrayAdapterIngredientEdit.notifyDataSetChanged();
+                    setListViewHeightBasedOnItems(lView1);
+                    setListViewHeightBasedOnItems(lView2);
+                }
+            }
         }
         return true;
     }

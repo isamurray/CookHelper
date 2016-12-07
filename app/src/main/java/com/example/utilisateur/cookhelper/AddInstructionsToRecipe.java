@@ -56,7 +56,6 @@ public class AddInstructionsToRecipe extends AppCompatActivity {
             public void onClick(View view) {
                 if(instructionList.size()>0){
                     newRecipe.setInstructions(instructionList);
-                    newRecipe.setStars(0);
                     handler.addRecipe(newRecipe);
                     Intent intent = new Intent(getApplication(), ViewRecipe.class);
                     intent.putExtra("recipeName", newRecipe.getTitle());
