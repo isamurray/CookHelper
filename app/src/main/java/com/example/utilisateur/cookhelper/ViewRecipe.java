@@ -691,6 +691,7 @@ public class ViewRecipe extends AppCompatActivity {
             }
         });
 
+        //Commentaire Cedric
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
