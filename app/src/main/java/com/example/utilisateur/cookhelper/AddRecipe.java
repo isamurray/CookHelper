@@ -25,12 +25,25 @@ public class AddRecipe extends AppCompatActivity {
         setContentView(R.layout.activity_add_recipe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        readItemSelection();
+
+        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        String[] dbCategoryList = handler.getAllRecipeCategories();
+        String[] dbTypeList = handler.getAllRecipeTypes();
+
+        ArrayAdapter<String> dataAdapterCategory = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbCategoryList);
+        dataAdapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoryChosen.setAdapter(dataAdapterCategory);
+
+        ArrayAdapter<String> dataAdapterType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbTypeList);
+        dataAdapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeChoice.setAdapter(dataAdapterType);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.addRecipe);
         fab.setOnClickListener(new View.OnClickListener() {
                                    @Override
                                    public void onClick(View view) {
-                                       readItemSelection();
 
                                        if (String.valueOf(typeChoice.getSelectedItem()).equals("-select-") || String.valueOf(categoryChosen.getSelectedItem()).equals("-select-") ||
                                                recipeName.getText().toString().equals("")){

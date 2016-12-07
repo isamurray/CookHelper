@@ -1,6 +1,8 @@
 package com.example.utilisateur.cookhelper;
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+
 /**
  * Created by ced on 2016-11-30.
  */
@@ -11,6 +13,7 @@ public class Recipe {
     private int cookingTime;
     //private CookingTime cookingTime;
     private int stars  = 0, servings;
+    private ArrayList<String> ingredientsList;
     private ArrayList<String> instructions;
     
     //private LinkedList<IngredientQuantity> ingredients;
@@ -44,6 +47,8 @@ public class Recipe {
         this.title = title;
         this.type = type;
         this.category = category;
+        this.ingredientsList = null;
+
         this.cookingTime = time;
         ArrayList<String> struct = new ArrayList<String>();
         struct.add("Go to kitchen");
@@ -89,7 +94,8 @@ public class Recipe {
     public void setStars(int stars) {
         this.stars = stars;
     }
-    //public LinkedList<IngredientQuantity> getIngredients() {
+
+    //public ArrayList<String> getIngredients() {
     //    return ingredients;
     //}
     //public void setIngredients(LinkedList<IngredientQuantity> ingredients) {

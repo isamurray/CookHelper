@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickViewAllRecipesPage(View v) {
-        Intent intent = new Intent(getApplication(), ViewRecipe.class);
+        Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
         startActivityForResult(intent, 0);
     }
 
@@ -105,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
         //handler.addIngredient(ingredient);
     }
+
+
     public void deserialize(){
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         handler.getInstructions("Burger");

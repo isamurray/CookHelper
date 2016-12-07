@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -36,6 +38,16 @@ public class AddIngredientToRecipe extends ListActivity {
         adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listIngredient);
         setListAdapter(adapter1);
 
+        ingredientChosen = (Spinner) findViewById(R.id.ingredientChosen);
+        input_ingredient_qty = (EditText) findViewById(R.id.input_ingredient_recipe);
+
+        //make sure input are numerical
+        input_ingredient_qty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input_ingredient_qty.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input_ingredient_qty.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        input_ingredient_qty.setKeyListener(DigitsKeyListener.getInstance(false,true));
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,11 +74,7 @@ public class AddIngredientToRecipe extends ListActivity {
         // INGREDIENT LIST HERE IS THE ONE THAT WILL TAKE FROM DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         ArrayList<String> dbIngredientList = handler.getIngredients();
-        // ingredientList.add("-select ingredient-");
-        // for (int i = 1; i < 100; i++) {
-            // ingredientList.add("Ingredient sample " +Integer.toString(i));
-        // }
-        // ADDED dbIngredientList
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dbIngredientList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ingredientChosen.setAdapter(dataAdapter);
@@ -75,8 +83,6 @@ public class AddIngredientToRecipe extends ListActivity {
     //METHOD WHICH WILL HANDLE DYNAMIC INSERTION
     public void addIngredientInList(View v) {
 
-        ingredientChosen = (Spinner) findViewById(R.id.ingredientChosen);
-        input_ingredient_qty = (EditText) findViewById(R.id.input_ingredient_recipe);
 
         if (!String.valueOf(ingredientChosen.getSelectedItem()).equals("-select ingredient-") && !input_ingredient_qty.getText().toString().equals("")) {
             listIngredient.add(input_ingredient_qty.getText().toString() + " " + String.valueOf(ingredientChosen.getSelectedItem()));

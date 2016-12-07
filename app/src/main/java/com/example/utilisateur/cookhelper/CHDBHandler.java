@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 25;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -133,27 +133,31 @@ public class CHDBHandler extends SQLiteOpenHelper {
         
         // POPULATE 3 SAMPLE RECIPES
         values.put(COL_RECIPENAME,"Burger");
-        values.put(COL_RECIPECOUNTRY,"Canada");
-        values.put(COL_RECIPEDISHTYPE,"Brunch");
+        values.put(COL_RECIPECOUNTRY,"Canadian");
+        values.put(COL_RECIPEDISHTYPE,"Lunch");
         values.put(COL_RECIPECOOKTIME,25);
         db.insert(TABLE_RECIPES,null,values);
 
         ContentValues values2 = new ContentValues();
         values2.put(COL_RECIPENAME,"Cereal");
-        values2.put(COL_RECIPECOUNTRY,"Earth");
+        values2.put(COL_RECIPECOUNTRY,"Indian");
         values2.put(COL_RECIPEDISHTYPE,"Breakfast");
         values2.put(COL_RECIPECOOKTIME,3);
         db.insert(TABLE_RECIPES,null,values2);
 
         ContentValues values3 = new ContentValues();
         values3.put(COL_RECIPENAME,"GreaseRoll");
-        values3.put(COL_RECIPECOUNTRY,"USA");
-        values3.put(COL_RECIPEDISHTYPE,"Midnight");
+        values3.put(COL_RECIPECOUNTRY,"American");
+        values3.put(COL_RECIPEDISHTYPE,"Dinner");
         values3.put(COL_RECIPECOOKTIME,1);
         db.insert(TABLE_RECIPES,null,values3);
         
         // POPULATE 3 SAMPLE INGREDIENTS
-        
+        ContentValues values18 = new ContentValues();
+        values18.put(COL_PARENT_RECIPE,3);
+        values18.put(COL_INGREDIENTNAME,"-select ingredient-");
+        db.insert(TABLE_INGREDIENTS,null,values18);
+
         ContentValues values4 = new ContentValues();
         values4.put(COL_PARENT_RECIPE,1);
         values4.put(COL_INGREDIENTNAME,"Potato");
@@ -166,7 +170,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         
         ContentValues values6 = new ContentValues();
         values6.put(COL_PARENT_RECIPE,3);
-        values6.put(COL_INGREDIENTNAME,"Rock");
+        values6.put(COL_INGREDIENTNAME,"Milk");
         db.insert(TABLE_INGREDIENTS,null,values6);
         
         // POPULATE SAMPLE INSTRUCTIONS
@@ -210,6 +214,11 @@ public class CHDBHandler extends SQLiteOpenHelper {
         
                 // COL_PARENT_RECIPE + " INTEGER," +
                 // COL_RECIPETYPES_TYPE + " TEXT" + ")";
+        ContentValues values17 = new ContentValues();
+        values17.put(COL_PARENT_RECIPE,1);
+        values17.put(COL_RECIPETYPES_TYPE,"-select-");
+        db.insert(TABLE_RECIPETYPES,null,values17);
+
         ContentValues values10 = new ContentValues();
         values10.put(COL_PARENT_RECIPE,1);
         values10.put(COL_RECIPETYPES_TYPE,"Canadian");
@@ -222,10 +231,14 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
         ContentValues values12 = new ContentValues();
         values12.put(COL_PARENT_RECIPE,3);
-        values12.put(COL_RECIPETYPES_TYPE,"French");
+        values12.put(COL_RECIPETYPES_TYPE,"Indian");
         db.insert(TABLE_RECIPETYPES,null,values12);
         // POPULATE RECIPE CATEGORIES
 
+        ContentValues values16 = new ContentValues();
+        values16.put(COL_CAT_CATEGORY,"-select-");
+        values16.put(COL_PARENT_RECIPE,1);
+        db.insert(TABLE_RECIPECATEGORIES,null,values16);
 
         ContentValues values13 = new ContentValues();
         values13.put(COL_CAT_CATEGORY,"Breakfast");
@@ -241,6 +254,9 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values15.put(COL_CAT_CATEGORY,"Dinner");
         values15.put(COL_PARENT_RECIPE,1);
         db.insert(TABLE_RECIPECATEGORIES,null,values15);
+
+
+
         // values8.put(COL_PARENT_RECIPE,3);
         // values8.put(COL_INGREDIENTNAME,"Rock");
         // ContentValues values9 = new ContentValues();
@@ -347,7 +363,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
      * Get all recipe categories as array of strings from DB
      */
     public String[] getAllRecipeCategories(){
-        String query = "Select * FROM " + TABLE_RECIPECATEGORIES + "\"";
+        String query = "Select * FROM " + TABLE_RECIPECATEGORIES ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int queryCount = cursor.getCount();
@@ -355,7 +371,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         String[] categories = new String[queryCount];
         if(cursor.moveToFirst()){
             for(int i=0; i < queryCount; i++){
-                categories[i] = cursor.getString(1);
+                categories[i] = cursor.getString(2);
                 cursor.moveToNext();
             }
         }
@@ -470,7 +486,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
      * Get all recipe types as array of strings from DB
      */
     public String[] getAllRecipeTypes(){
-        String query = "Select * FROM " + TABLE_RECIPETYPES + "\"";
+        String query = "Select * FROM " + TABLE_RECIPETYPES ;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int queryCount = cursor.getCount();
@@ -478,7 +494,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             for(int i=0; i < queryCount; i++){
-                types[i] = cursor.getString(1);
+                types[i] = cursor.getString(2);
                 cursor.moveToNext();
             }
         }
@@ -492,7 +508,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
      * Get array of recipes
      */
     public Recipe[] getAllRecipes(){
-        String query = "Select * FROM " + TABLE_RECIPES + "\"";
+        String query = "Select * FROM " + TABLE_RECIPES ;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query,null);
