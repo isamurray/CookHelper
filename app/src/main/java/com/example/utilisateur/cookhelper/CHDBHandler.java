@@ -408,8 +408,20 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_INSTRUCTION_TEXT,serializedRecipe);
         db.insert(TABLE_INSTRUCTIONS_S,null,values);
         db.close();                        
-
-
+    }
+    
+    //String recipeName
+    public void getInstructions(){
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "Select * FROM " + TABLE_INSTRUCTIONS_S +
+                " WHERE " + COL_ID + " = 1";
+        System.out.println(query);
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        ArrayList<String> obj = deserializeObject(cursor.getBlob(2));
+        System.out.println(obj);
+        cursor.close();
         
     }
     
@@ -428,10 +440,10 @@ public class CHDBHandler extends SQLiteOpenHelper {
         
     }
         
-    private static Object deserializeObject(byte[] b){
+    private static ArrayList<String> deserializeObject(byte[] b){
         try{
             ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
-            Object object = in.readObject();
+            ArrayList<String> object = (ArrayList<String>) in.readObject();
             in.close();
             return object;
         }catch(ClassNotFoundException ea){
