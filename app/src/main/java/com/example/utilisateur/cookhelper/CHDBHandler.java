@@ -542,37 +542,43 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return recipes;
     }
     
-    public static void updateRecipe(Recipe recipe, String oldName){
+    public void updateRecipe(Recipe recipe, String oldName){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "Select * FROM " + TABLE_RECIPES +
             " WHERE " + COL_RECIPENAME + " =\"" +
             oldName + "\"";
 
-                // COL_RECIPENAME + " TEXT," +
-                // COL_RECIPECOUNTRY + " TEXT," +
-                // COL_RECIPEDISHTYPE + " TEXT," +
-                // COL_INSTRUCTION_TEXT + " BLOB," +
-                // COL_RECIPECOOKTIME + " INTEGER" + ")";
-
-    // private static final String COL_RECIPENAME = "title";
-    // private static final String COL_RECIPECOUNTRY = "type";
-    // private static final String COL_RECIPEDISHTYPE = "category";
-    // private static final String COL_RECIPECOOKTIME = "time";
-
-
         // test string below
         // UPDATE recipes SET title="newTitle",type="newType",category="newCat",time=1111 WHERE _id=1;
-        String queryUpdate = "UPDATE " + TABLE_RECIPES +
-            " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() +
-            ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + 
-            ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() +
-            ", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
-            ", " + COL_RECIPECOOKTIME + " = " + getCookingTime() + " WHERE " + COL_ID +
-            " = " getRecipeIndex(oldName);
-        Cursor cursor = db.rawQuery(queryUpdate,null);
-        System.out.println(queryUpdate);
-        cursor.moveToFirst();
-        cursor.close();
+        // String queryUpdate = "UPDATE " + TABLE_RECIPES +
+            // " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() + "\"" +
+            // ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + "\"" + 
+            // ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() + "\"" +
+////            ", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
+            // ", " + COL_RECIPECOOKTIME + " = " + recipe.getCookingTime() + " WHERE " + COL_ID +
+            // " = " + getRecipeIndex(oldName);
+        
+        ContentValues record = new ContentValues();
+        String newTitle = recipe.getTitle();
+        String newType = recipe.getType();
+        String newCat = recipe.getType();
+        byte[] structs = serializeObject(recipe.getInstructions());
+        int newTime = recipe.getCookingTime();
+        
+        record.put(COL_RECIPENAME, newTitle);
+        record.put(COL_RECIPECOUNTRY, newType);
+        record.put(COL_RECIPEDISHTYPE, newCat);
+        record.put(COL_RECIPECOOKTIME, newTime);
+        record.put(COL_INSTRUCTION_TEXT, structs);
+        String whereClause = " WHERE " + COL_ID + " = ?";
+        int index = getRecipeIndex(oldName);
+        String[] str = new String[]{Integer.toString(index)};
+        int result = db.update(TABLE_RECIPES,record,whereClause,str);
+
+        // Cursor cursor = db.rawQuery(queryUpdate,null);
+        System.out.println("Updated "+result+" records.");
+        // cursor.moveToFirst();
+        // cursor.close();
         
     }
 
