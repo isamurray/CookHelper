@@ -18,6 +18,7 @@ public class AddRecipe extends AppCompatActivity {
 
     private Spinner typeChoice, categoryChosen;
     private EditText recipeName;
+    private Recipe newRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class AddRecipe extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         readItemSelection();
+        newRecipe = new Recipe();
 
         final CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         String[] dbCategoryList = handler.getAllRecipeCategories();
@@ -55,7 +57,11 @@ public class AddRecipe extends AppCompatActivity {
                                        }
 
                                        else{
+                                           newRecipe.setType(String.valueOf(typeChoice.getSelectedItem()) );
+                                           newRecipe.setCategory(String.valueOf(categoryChosen.getSelectedItem()));
+                                           newRecipe.setTitle( recipeName.getText().toString());
                                            Intent intent = new Intent(getApplication(), AddIngredientToRecipe.class);
+                                           intent.putExtra("recipe", newRecipe);
                                            startActivityForResult(intent, 0);
 
                                        }

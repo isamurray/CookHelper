@@ -27,11 +27,13 @@ public class AddIngredientToRecipe extends ListActivity {
 
     private EditText input_ingredient_qty;
     private Spinner ingredientChosen;
+    private Recipe newRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_ingredient_to_recipe);
+        newRecipe = (Recipe) getIntent().getSerializableExtra("recipe");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
      //   setSupportActionBar(toolbar);
         addItemsOnSpinner();
@@ -54,7 +56,9 @@ public class AddIngredientToRecipe extends ListActivity {
             public void onClick(View view) {
 
                 if(listIngredient.size()>0){
+
                     Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
+                    intent.putExtra("recipe", newRecipe);
                     startActivityForResult(intent, 0);
                 }
                 else {

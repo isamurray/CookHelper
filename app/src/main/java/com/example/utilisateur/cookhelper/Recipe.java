@@ -1,4 +1,5 @@
 package com.example.utilisateur.cookhelper;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * Created by ced on 2016-11-30.
  */
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     private String title, type, category; //type  = entree sauce // category = vegetarien italien
     private int cookingTime;

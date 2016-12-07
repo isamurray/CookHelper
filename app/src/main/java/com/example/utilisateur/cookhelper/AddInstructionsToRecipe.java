@@ -24,19 +24,21 @@ public class AddInstructionsToRecipe extends ListActivity {
 
 
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
-    private List<String> instructionList = new ArrayList<String>();
+    private ArrayList<String> instructionList = new ArrayList<String>();
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     private ArrayAdapter<String> adapter1;
 
     private EditText input_instruction_recipe;
     private int i=1;
+    private Recipe newRecipe;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_instructions_to_recipe);
+        newRecipe = (Recipe) getIntent().getSerializableExtra("recipe");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, instructionList);
@@ -47,7 +49,9 @@ public class AddInstructionsToRecipe extends ListActivity {
             @Override
             public void onClick(View view) {
                 if(instructionList.size()>0){
+                    newRecipe.setInstructions(instructionList);
                     Intent intent = new Intent(getApplication(), ViewRecipe.class);
+                    //intent.putExtra("recipeName", newRecipe.getTitle());
                     startActivityForResult(intent, 0);
                 }
                 else{
