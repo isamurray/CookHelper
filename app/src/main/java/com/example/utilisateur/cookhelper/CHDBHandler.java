@@ -402,7 +402,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
     //    return returnRecipes;
     //        
     //}
-    
+
 
     /**
      * Get all recipe categories as array of strings from DB

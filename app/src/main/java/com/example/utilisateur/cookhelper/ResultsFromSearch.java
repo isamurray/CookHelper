@@ -26,14 +26,20 @@ public class ResultsFromSearch extends AppCompatActivity{
         setTitle("View All Recipes");
         ListView recipeListView;
         recipeListView = (ListView) findViewById(R.id.listview);
+        Recipe[]recipe;
 
+        if( getIntent().getExtras()!= null) {
+            recipe = (Recipe[]) getIntent().getSerializableExtra("recipeList");
+        }
+        else{
         //>>>> DB
         CHDBHandler handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
         //get DBvalues to populate spinners
-        Recipe recipe[] = handler.getAllRecipes();
-        System.out.println(recipe);
+        recipe = handler.getAllRecipes();
         System.out.println(recipe.length);
+        System.out.println("there is no extra");
+        }
 
 
         ArrayList<String> listRecipe = new ArrayList<String>();
@@ -55,6 +61,7 @@ public class ResultsFromSearch extends AppCompatActivity{
             }
         });
     }
+
 
     //menu in title bar
     @Override

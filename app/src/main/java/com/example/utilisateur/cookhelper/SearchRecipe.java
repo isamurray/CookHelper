@@ -19,6 +19,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class SearchRecipe extends AppCompatActivity {
     private Spinner typeChosen, categoryChosen;
     private EditText recipeName, ingredientBool;
@@ -58,6 +60,7 @@ public class SearchRecipe extends AppCompatActivity {
     public void onClickSearchByName(View v) {
 
         readItemSelection();//<----- we should keep our 'field methods' by the same name
+
         // input box is empty
         if (recipeName.getText().toString().equals("")) {
             Snackbar.make(v, "Please enter a recipe name", Snackbar.LENGTH_LONG)
@@ -103,15 +106,37 @@ public class SearchRecipe extends AppCompatActivity {
      */
     public void onClickSearch(View v) {
 
-        readItemSelection();
+
         if(ingredientBool.getText().toString().equals("") &&  String.valueOf(categoryChosen.getSelectedItem()).equals("-select-")
                 && String.valueOf(typeChosen.getSelectedItem()).equals("-select-"))  {
             Snackbar.make(v, "Please select at least one criteria", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
         else{
-            Intent intent = new Intent(getApplication(), ViewRecipe.class);                 //FAIRE QQCH AVEC LES CHOIX VIDE POS 0
-            startActivityForResult(intent, 0);}
+            String boolExpression = ingredientBool.getText().toString();
+            boolExpression = boolExpression.toLowerCase();
+            String []arrayBool = boolExpression.split("\\s+");
+           // Recipe[] recipeFound = advancedFindRecipe(String.valueOf(categoryChosen.getSelectedItem()),ingredientBool.getText().toString(), arrayBool);
+
+
+           CHDBHandler handler = new CHDBHandler(this, null, null, 1);  //FOR TESTING
+            Recipe[] recipeFound = handler.getAllRecipes();             //FOR TESTING
+            System.out.println("this should be recicpe number");
+            System.out.println(recipeFound.length);
+
+           if(recipeFound.length == 1)
+                {
+                Intent intent = new Intent(getApplication(), ViewRecipe.class);
+                intent.putExtra("recipeName", recipeFound[0].getTitle());
+                startActivityForResult(intent, 0);
+                }
+            else{
+                Intent intent = new Intent(getApplication(), ResultsFromSearch.class);
+                intent.putExtra("recipeList", recipeFound);
+                startActivityForResult(intent, 0);
+            }
+
+        }
     }
 
     //menu in title bar
