@@ -78,8 +78,10 @@ public class ViewRecipe extends AppCompatActivity {
         dbTypes = handler.getAllRecipeTypes();
         ingredientData = handler.getIngredients();
         instructionData = handler.getInstructions(query);
+        ingredientList = recipe.getIngredients();
         String [] unitString = {"per unit","Cup","Tsp" ,"Tbs" ,"Oz" , "kg" ,"mL"};
-
+        System.out.println("creation");
+        System.out.println(ingredientList.size());
 
         categoryData = new ArrayList<String>(Arrays.asList(dbCategories));
         typeData = new ArrayList<String>(Arrays.asList(dbTypes));
@@ -102,14 +104,11 @@ public class ViewRecipe extends AppCompatActivity {
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
         //TO REMOVE
-      /* instructionData.add("Instruction 1");
-        instructionData.add("Instruction 2");
-        instructionData.add("Instruction 3");
-        instructionData.add("Instruction 4");*/
+      /*
         ingredientList.add("Milk (3 Cup)");
         ingredientList.add("Juice (2)");
         ingredientList.add("Banana (1 Tsp)");
-        ingredientList.add("Chocolate (5)");
+        ingredientList.add("Chocolate (5)");*/
 
         //Create all necessary ArrayAdapter
 
@@ -708,8 +707,9 @@ public class ViewRecipe extends AppCompatActivity {
         recipe.setCategory(input_category.getText().toString());
         recipe.setInstructions(instructionData);
         recipe.setStars(mBar.getRating());
-        //recipe.setIngredient(ingredientData);
-
+        recipe.setIngredients(ingredientList);
+        System.out.println("update");
+        System.out.println(ingredientList.size());
     }
 
     }

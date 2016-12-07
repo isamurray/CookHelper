@@ -25,7 +25,7 @@ import java.util.List;
 public class AddIngredientToRecipe extends AppCompatActivity {
     //LIST OF ARRAY STRINGS WHICH WILL SERVE AS LIST ITEMS
     private ArrayList<String> listIngredient = new ArrayList<String>();
-    private List<String> ingredientList = new ArrayList<String>();
+    private ArrayList<String> ingredientList = new ArrayList<String>();
 
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
     private ArrayAdapter<String> adapter1;
@@ -65,7 +65,11 @@ public class AddIngredientToRecipe extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(listIngredient.size()>0){
-                    //newRecipe.setIngredient(ingredientList);
+                    newRecipe.setIngredients(ingredientList);
+
+                    System.out.println("dans addingredient");
+                    System.out.println(ingredientList.size());
+
                     Intent intent = new Intent(getApplication(), AddInstructionsToRecipe.class);
                     intent.putExtra("recipe", newRecipe);
                     startActivityForResult(intent, 0);
