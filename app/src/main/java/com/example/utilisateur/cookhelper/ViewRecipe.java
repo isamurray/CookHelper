@@ -52,6 +52,8 @@ public class ViewRecipe extends AppCompatActivity {
     private Spinner typeSpinner, categorySpinner, ingredientSpinner ;
     private LinearLayout linearSpinnerType, linearSpinnerCategory, linearSpinnerIngredient;
     private TextView recipeName, input_category, input_type;
+    private String oldname;
+    private Boolean editing = false;
 
     private RatingBar mBar;
     private ListView lView1, lView2;
@@ -59,6 +61,8 @@ public class ViewRecipe extends AppCompatActivity {
     private ArrayAdapter<String> arrayAdapterCheckBoxInstruction, arrayAdapterNoCheckInstruction, arrayAdapterIngredient, arrayAdapterIngredientEdit,
             arrayAdapterTypeSpinner, arrayAdapterCategorySpinner, arrayAdapterIngredientSpinner;
     private static int menuItemSelected;
+    private CHDBHandler handler;
+    private Recipe recipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +70,11 @@ public class ViewRecipe extends AppCompatActivity {
         String query = getIntent().getExtras().getString("recipeName");
         System.out.println(query);
         //>>>> DB
-        CHDBHandler handler = new CHDBHandler(this, null, null, 1);
+        handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
 
         //get DBvalues to populate spinners
-        Recipe recipe = handler.findRecipe(query);
+        recipe = handler.findRecipe(query);
         dbCategories = handler.getAllRecipeCategories();
         dbTypes = handler.getAllRecipeTypes();
         ingredientData = handler.getIngredients();
@@ -97,10 +101,10 @@ public class ViewRecipe extends AppCompatActivity {
         lView2 = (ListView) findViewById(R.id.instructionListViewCheck);
 
         //TO REMOVE
-       instructionData.add("Instruction 1");
+      /* instructionData.add("Instruction 1");
         instructionData.add("Instruction 2");
         instructionData.add("Instruction 3");
-        instructionData.add("Instruction 4");
+        instructionData.add("Instruction 4");*/
 
         ingredientList.add("45 Pomme");
         ingredientList.add("14 Banane");
@@ -210,10 +214,10 @@ public class ViewRecipe extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_edit:
-                if (item.getTitle().toString().equals("Edit")) {
+                if (editing == false) {
                     setTitle("Editing recipe...");
                     item.setTitle("done");
-
+                    editing = true;
                     //long click activated
                     registerForContextMenu(lView1);
                     registerForContextMenu(lView2);
@@ -248,8 +252,10 @@ public class ViewRecipe extends AppCompatActivity {
                     addIngredientButton.setVisibility(View.VISIBLE);
                     addInstructionButton.setVisibility(View.VISIBLE);
 
+                    //save the recipe name for database purpose
+                    oldname = recipeName.getText().toString();
 
-                } else {
+                } else if(editing ==true){
                     //To quit EDIT mode
                     item.setTitle("Edit");
                     setTitle("View Recipe");
@@ -276,13 +282,30 @@ public class ViewRecipe extends AppCompatActivity {
                     addIngredientButton.setVisibility(View.GONE);
                     addInstructionButton.setVisibility(View.GONE);
 
+                    //update database
+                    updateRecipeValues();
+                    handler.updateRecipe(recipe, oldname);
+                    oldname = recipeName.getText().toString();
+                    editing = false;
                     Toast.makeText(getApplicationContext(), "Done editing", Toast.LENGTH_SHORT).show();
 
 
                 }
                 return true;
             case R.id.menu_trash:
+                handler.deleteRecipe(oldname);
                 Toast.makeText(getApplicationContext(), "You are trying to delete the recipe", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent, 0);
+                return true;
+            case R.id.menu_main:
+                if(editing == false){   //if we are still editing
+                Intent intent2 = new Intent(getApplication(), MainActivity.class);
+                startActivityForResult(intent2, 0);}
+                else{
+                    Toast.makeText(getApplicationContext(), "Please finish editing before leaving", Toast.LENGTH_SHORT).show();
+
+                }
                 return true;
             default:
                 Toast.makeText(getApplicationContext(), "An error occured", Toast.LENGTH_LONG).show();
@@ -632,5 +655,14 @@ public class ViewRecipe extends AppCompatActivity {
         alert.show();
     }
 
+    private void updateRecipeValues(){
+        recipe.setTitle(recipeName.getText().toString());
+        recipe.setType(input_type.getText().toString());
+        recipe.setCategory(input_category.getText().toString());
+        recipe.setInstructions(instructionData);
+        //recipe.setIngredient(ingredientData);
+
+
+    }
 
     }

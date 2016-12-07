@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 28;
+    private static final int DATABASE_VERSION = 29;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -544,7 +544,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         return recipes;
     }
     
-    public static void updateRecipe(Recipe recipe, String oldName){
+    public void updateRecipe(Recipe recipe, String oldName){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "Select * FROM " + TABLE_RECIPES +
             " WHERE " + COL_RECIPENAME + " =\"" +
@@ -565,12 +565,12 @@ public class CHDBHandler extends SQLiteOpenHelper {
         // test string below
         // UPDATE recipes SET title="newTitle",type="newType",category="newCat",time=1111 WHERE _id=1;
         String queryUpdate = "UPDATE " + TABLE_RECIPES +
-            " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() +
-            ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + 
-            ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() +
-            ", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
-            ", " + COL_RECIPECOOKTIME + " = " + getCookingTime() + " WHERE " + COL_ID +
-            " = " getRecipeIndex(oldName);
+            " SET " + COL_RECIPENAME + " = \"" + recipe.getTitle() +"\""+
+            ", " + COL_RECIPECOUNTRY + " = \"" + recipe.getType() + "\""+
+            ", " + COL_RECIPEDISHTYPE + " = \"" + recipe.getCategory() + "\""+
+            //", " + COL_INSTRUCTION_TEXT + " = " + serializeObject(recipe.getInstructions()) +
+            ", " + COL_RECIPECOOKTIME + " = " + recipe.getCookingTime() + " WHERE " + COL_ID +
+            " = " + getRecipeIndex(oldName);
         Cursor cursor = db.rawQuery(queryUpdate,null);
         System.out.println(queryUpdate);
         cursor.moveToFirst();
