@@ -284,6 +284,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         values.put(COL_RECIPENAME,recipe.getTitle());
         values.put(COL_RECIPECOUNTRY,recipe.getType());
         values.put(COL_RECIPEDISHTYPE,recipe.getCategory());
+        values.put(COL_INSTRUCTION_TEXT,serializeObject(recipe.getInstructions()));
         values.put(COL_RECIPECOOKTIME,recipe.getCookingTime());
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -433,12 +434,12 @@ public class CHDBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         int index = getRecipeIndex(recipeName);
-        String query = "Select * FROM " + TABLE_INSTRUCTIONS_S +
+        String query = "Select * FROM " + TABLE_RECIPES +
                 " WHERE " + COL_ID + " = " + index;
         System.out.println(query);
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
-        ArrayList<String> obj = deserializeObject(cursor.getBlob(2));
+        ArrayList<String> obj = deserializeObject(cursor.getBlob(4));
         System.out.println(obj);
         cursor.close();
         return obj;
@@ -454,6 +455,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         int index = cursor.getInt(0);
+        cursor.close();
         return index;
     }
     
