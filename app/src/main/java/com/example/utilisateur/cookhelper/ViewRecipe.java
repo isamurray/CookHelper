@@ -68,7 +68,6 @@ public class ViewRecipe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         String query = getIntent().getExtras().getString("recipeName");
-        System.out.println(query);
         //>>>> DB
         handler = new CHDBHandler(this, null, null, 1);
         //updateFields(); //<--- function was in other class in order to make sure field values were taken
@@ -210,6 +209,9 @@ public class ViewRecipe extends AppCompatActivity {
         //Hide the button until EDIT mode activated
         addIngredientButton.setVisibility(View.GONE);
         addInstructionButton.setVisibility(View.GONE);
+
+        oldname = recipeName.getText().toString();
+
     }
 
     //menu in title bar
@@ -263,7 +265,6 @@ public class ViewRecipe extends AppCompatActivity {
                     addInstructionButton.setVisibility(View.VISIBLE);
 
                     //save the recipe name for database purpose
-                    oldname = recipeName.getText().toString();
 
                 } else if(editing ==true){
                     //To quit EDIT mode
@@ -309,8 +310,13 @@ public class ViewRecipe extends AppCompatActivity {
                 startActivityForResult(intent, 0);
                 return true;
             case R.id.menu_main:
-                if(editing == false){   //if we are still editing
-                Intent intent2 = new Intent(getApplication(), MainActivity.class);
+                if(editing == false){   //if we are done editing
+                    recipe.setStars(mBar.getRating());
+                    handler.updateRecipe(recipe, oldname);                                                          //should be change to update rating only
+                    System.out.println(recipe.getStars());
+                    System.out.println("apres update");
+
+                    Intent intent2 = new Intent(getApplication(), MainActivity.class);
                 startActivityForResult(intent2, 0);}
                 else{
                     Toast.makeText(getApplicationContext(), "Please finish editing before leaving", Toast.LENGTH_SHORT).show();
@@ -324,7 +330,6 @@ public class ViewRecipe extends AppCompatActivity {
     }
 
     public void onClickRatingBar(View v) {
-        mBar.getRating();
         recipe.setStars(mBar.getRating());
     }
 
@@ -437,11 +442,6 @@ public class ViewRecipe extends AppCompatActivity {
             String unit = "per unit";
             if(info.length==2)
                 unit = info[1];
-
-            System.out.println(ingredient);
-            System.out.println(qtyInfo);
-            System.out.println(qty);
-            System.out.println(unit);
 
             input.setText(qty);
             ingredientSpinner.setSelection(ingredientData.indexOf(ingredient));
@@ -697,8 +697,8 @@ public class ViewRecipe extends AppCompatActivity {
         recipe.setType(input_type.getText().toString());
         recipe.setCategory(input_category.getText().toString());
         recipe.setInstructions(instructionData);
+        recipe.setStars(mBar.getRating());
         //recipe.setIngredient(ingredientData);
-
 
     }
 

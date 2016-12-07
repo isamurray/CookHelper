@@ -45,13 +45,13 @@ public class Recipe implements Serializable {
 // 
      // }
 
-    public Recipe(String title, String type, String category,int time){
+    public Recipe(String title, String type, String category,float stars){
         this.title = title;
         this.type = type;
         this.category = category;
         this.ingredientsList = null;
 
-        this.cookingTime = time;
+        this.stars = stars;
         ArrayList<String> struct = new ArrayList<String>();
         struct.add("Go to kitchen");
         this.instructions = struct;
