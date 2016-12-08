@@ -21,7 +21,7 @@ import java.util.LinkedList;
  */
 
 public class CHDBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 40;
+    private static final int DATABASE_VERSION = 41;
     private static final String DATABASE_NAME = "cookhelperDB.db";
     private static final String TABLE_RECIPES = "recipes";
     private static final String TABLE_INGREDIENTS = "ingredients";
@@ -139,8 +139,7 @@ public class CHDBHandler extends SQLiteOpenHelper {
         sampleInstructions.add("Drop".toLowerCase());
         sampleInstructions.add("Roll".toLowerCase());
         ArrayList<String> sampleIngredients = new ArrayList<String>();
-        sampleIngredients.add("Apple (1 Cup)".toLowerCase());
-        sampleIngredients.add("Orange (1 Tbs)".toLowerCase());
+        sampleIngredients.add("Potato (1 Tbs)".toLowerCase());
         sampleIngredients.add("Banana (1)".toLowerCase());
         sampleIngredients.add("Milk (3 kg)".toLowerCase());
         // POPULATE 3 SAMPLE RECIPES
