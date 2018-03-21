@@ -1,19 +1,5 @@
-# Coming Soon...
-allo je fais un test
+# CookHelper
 
+SEG2105 Final Project
 
-Jobin says hallo...
-
-So does cedric
-
-
-<<<<<<< HEAD
-CATHERINE 
-catherine local
-=======
-Awignahan
-
-Test de Isa
-Test de master
-
->>>>>>> master
+Help users to create, rate and manage recipes within an Android application
